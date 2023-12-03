@@ -75,25 +75,6 @@ class AppInterceptors extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    if (options.path.contains('files/api-docs')) {
-      options.headers['Content-type'] = 'application/octet-stream';
-    } else if (options.path.contains('login')) {
-      options.headers['Content-type'] = 'application/x-www-form-urlencoded';
-    } else if (options.path.contains('files/documents')) {
-      if (options.path.contains('pdf')) {
-        options.headers['Content-type'] = 'application/pdf';
-      } else if (options.path.contains('doc')) {
-        options.headers['Content-type'] = 'application/msword';
-      } else {
-        options.headers['Content-type'] = 'application/pdf';
-      }
-    } else {
-      options.headers['Content-type'] = 'application/json';
-    }
-    options.headers['Access-Control-Allow-Origin'] = '*';
-    options.headers['Access-Control-Allow-Headers'] = '*';
-    options.headers['Access-Control-Allow-Methods'] = '*';
-    options.headers['Access-Control-Allow-Credentials'] = 'true';
     return handler.next(options);
   }
 

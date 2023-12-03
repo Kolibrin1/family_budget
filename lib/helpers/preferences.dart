@@ -1,6 +1,6 @@
-// import 'package:flowers/constants/keys.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'keys.dart';
 
 @lazySingleton
 class Preferences {
@@ -8,14 +8,14 @@ class Preferences {
 
   final SharedPreferences _prefs;
 
-  // Future<void> saveAccessToken(String token) async {
-  //   await _prefs.setString(Keys.accessToken, token);
-  // }
-  //
-  // Future<void> saveSplashInit(bool isOpen) async {
-  //   await _prefs.setBool(Keys.splashInit, isOpen);
-  // }
-  //
+  Future<void> saveUserLogin(String login) async {
+    await _prefs.setString(Keys.userLogin, login);
+  }
+
+  Future<void> saveUserPass(String pass) async {
+    await _prefs.setString(Keys.userPassword, pass);
+  }
+
   // Future<void> saveFirstInit(bool isFirst) async {
   //   await _prefs.setBool(Keys.firstInit, isFirst);
   // }
@@ -36,49 +36,25 @@ class Preferences {
   //   return _prefs.getBool(Keys.afterReg);
   // }
   //
-  // String? loadAccessToken() {
-  //   if (_prefs.containsKey(Keys.accessToken)) {
-  //     final token = _prefs.getString(Keys.accessToken);
-  //     return token;
-  //   }
-  //   return null;
-  // }
-  //
-  // Future<void> deleteAccessToken() async {
-  //   _prefs.remove(Keys.accessToken);
-  // }
-  //
-  // Future<void> deleteRefreshToken() async {
-  //   _prefs.remove(Keys.refreshToken);
-  // }
+  String? loadUserLogin() {
+    if (_prefs.containsKey(Keys.userLogin)) {
+      final login = _prefs.getString(Keys.userLogin);
+      return login;
+    }
+    return null;
+  }
+
+  String? loadUserPass() {
+    if (_prefs.containsKey(Keys.userPassword)) {
+      final pass = _prefs.getString(Keys.userPassword);
+      return pass;
+    }
+    return null;
+  }
 
   Future<void> clear() async {
     _prefs.clear();
   }
-
-  // Future<void> saveRefreshToken(String token) async {
-  //   await _prefs.setString(Keys.refreshToken, token);
-  // }
-  //
-  // String? loadRefreshToken() {
-  //   return _prefs.containsKey(Keys.refreshToken)
-  //       ? _prefs.getString(Keys.refreshToken)
-  //       : '';
-  // }
-  //
-  // Future<void> saveTokenSession(DateTime tokenSession) async {
-  //   await _prefs.setString(Keys.tokenSession, tokenSession.toString());
-  // }
-  //
-  // Future<void> deleteTokenSession() async {
-  //   await _prefs.remove(Keys.tokenSession);
-  // }
-  //
-  // String? loadTokenSession() {
-  //   return _prefs.containsKey(Keys.tokenSession)
-  //       ? _prefs.getString(Keys.tokenSession)
-  //       : '';
-  // }
 
   Future<void> setStringByKey(String key, String str) async {
     await _prefs.setString(key, str);
