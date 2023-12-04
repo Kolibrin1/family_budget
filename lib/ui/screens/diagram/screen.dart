@@ -37,10 +37,14 @@ class DiagramScreen extends StatelessWidget {
                 child: CircularProgressIndicator(),
               ),
             ),
-            initial: (currency, expensesList, type) => DiagramBody(
+            initial: (currency, expensesList, type, colors, titles, totalCounts, allCount) => DiagramBody(
               currency: currency,
               expenses: expensesList,
               type: type,
+              colors: colors,
+              titles: titles,
+              totalCounts: totalCounts,
+              allCount: allCount,
             ),
             orElse: () => const AppScaffold(
               child: Center(

@@ -3,22 +3,33 @@ import 'package:family_budget/data/models/income_model.dart';
 import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart';
+import 'package:family_budget/ui/screens/diagram/widgets/description_bottom_sheet.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class DiagramBody extends StatefulWidget {
-  const DiagramBody(
-      {super.key,
-      required this.expenses,
-      required this.currency,
-      required this.type});
+  const DiagramBody({
+    super.key,
+    required this.expenses,
+    required this.currency,
+    required this.type,
+    required this.colors,
+    required this.titles,
+    required this.totalCounts,
+    required this.allCount,
+  });
 
   final List<ExpenseModel> expenses;
   final String currency;
   final int type;
+  final List<Color> colors;
+  final List<String> titles;
+  final List<double> totalCounts;
+  final double allCount;
 
   @override
   State<DiagramBody> createState() => _DiagramBodyState();
@@ -44,7 +55,11 @@ class _DiagramBodyState extends State<DiagramBody> {
           Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: InkWell(
-              onTap: () {},
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              onTap: () {
+                showDescriptionBottomSheet(context, widget.colors, widget.titles, widget.totalCounts, widget.allCount);
+              },
               child: SvgPicture.asset(
                 'assets/icons/info.svg',
                 color: AppColors.colorScheme.primary,
@@ -147,8 +162,24 @@ class _DiagramBodyState extends State<DiagramBody> {
                   ),
                 ],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 320,
+                child: PieChart(
+                  PieChartData(
+                    centerSpaceRadius: 20,
+                    borderData: FlBorderData(show: false),
+                    sections: [
+                      ...List.generate(
+                        widget.colors.length,
+                        (index) => PieChartSectionData(
+                          value: widget.totalCounts[index],
+                          color: widget.colors[index],
+                          radius: 100,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               Text(
                 'Список расходов',
@@ -178,6 +209,8 @@ class _DiagramBodyState extends State<DiagramBody> {
                                     ),
                                     context,
                                     widget.currency,
+                                    widget.colors,
+                                    widget.titles,
                                   ),
                                 ),
                               ),
@@ -203,6 +236,8 @@ Widget getRowIncome(
   IncomeModel income,
   BuildContext context,
   String currency,
+  List<Color> colors,
+  List<String> titles,
 ) {
   return Material(
     elevation: 0.3,
@@ -244,7 +279,7 @@ Widget getRowIncome(
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(3),
-                color: AppColors.text,
+                color: colors[titles.indexOf(income.title!)],
               ),
               height: 30,
               width: 60,

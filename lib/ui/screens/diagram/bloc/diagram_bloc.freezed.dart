@@ -316,7 +316,13 @@ mixin _$DiagramState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)
         initial,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
@@ -325,7 +331,13 @@ mixin _$DiagramState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
@@ -334,7 +346,13 @@ mixin _$DiagramState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
@@ -389,7 +407,14 @@ abstract class _$$InitialStateImplCopyWith<$Res> {
           _$InitialStateImpl value, $Res Function(_$InitialStateImpl) then) =
       __$$InitialStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String currency, List<ExpenseModel> expensesList, int type});
+  $Res call(
+      {String currency,
+      List<ExpenseModel> expensesList,
+      int type,
+      List<Color> colors,
+      List<String> titles,
+      List<double> totalCounts,
+      double allCount});
 }
 
 /// @nodoc
@@ -406,6 +431,10 @@ class __$$InitialStateImplCopyWithImpl<$Res>
     Object? currency = null,
     Object? expensesList = null,
     Object? type = null,
+    Object? colors = null,
+    Object? titles = null,
+    Object? totalCounts = null,
+    Object? allCount = null,
   }) {
     return _then(_$InitialStateImpl(
       currency: null == currency
@@ -420,6 +449,22 @@ class __$$InitialStateImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as int,
+      colors: null == colors
+          ? _value._colors
+          : colors // ignore: cast_nullable_to_non_nullable
+              as List<Color>,
+      titles: null == titles
+          ? _value._titles
+          : titles // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      totalCounts: null == totalCounts
+          ? _value._totalCounts
+          : totalCounts // ignore: cast_nullable_to_non_nullable
+              as List<double>,
+      allCount: null == allCount
+          ? _value.allCount
+          : allCount // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -430,8 +475,15 @@ class _$InitialStateImpl implements _InitialState {
   const _$InitialStateImpl(
       {required this.currency,
       required final List<ExpenseModel> expensesList,
-      required this.type})
-      : _expensesList = expensesList;
+      required this.type,
+      required final List<Color> colors,
+      required final List<String> titles,
+      required final List<double> totalCounts,
+      required this.allCount})
+      : _expensesList = expensesList,
+        _colors = colors,
+        _titles = titles,
+        _totalCounts = totalCounts;
 
   @override
   final String currency;
@@ -445,10 +497,36 @@ class _$InitialStateImpl implements _InitialState {
 
   @override
   final int type;
+  final List<Color> _colors;
+  @override
+  List<Color> get colors {
+    if (_colors is EqualUnmodifiableListView) return _colors;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_colors);
+  }
+
+  final List<String> _titles;
+  @override
+  List<String> get titles {
+    if (_titles is EqualUnmodifiableListView) return _titles;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_titles);
+  }
+
+  final List<double> _totalCounts;
+  @override
+  List<double> get totalCounts {
+    if (_totalCounts is EqualUnmodifiableListView) return _totalCounts;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_totalCounts);
+  }
+
+  @override
+  final double allCount;
 
   @override
   String toString() {
-    return 'DiagramState.initial(currency: $currency, expensesList: $expensesList, type: $type)';
+    return 'DiagramState.initial(currency: $currency, expensesList: $expensesList, type: $type, colors: $colors, titles: $titles, totalCounts: $totalCounts, allCount: $allCount)';
   }
 
   @override
@@ -460,12 +538,25 @@ class _$InitialStateImpl implements _InitialState {
                 other.currency == currency) &&
             const DeepCollectionEquality()
                 .equals(other._expensesList, _expensesList) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            const DeepCollectionEquality().equals(other._colors, _colors) &&
+            const DeepCollectionEquality().equals(other._titles, _titles) &&
+            const DeepCollectionEquality()
+                .equals(other._totalCounts, _totalCounts) &&
+            (identical(other.allCount, allCount) ||
+                other.allCount == allCount));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, currency,
-      const DeepCollectionEquality().hash(_expensesList), type);
+  int get hashCode => Object.hash(
+      runtimeType,
+      currency,
+      const DeepCollectionEquality().hash(_expensesList),
+      type,
+      const DeepCollectionEquality().hash(_colors),
+      const DeepCollectionEquality().hash(_titles),
+      const DeepCollectionEquality().hash(_totalCounts),
+      allCount);
 
   @JsonKey(ignore: true)
   @override
@@ -477,38 +568,59 @@ class _$InitialStateImpl implements _InitialState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)
         initial,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) {
-    return initial(currency, expensesList, type);
+    return initial(
+        currency, expensesList, type, colors, titles, totalCounts, allCount);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) {
-    return initial?.call(currency, expensesList, type);
+    return initial?.call(
+        currency, expensesList, type, colors, titles, totalCounts, allCount);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(currency, expensesList, type);
+      return initial(
+          currency, expensesList, type, colors, titles, totalCounts, allCount);
     }
     return orElse();
   }
@@ -552,11 +664,19 @@ abstract class _InitialState implements DiagramState {
   const factory _InitialState(
       {required final String currency,
       required final List<ExpenseModel> expensesList,
-      required final int type}) = _$InitialStateImpl;
+      required final int type,
+      required final List<Color> colors,
+      required final List<String> titles,
+      required final List<double> totalCounts,
+      required final double allCount}) = _$InitialStateImpl;
 
   String get currency;
   List<ExpenseModel> get expensesList;
   int get type;
+  List<Color> get colors;
+  List<String> get titles;
+  List<double> get totalCounts;
+  double get allCount;
   @JsonKey(ignore: true)
   _$$InitialStateImplCopyWith<_$InitialStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -601,7 +721,13 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)
         initial,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
@@ -613,7 +739,13 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
@@ -625,7 +757,13 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
@@ -750,7 +888,13 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)
         initial,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
@@ -762,7 +906,13 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
@@ -774,7 +924,13 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
-            String currency, List<ExpenseModel> expensesList, int type)?
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
         initial,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,

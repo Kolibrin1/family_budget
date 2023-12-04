@@ -6,6 +6,10 @@ class DiagramState with _$DiagramState {
     required String currency,
     required List<ExpenseModel> expensesList,
     required int type,
+    required List<Color> colors,
+    required List<String> titles,
+    required List<double> totalCounts,
+    required double allCount,
   }) = _InitialState;
 
   const factory DiagramState.loading() = _LoadingState;
