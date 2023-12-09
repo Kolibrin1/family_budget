@@ -10,7 +10,7 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:family_budget/app/app_router/app_router.dart' as _i15;
 import 'package:family_budget/app/app_router/auth_guard.dart' as _i10;
-import 'package:family_budget/app/di/di.dart' as _i19;
+import 'package:family_budget/app/di/di.dart' as _i20;
 import 'package:family_budget/data/api_client.dart' as _i8;
 import 'package:family_budget/data/api_service.dart' as _i9;
 import 'package:family_budget/data/repositories/currency_repository.dart'
@@ -23,10 +23,12 @@ import 'package:family_budget/helpers/preferences.dart' as _i7;
 import 'package:family_budget/ui/navigator/cubit/navigator_cubit.dart' as _i5;
 import 'package:family_budget/ui/navigator/navbar_listener.dart' as _i4;
 import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart' as _i16;
-import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart'
+import 'package:family_budget/ui/screens/calculator/bloc/calc_bloc.dart'
     as _i17;
-import 'package:family_budget/ui/screens/profile/bloc/profile_bloc.dart'
+import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart'
     as _i18;
+import 'package:family_budget/ui/screens/profile/bloc/profile_bloc.dart'
+    as _i19;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as _i3;
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
@@ -80,12 +82,14 @@ extension GetItInjectableX on _i1.GetIt {
           gh<_i7.Preferences>(),
           gh<_i14.UserRepository>(),
         ));
-    gh.factory<_i17.DiagramBloc>(() => _i17.DiagramBloc(
+    gh.factory<_i17.CalculatorBloc>(
+        () => _i17.CalculatorBloc(gh<_i11.CurrencyRepository>()));
+    gh.factory<_i18.DiagramBloc>(() => _i18.DiagramBloc(
           gh<_i7.Preferences>(),
           gh<_i14.UserRepository>(),
           gh<_i12.ExpenseRepository>(),
         ));
-    gh.factory<_i18.ProfileBloc>(() => _i18.ProfileBloc(
+    gh.factory<_i19.ProfileBloc>(() => _i19.ProfileBloc(
           gh<_i7.Preferences>(),
           gh<_i14.UserRepository>(),
           gh<_i12.ExpenseRepository>(),
@@ -95,4 +99,4 @@ extension GetItInjectableX on _i1.GetIt {
   }
 }
 
-class _$AppModule extends _i19.AppModule {}
+class _$AppModule extends _i20.AppModule {}

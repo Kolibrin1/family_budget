@@ -75,6 +75,11 @@ class AppInterceptors extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
+    if (options.path
+        .contains('convert?to=')) {
+      options.baseUrl = 'https://api.apilayer.com';
+      options.headers['apikey'] = '42rYJoyvTsdnmHwTj45WyiNQG1MbfN2V';
+    }
     return handler.next(options);
   }
 

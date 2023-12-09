@@ -1,4 +1,5 @@
 import 'package:family_budget/data/api_service.dart';
+import 'package:family_budget/data/models/conv_model.dart';
 import 'package:family_budget/data/models/rate_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,19 +9,11 @@ class CurrencyRepository {
 
   final ApiService _service;
 
-  // Future<CurrencyModel> getAll() async {
-  //   final res = await _service.getMethod(
-  //     path:
-  //         "/v1/currencies?key=7d8HvwPxBZlK3S63hytdYEqSS2TutY0nUHlT&output=JSON",
-  //   );
-  //   return CurrencyModel.fromJson(res.data);
-  // }
-
-  Future<RateModel> getRates(String base) async {
+  Future<ConvModel> getRate(double ammount, String from, String to,) async {
     final res = await _service.getMethod(
       path:
-          "/v1/rates?key=7d8HvwPxBZlK3S63hytdYEqSS2TutY0nUHlT&base=$base&output=JSON",
+          "/fixer/convert?to=$to&from=$from&amount=$ammount",
     );
-    return RateModel.fromJson(res.data);
+    return ConvModel.fromJson(res.data);
   }
 }
