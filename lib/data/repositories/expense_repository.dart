@@ -1,5 +1,6 @@
 import 'package:family_budget/data/api_service.dart';
 import 'package:family_budget/data/models/expense_model.dart';
+import 'package:family_budget/helpers/extensions.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
@@ -11,8 +12,8 @@ class ExpenseRepository {
   Future<List<ExpenseModel>> getAll(int userId, DateTime dateFrom, DateTime dateTo) async {
     final res = await _service.getMethod(path: "/expense", params: {
       "user_id": userId,
-      "dateFrom": dateFrom,
-      "dateTo": dateTo,
+      "dateFrom": dateFrom.sendFormat,
+      "dateTo": dateTo.sendFormat,
     });
     return (res.data as List).map((e) => ExpenseModel.fromJson(e)).toList();
   }
@@ -22,7 +23,7 @@ class ExpenseRepository {
     final res = await _service.postMethod(path: "/expense", body: {
       "title": title,
       "totalCount": totalCount,
-      "date": date,
+      "date": date.sendFormat,
       "user_id": userId,
     });
     return ExpenseModel.fromJson(res.data);
@@ -33,7 +34,7 @@ class ExpenseRepository {
     final res = await _service.patchMethod(path: "/expense/$id", body: {
       "title": title,
       "totalCount": totalCount,
-      "date": date,
+      "date": date.sendFormat,
       "user_id": userId,
     });
 

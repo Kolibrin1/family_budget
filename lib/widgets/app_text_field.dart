@@ -1,10 +1,7 @@
-import 'dart:async';
-
-import 'package:family_budget/styles/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:rxdart/rxdart.dart';
+// import 'package:rxdart/rxdart.dart';
 
 import '../styles/app_colors.dart';
 
@@ -77,9 +74,9 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   MaskTextInputFormatter? _mask;
 
-  final _errorText = BehaviorSubject.seeded('');
+  // final _errorText = BehaviorSubject.seeded('');
 
-  Stream<String> get getErrorText => _errorText.stream;
+  // Stream<String> get getErrorText => _errorText.stream;
 
   @override
   void initState() {
@@ -191,21 +188,21 @@ class _AppTextFieldState extends State<AppTextField> {
             ),
           ),
         ),
-        StreamBuilder<String>(
-          stream: getErrorText,
-          initialData: '',
-          builder: (context, snapshot) {
-            return snapshot.data!.isEmpty
-                ? const SizedBox()
-                : Padding(
-                    padding: const EdgeInsets.only(left: 10, top: 5),
-                    child: Text(
-                      snapshot.data!,
-                      style: AppTextStyles.textStyle16w400,
-                    ),
-                  );
-          },
-        ),
+        // StreamBuilder<String>(
+        //   // stream: getErrorText,
+        //   initialData: '',
+        //   builder: (context, snapshot) {
+        //     return snapshot.data!.isEmpty
+        //         ? const SizedBox()
+        //         : Padding(
+        //             padding: const EdgeInsets.only(left: 10, top: 5),
+        //             child: Text(
+        //               snapshot.data!,
+        //               style: AppTextStyles.textStyle16w400,
+        //             ),
+        //           );
+        //   },
+        // ),
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:family_budget/data/api_service.dart';
 import 'package:family_budget/data/models/income_model.dart';
+import 'package:family_budget/helpers/extensions.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
@@ -20,7 +21,7 @@ class IncomeRepository {
     final res = await _service.postMethod(path: "/income", body: {
       "title": title,
       "totalCount": totalCount,
-      "date": date,
+      "date": date.sendFormat,
       "user_id": userId,
     });
     return IncomeModel.fromJson(res.data);
@@ -31,7 +32,7 @@ class IncomeRepository {
     final res = await _service.patchMethod(path: "/income/$id", body: {
       "title": title,
       "totalCount": totalCount,
-      "date": date,
+      "date": date.sendFormat,
       "user_id": userId,
     });
 

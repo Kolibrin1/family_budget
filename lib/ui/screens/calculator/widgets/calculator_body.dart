@@ -11,13 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CalculatorBody extends StatefulWidget {
-  const CalculatorBody(
-      {super.key,
-      this.first,
-      this.second,
-      this.count,
-      this.answer,
-      this.searchText});
+  const CalculatorBody({super.key, this.first, this.second, this.count, this.answer, this.searchText});
 
   final Currency? first;
   final Currency? second;
@@ -115,8 +109,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                 ),
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 30),
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width),
+                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -194,10 +187,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                 color: AppColors.colorScheme.onPrimary,
                 title: 'Посчитать',
                 onPressed: () {
-                  if (first != null &&
-                      second != null &&
-                      firstCountController.text != '' &&
-                      double.tryParse(firstCountController.text) != null) {
+                  if (first != null && second != null && firstCountController.text != '' && double.tryParse(firstCountController.text) != null) {
                     context.read<CalculatorBloc>().add(
                           CalculatorEvent.calculate(
                             first: first!,
@@ -253,27 +243,21 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                                 ),
                                 child: Center(
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           if (first == curCurrencies[index])
                                             Container(
                                               height: 30,
                                               width: 10,
                                               decoration: BoxDecoration(
-                                                color: AppColors
-                                                    .colorScheme.primary,
-                                                borderRadius:
-                                                    const BorderRadius.only(
+                                                color: AppColors.colorScheme.primary,
+                                                borderRadius: const BorderRadius.only(
                                                   topLeft: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
+                                                  bottomLeft: Radius.circular(10),
                                                 ),
                                               ),
                                             )
@@ -288,7 +272,13 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          Text(curCurrencies[index].name),
+                                          Container( width: MediaQuery.of(context).size.width - 120,
+                                            child: Text(
+                                              curCurrencies[index].name,
+                                              overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                       if (second == curCurrencies[index])

@@ -1,6 +1,7 @@
 import 'package:family_budget/data/models/expense_model.dart';
 import 'package:family_budget/data/models/income_model.dart';
 import 'package:family_budget/helpers/extensions.dart';
+import 'package:family_budget/helpers/strings.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart';
 import 'package:family_budget/ui/screens/diagram/widgets/description_bottom_sheet.dart';
@@ -76,6 +77,18 @@ class _DiagramBodyState extends State<DiagramBody> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
+                AppWeekStrings.strings[9],
+                style: GoogleFonts.inter(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.colorScheme.secondary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Text(
                 'Данные за:',
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
@@ -107,9 +120,7 @@ class _DiagramBodyState extends State<DiagramBody> {
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: type == 1
-                            ? AppColors.colorScheme.secondary
-                            : Colors.black,
+                        color: type == 1 ? AppColors.colorScheme.secondary : Colors.black,
                       ),
                     ),
                   ),
@@ -129,9 +140,7 @@ class _DiagramBodyState extends State<DiagramBody> {
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: type == 2
-                            ? AppColors.colorScheme.secondary
-                            : Colors.black,
+                        color: type == 2 ? AppColors.colorScheme.secondary : Colors.black,
                       ),
                     ),
                   ),
@@ -147,13 +156,11 @@ class _DiagramBodyState extends State<DiagramBody> {
                           );
                     },
                     child: Text(
-                      'Год',
+                      'Год        ',
                       style: GoogleFonts.inter(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: type == 3
-                            ? AppColors.colorScheme.secondary
-                            : Colors.black,
+                        color: type == 3 ? AppColors.colorScheme.secondary : Colors.black,
                       ),
                     ),
                   ),
@@ -163,7 +170,7 @@ class _DiagramBodyState extends State<DiagramBody> {
                 ],
               ),
               SizedBox(
-                height: 320,
+                height: 250,
                 child: PieChart(
                   PieChartData(
                     centerSpaceRadius: 20,
@@ -174,7 +181,7 @@ class _DiagramBodyState extends State<DiagramBody> {
                         (index) => PieChartSectionData(
                           value: widget.totalCounts[index],
                           color: widget.colors[index],
-                          radius: 100,
+                          radius: 85,
                         ),
                       ),
                     ],
@@ -203,8 +210,7 @@ class _DiagramBodyState extends State<DiagramBody> {
                                   child: getRowIncome(
                                     IncomeModel(
                                       date: widget.expenses[index].date,
-                                      totalCount:
-                                          widget.expenses[index].totalCount,
+                                      totalCount: widget.expenses[index].totalCount,
                                       title: widget.expenses[index].title,
                                     ),
                                     context,
@@ -271,8 +277,7 @@ Widget getRowIncome(
                 ),
                 Text(
                   "${income.title} - ${income.totalCount} $currency",
-                  style: GoogleFonts.inter(
-                      fontSize: 14, fontWeight: FontWeight.w400),
+                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400),
                 ),
               ],
             ),
