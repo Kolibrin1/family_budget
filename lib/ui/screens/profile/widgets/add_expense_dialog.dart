@@ -14,7 +14,7 @@ Future<void> showAddExpenseDialog({
   String? hintText,
   required Function(
     String title,
-      DateTime date,
+    DateTime date,
     double totalCount,
   ) onTap,
 }) async {
@@ -46,7 +46,7 @@ class _WarningDialogBody extends StatefulWidget {
   final String? hintText;
   final Function(
     String title,
-      DateTime date,
+    DateTime date,
     double totalCount,
   ) onTap;
 
@@ -178,7 +178,6 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
           radius: 10,
           title: widget.okButtonTitle,
           textColor: AppColors.white,
-          color: Theme.of(context).colorScheme.primary,
           onPressed: () {
             if (validate()) {
               Navigator.of(context).pop();
@@ -189,6 +188,12 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
               );
             }
           },
+          gradientColors: const [
+            AppColors.complementaryBlue,
+            AppColors.primary,
+            AppColors.primary,
+            AppColors.complementaryBlue
+          ],
         ),
       ],
     );

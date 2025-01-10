@@ -5,6 +5,7 @@ import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 import 'widgets/auth_body.dart';
 
@@ -48,32 +49,43 @@ class _AuthScreenState extends State<AuthScreen> {
           style: TextStyle(fontSize: 20),
         ),
         centerTitle: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
       ),
       willPop: false,
       child: Padding(
         padding:
-            const EdgeInsets.only(bottom: 20.0, left: 30, right: 30, top: 40),
+            const EdgeInsets.only(bottom: 20.0, left: 30, right: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(
-              child: SvgPicture.asset(
-                'assets/icons/coins.svg',
-                color: AppColors.colorScheme.onPrimary,
-                height: 200,
-                width: 200,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 16,
+              children: [
+                HugeIcon(
+                  icon: HugeIcons.strokeRoundedSaveMoneyDollar,
+                  color: AppColors.onPrimary,
+                  size: MediaQuery.sizeOf(context).width / 1.85,
+                ),
+                const Text(
+                  "Добро пожаловать в ваш личный помощник финансов! Контролируйте свой бюджет и ваши расходы!",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: AppColors.onPrimary, fontSize: 19),
+                )
+              ],
             ),
-            const SizedBox(
-              height: 200,
-            ),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: AppButton(
                 title: 'Войти',
-                color: AppColors.colorScheme.primary,
+                gradientColors: const [
+                  AppColors.complementaryBlue,
+                  AppColors.primary,
+                  AppColors.primary,
+                  AppColors.complementaryBlue
+                ],
                 radius: 10,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
@@ -82,14 +94,16 @@ class _AuthScreenState extends State<AuthScreen> {
                 },
               ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: AppButton(
                 title: 'Зарегистрироваться',
-                color: AppColors.colorScheme.primary,
+                gradientColors: const [
+                  AppColors.complementaryBlue,
+                  AppColors.primary,
+                  AppColors.primary,
+                  AppColors.complementaryBlue
+                ],
                 radius: 10,
                 fontSize: 16,
                 fontWeight: FontWeight.w600,

@@ -38,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const _LoadingState());
     try {
       emit(
-        const AuthState.auth(),
+        AuthState.auth(login: event.login ?? '', pass: event.pass ?? ''),
       );
       oldState = const AuthState.auth();
     } catch (ex) {

@@ -9,6 +9,7 @@ import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
 class AuthLoginScreen extends StatefulWidget {
@@ -32,15 +33,33 @@ class AuthLoginScreen extends StatefulWidget {
 }
 
 class _AuthLoginScreenState extends State<AuthLoginScreen> {
+  final _loginController = TextEditingController();
+  final _passController = TextEditingController();
+  final _confirmPassController = TextEditingController();
+
+  bool isObscure = true;
+  bool isConfirmObscure = true;
+
   bool validate() {
-    if (_loginController.text.isNotEmpty && _passController.text.isNotEmpty) {
-      return true;
+    if (_loginController.text.isEmpty ||
+        _passController.text.isEmpty ||
+        (widget.title == 'Регистрация' &&
+            _confirmPassController.text.isEmpty)) {
+      showMessage(
+        message: 'Заполните все поля!',
+        type: PageState.info,
+      );
+      return false;
     }
-    showMessage(
-      message: 'Заплните все поля!',
-      type: PageState.info,
-    );
-    return false;
+    if (widget.title == 'Регистрация' &&
+        _passController.text != _confirmPassController.text) {
+      showMessage(
+        message: 'Пароли не совпадают!',
+        type: PageState.error,
+      );
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -52,12 +71,10 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
     super.initState();
   }
 
-  final _loginController = TextEditingController();
-  final _passController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
@@ -74,32 +91,27 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
           widget.title,
           style: const TextStyle(fontSize: 20),
         ),
-        toolbarHeight: 60,
         centerTitle: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
       ),
       willPop: false,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 16,
           children: [
             Text(
               'Логин',
               style: GoogleFonts.montserrat(
-                  fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 15,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white),
             ),
             AppTextField(
               textController: _loginController,
               colorBorder: AppColors.colorScheme.primary,
             ),
-            if (widget.isError != null)
-              const SizedBox(
-                height: 15,
-              ),
             if (widget.isError != null)
               Text(
                 'Данный логин занят',
@@ -109,24 +121,77 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                   color: AppColors.error,
                 ),
               ),
-            const SizedBox(
-              height: 20,
-            ),
             Text(
               'Пароль',
               style: GoogleFonts.montserrat(
-                  fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 15,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white),
             ),
             AppTextField(
+              padding: 4,
               textController: _passController,
               colorBorder: AppColors.colorScheme.primary,
+              suffix: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    isObscure = !isObscure;
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: isObscure
+                      ? HugeIcon(
+                    icon: HugeIcons.strokeRoundedViewOffSlash,
+                    color: AppColors.colorScheme.secondary,
+                    size: 24.0,
+                  )
+                      : HugeIcon(
+                    icon: HugeIcons.strokeRoundedView,
+                    color: AppColors.colorScheme.secondary,
+                    size: 24.0,
+                  ),
+                ),
+              ),
+              obscureText: isObscure,
             ),
-            const Expanded(
-              child: SizedBox(),
-            ),
+            if (widget.title == 'Регистрация') ...[
+              Text(
+                'Подтвердите пароль',
+                style: GoogleFonts.montserrat(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.white),
+              ),
+              AppTextField(
+                padding: 4,
+                textController: _confirmPassController,
+                colorBorder: AppColors.colorScheme.primary,
+                suffix: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isConfirmObscure = !isConfirmObscure;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: isConfirmObscure
+                        ? HugeIcon(
+                      icon: HugeIcons.strokeRoundedViewOffSlash,
+                      color: AppColors.colorScheme.secondary,
+                      size: 24.0,
+                    )
+                        : HugeIcon(
+                      icon: HugeIcons.strokeRoundedView,
+                      color: AppColors.colorScheme.secondary,
+                      size: 24.0,
+                    ),
+                  ),
+                ),
+                obscureText: isConfirmObscure,
+              ),
+            ],
+            const Expanded(child: SizedBox()),
             AppButton(
               title: 'Продолжить',
               fontWeight: FontWeight.w600,
@@ -134,21 +199,26 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
               onPressed: () {
                 if (validate()) {
                   context.read<AuthBloc>().add(
-                        AuthEvent.detail(
-                          authType: widget.title == 'Вход'
-                              ? AuthType.login
-                              : AuthType.register,
-                          login: _loginController.text,
-                          pass: _passController.text,
-                          onAuthCompleted: widget.onAuthCompleted,
-                        ),
-                      );
+                    AuthEvent.detail(
+                      authType: widget.title == 'Вход'
+                          ? AuthType.login
+                          : AuthType.register,
+                      login: _loginController.text,
+                      pass: _passController.text,
+                      onAuthCompleted: widget.onAuthCompleted,
+                    ),
+                  );
                 }
               },
               height: 39,
-              color: AppColors.colorScheme.primary,
+              gradientColors: const [
+                AppColors.complementaryBlue,
+                AppColors.primary,
+                AppColors.primary,
+                AppColors.complementaryBlue
+              ],
               radius: 10,
-            )
+            ),
           ],
         ),
       ),

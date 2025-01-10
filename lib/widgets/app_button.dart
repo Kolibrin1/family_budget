@@ -5,7 +5,7 @@ class AppButton extends StatelessWidget {
   final String title;
   final bool isDisabled;
   final double padding;
-  final Color color;
+  final List<Color> gradientColors; // Gradient colors
   final Widget? icon;
   final double? height;
   final double? radius;
@@ -20,13 +20,14 @@ class AppButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.padding = 9,
-    this.color = Colors.blue,
+    required this.gradientColors,
     this.icon,
     this.height,
     this.radius,
     this.textColor,
     this.fontWeight,
-    this.fontSize, this.child,
+    this.fontSize,
+    this.child,
   }) : super(key: key);
 
   @override
@@ -34,35 +35,52 @@ class AppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isDisabled ? null : () => onPressed(),
       style: ElevatedButton.styleFrom(
-        backgroundColor: isDisabled ? Colors.blue : color,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radius ?? 4),
+          borderRadius: BorderRadius.circular(radius ?? 12),
         ),
         padding: EdgeInsets.symmetric(vertical: padding),
-        minimumSize: const Size(double.maxFinite, 39),
-        maximumSize: const Size(double.maxFinite, 56),
-        shadowColor: Colors.white,
+        minimumSize: const Size(double.maxFinite, 48),
+        elevation: 6,
+        shadowColor: Colors.black.withOpacity(0.2),
+        backgroundColor: Colors.transparent,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) icon!,
-          if (icon != null)
-            const SizedBox(
-              width: 6,
-            ),
-          if(child == null)
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: fontSize ?? 16,
-                fontWeight: fontWeight ?? FontWeight.w600,
-                fontFamily: 'Inter',
-              ),
-            ) else
-            child!
-        ],
+      child: Ink(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: gradientColors,
+            stops: [0.0, 0.25, 0.75, 1.0],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            transform: const GradientRotation(6.76),
+          ),
+          borderRadius: BorderRadius.circular(radius ?? 12),
+        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: padding),
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (icon != null) icon!,
+              if (icon != null)
+                const SizedBox(
+                  width: 6,
+                ),
+              if (child == null)
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: textColor ?? Colors.white,
+                    fontSize: fontSize ?? 16,
+                    fontWeight: fontWeight ?? FontWeight.w600,
+                    fontFamily: 'Inter',
+                  ),
+                )
+              else
+                child!,
+            ],
+          ),
+        ),
       ),
     );
   }

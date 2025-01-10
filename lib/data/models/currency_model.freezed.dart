@@ -12,7 +12,7 @@ part of 'currency_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 CurrencyModel _$CurrencyModelFromJson(Map<String, dynamic> json) {
   return _CurrencyModel.fromJson(json);
@@ -23,8 +23,12 @@ mixin _$CurrencyModel {
   bool get valid => throw _privateConstructorUsedError;
   Map<String, String> get currencies => throw _privateConstructorUsedError;
 
+  /// Serializes this CurrencyModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CurrencyModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CurrencyModelCopyWith<CurrencyModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$CurrencyModelCopyWithImpl<$Res, $Val extends CurrencyModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CurrencyModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$CurrencyModelImplCopyWithImpl<$Res>
       _$CurrencyModelImpl _value, $Res Function(_$CurrencyModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CurrencyModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -131,7 +139,7 @@ class _$CurrencyModelImpl implements _CurrencyModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CurrencyModelImpl &&
@@ -140,12 +148,14 @@ class _$CurrencyModelImpl implements _CurrencyModel {
                 .equals(other._currencies, _currencies));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, valid, const DeepCollectionEquality().hash(_currencies));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CurrencyModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CurrencyModelImplCopyWith<_$CurrencyModelImpl> get copyWith =>
@@ -171,8 +181,11 @@ abstract class _CurrencyModel implements CurrencyModel {
   bool get valid;
   @override
   Map<String, String> get currencies;
+
+  /// Create a copy of CurrencyModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CurrencyModelImplCopyWith<_$CurrencyModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -29,12 +29,12 @@ class _RoflScreenState extends State<RoflScreen> {
           const SizedBox(
             height: 20,
           ),
-          AppButton(
-            title: 'Загрузить',
-            onPressed: () async {
-              // await getCurrencies();
-            },
-          ),
+          // AppButton(
+          //   title: 'Загрузить',
+          //   onPressed: () async {
+          //     // await getCurrencies();
+          //   },
+          // ),
         ],
       ),
     );

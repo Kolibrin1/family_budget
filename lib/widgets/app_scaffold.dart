@@ -1,3 +1,4 @@
+import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/navigator/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -28,18 +29,22 @@ class AppScaffold extends StatelessWidget {
       child: Scaffold(
         appBar: appBar,
         bottomNavigationBar: const AppBottomNavigationBar(),
-        body: Padding(
-          padding: EdgeInsets.only(
-            top: statusBarPadding
-                ? (MediaQuery.of(context).viewPadding.top + verticalPadding)
-                : verticalPadding,
-            bottom: verticalPadding,
-            left: horizontalPadding,
-            right: horizontalPadding,
+        body: Container(
+          color: AppColors.background,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: statusBarPadding
+                  ? (MediaQuery.of(context).viewPadding.top + verticalPadding)
+                  : verticalPadding,
+              bottom: verticalPadding,
+              left: horizontalPadding,
+              right: horizontalPadding,
+            ),
+            child: child,
           ),
-          child: child,
         ),
       ),
     );
   }
 }
+

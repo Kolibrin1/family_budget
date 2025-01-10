@@ -61,67 +61,6 @@ String getWelcome() {
   return result;
 }
 
-// String getWeekDayLabel(int day) {
-//   String label = 'Сегодня';
-//   switch (day) {
-//     case 7:
-//       label = "Воскресенье";
-//       break;
-//     case 1:
-//       label = "Понедельник";
-//       break;
-//
-//     case 2:
-//       label = "Вторник";
-//       break;
-//
-//     case 3:
-//       label = "Среда";
-//       break;
-//
-//     case 4:
-//       label = "Четверг";
-//       break;
-//
-//     case 5:
-//       label = "Пятница";
-//       break;
-//
-//     case 6:
-//       label = "Суббота";
-//       break;
-//
-//     default:
-//       label = "Понедельник";
-//       break;
-//   }
-//   return label;
-// }
-
-
-
-
-// Future<XFile?> getImage() async {
-//   final image = await ImagePicker().pickImage(
-//     source: ImageSource.gallery,
-//     imageQuality: 50,
-//   );
-//   if (image == null) {
-//     return null;
-//   } else {
-//     return image;
-//   }
-// }
-
-// Future<FilePickerResult?> filePicker() async {
-//   FilePickerResult? myFile = await FilePicker.platform.pickFiles(
-//     type: FileType.any,
-//   );
-//
-//   return myFile;
-// }
-
-
 void showSnackBar({
   required BuildContext context,
   required String title,
@@ -200,52 +139,6 @@ Future<T?> showAppDialog<T>({
     ),
   );
 }
-
-
-// String formatTime({required int? time}) {
-//   int sec = time! % 60;
-//   int min = (time / 60).floor();
-//   int hrs = ((time / 3600).floor());
-//   String hour = hrs.toString().length <= 1 ? "0$hrs" : "$hrs";
-//   String minute = min.toString().length <= 1 ? "0$min" : "$min";
-//   String second = sec.toString().length <= 1 ? "0$sec" : "$sec";
-//   return "$hour : $minute : $second";
-// }
-
-// String formattingPhone(String text) {
-//   //регулярка протиа букв. в телефоне только цифры
-//   text = text.replaceAll(RegExp(r'\D'), '');
-//   if (text.isNotEmpty) {
-//     String phone = '';
-//     //проверяем российски ли номер
-//     if (['7', '8', '9'].contains(text[0])) {
-//       //если пользователь начал с 9, то добавим 7
-//       if (text[0] == '9') {
-//         text = '7$text';
-//       }
-//       //Проверяем нужен ли +
-//       String firstSymbols = (text[0] == '8') ? '8' : '+7';
-//       //само форматирование
-//       phone = '$firstSymbols ';
-//       if (text.length > 1) {
-//         phone += '(${text.substring(1, (text.length < 4) ? text.length : 4)}';
-//       }
-//       if (text.length >= 5) {
-//         phone += ') ${text.substring(4, (text.length < 7) ? text.length : 7)}';
-//       }
-//       if (text.length >= 8) {
-//         phone += '-${text.substring(7, (text.length < 9) ? text.length : 9)}';
-//       }
-//       if (text.length >= 10) {
-//         phone += '-${text.substring(9, (text.length < 11) ? text.length : 11)}';
-//       }
-//       return phone;
-//     } else {
-//       return '+$text';
-//     }
-//   }
-//   return '';
-// }
 
 class Format {
   static final phoneFormat = MaskTextInputFormatter(

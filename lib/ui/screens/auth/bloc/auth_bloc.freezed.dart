@@ -12,7 +12,7 @@ part of 'auth_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AuthEvent {
@@ -84,7 +84,9 @@ mixin _$AuthEvent {
   }) =>
       throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $AuthEventCopyWith<AuthEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -107,6 +109,8 @@ class _$AuthEventCopyWithImpl<$Res, $Val extends AuthEvent>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -140,6 +144,8 @@ class __$$InitialEventImplCopyWithImpl<$Res>
       _$InitialEventImpl _value, $Res Function(_$InitialEventImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -168,7 +174,7 @@ class _$InitialEventImpl implements _InitialEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$InitialEventImpl &&
@@ -179,7 +185,9 @@ class _$InitialEventImpl implements _InitialEvent {
   @override
   int get hashCode => Object.hash(runtimeType, authType);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InitialEventImplCopyWith<_$InitialEventImpl> get copyWith =>
@@ -282,8 +290,11 @@ abstract class _InitialEvent implements AuthEvent {
 
   @override
   AuthType get authType;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InitialEventImplCopyWith<_$InitialEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -311,6 +322,8 @@ class __$$DetailEventImplCopyWithImpl<$Res>
       _$DetailEventImpl _value, $Res Function(_$DetailEventImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -364,7 +377,7 @@ class _$DetailEventImpl implements _DetailEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DetailEventImpl &&
@@ -380,7 +393,9 @@ class _$DetailEventImpl implements _DetailEvent {
   int get hashCode =>
       Object.hash(runtimeType, login, pass, authType, onAuthCompleted);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DetailEventImplCopyWith<_$DetailEventImpl> get copyWith =>
@@ -489,8 +504,11 @@ abstract class _DetailEvent implements AuthEvent {
   @override
   AuthType get authType;
   dynamic Function() get onAuthCompleted;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DetailEventImplCopyWith<_$DetailEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -520,6 +538,8 @@ class __$$AuthEventImplCopyWithImpl<$Res>
       _$AuthEventImpl _value, $Res Function(_$AuthEventImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -589,7 +609,7 @@ class _$AuthEventImpl implements _AuthEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuthEventImpl &&
@@ -608,7 +628,9 @@ class _$AuthEventImpl implements _AuthEvent {
   int get hashCode => Object.hash(
       runtimeType, login, pass, balance, currency, authType, onAuthCompleted);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AuthEventImplCopyWith<_$AuthEventImpl> get copyWith =>
@@ -722,8 +744,11 @@ abstract class _AuthEvent implements AuthEvent {
   @override
   AuthType get authType;
   dynamic Function() get onAuthCompleted;
+
+  /// Create a copy of AuthEvent
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AuthEventImplCopyWith<_$AuthEventImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -797,6 +822,9 @@ class _$AuthStateCopyWithImpl<$Res, $Val extends AuthState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -816,6 +844,8 @@ class __$$PhoneStateImplCopyWithImpl<$Res>
       _$PhoneStateImpl _value, $Res Function(_$PhoneStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -858,7 +888,7 @@ class _$PhoneStateImpl implements _PhoneState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PhoneStateImpl &&
@@ -870,7 +900,9 @@ class _$PhoneStateImpl implements _PhoneState {
   @override
   int get hashCode => Object.hash(runtimeType, login, pass, isError);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PhoneStateImplCopyWith<_$PhoneStateImpl> get copyWith =>
@@ -960,7 +992,10 @@ abstract class _PhoneState implements AuthState {
   String? get login;
   String? get pass;
   bool? get isError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PhoneStateImplCopyWith<_$PhoneStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -982,6 +1017,8 @@ class __$$DetailStateImplCopyWithImpl<$Res>
       _$DetailStateImpl _value, $Res Function(_$DetailStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1017,7 +1054,7 @@ class _$DetailStateImpl implements _DetailState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DetailStateImpl &&
@@ -1028,7 +1065,9 @@ class _$DetailStateImpl implements _DetailState {
   @override
   int get hashCode => Object.hash(runtimeType, login, pass);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DetailStateImplCopyWith<_$DetailStateImpl> get copyWith =>
@@ -1116,7 +1155,10 @@ abstract class _DetailState implements AuthState {
 
   String get login;
   String get pass;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DetailStateImplCopyWith<_$DetailStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1135,6 +1177,9 @@ class __$$LoadingStateImplCopyWithImpl<$Res>
   __$$LoadingStateImplCopyWithImpl(
       _$LoadingStateImpl _value, $Res Function(_$LoadingStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -1148,7 +1193,7 @@ class _$LoadingStateImpl implements _LoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$LoadingStateImpl);
   }
@@ -1252,6 +1297,8 @@ class __$$InfoStateImplCopyWithImpl<$Res>
       _$InfoStateImpl _value, $Res Function(_$InfoStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1287,7 +1334,7 @@ class _$InfoStateImpl implements _InfoState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$InfoStateImpl &&
@@ -1299,7 +1346,9 @@ class _$InfoStateImpl implements _InfoState {
   @override
   int get hashCode => Object.hash(runtimeType, message, pageState);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InfoStateImplCopyWith<_$InfoStateImpl> get copyWith =>
@@ -1387,7 +1436,10 @@ abstract class _InfoState implements AuthState {
 
   String get message;
   PageState get pageState;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AuthState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InfoStateImplCopyWith<_$InfoStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

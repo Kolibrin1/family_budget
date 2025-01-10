@@ -12,7 +12,7 @@ part of 'income_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 IncomeModel _$IncomeModelFromJson(Map<String, dynamic> json) {
   return _IncomeModel.fromJson(json);
@@ -26,8 +26,12 @@ mixin _$IncomeModel {
   DateTime? get date => throw _privateConstructorUsedError;
   int? get userId => throw _privateConstructorUsedError;
 
+  /// Serializes this IncomeModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of IncomeModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $IncomeModelCopyWith<IncomeModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,6 +60,8 @@ class _$IncomeModelCopyWithImpl<$Res, $Val extends IncomeModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of IncomeModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -114,6 +120,8 @@ class __$$IncomeModelImplCopyWithImpl<$Res>
       _$IncomeModelImpl _value, $Res Function(_$IncomeModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of IncomeModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -174,7 +182,7 @@ class _$IncomeModelImpl implements _IncomeModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$IncomeModelImpl &&
@@ -186,12 +194,14 @@ class _$IncomeModelImpl implements _IncomeModel {
             (identical(other.userId, userId) || other.userId == userId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, id, totalCount, title, date, userId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of IncomeModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$IncomeModelImplCopyWith<_$IncomeModelImpl> get copyWith =>
@@ -226,8 +236,11 @@ abstract class _IncomeModel implements IncomeModel {
   DateTime? get date;
   @override
   int? get userId;
+
+  /// Create a copy of IncomeModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$IncomeModelImplCopyWith<_$IncomeModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

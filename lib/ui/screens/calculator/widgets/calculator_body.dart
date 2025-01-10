@@ -11,7 +11,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CalculatorBody extends StatefulWidget {
-  const CalculatorBody({super.key, this.first, this.second, this.count, this.answer, this.searchText});
+  const CalculatorBody(
+      {super.key,
+      this.first,
+      this.second,
+      this.count,
+      this.answer,
+      this.searchText});
 
   final Currency? first;
   final Currency? second;
@@ -29,6 +35,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
   final currencyController = TextEditingController();
 
   final firstCountController = TextEditingController();
+  final secondCountController = TextEditingController();
 
   List<Currency> curCurrencies = [];
 
@@ -41,7 +48,8 @@ class _CalculatorBodyState extends State<CalculatorBody> {
     curCurrencies = currencies;
     first = widget.first;
     second = widget.second;
-    answer = widget.answer;
+    secondCountController.text =
+        widget.answer != null ? '${widget.answer}' : '';
     firstCountController.text = widget.count != null ? '${widget.count}' : '';
     currencyController.text = widget.searchText ?? '';
     super.initState();
@@ -57,17 +65,20 @@ class _CalculatorBodyState extends State<CalculatorBody> {
           child: Column(
             children: [
               AppTextField(
-                padding: 2,
-                prefix: SvgPicture.asset(
-                  'assets/icons/search.svg',
-                  color: AppColors.colorScheme.outline,
+                padding: 4,
+                prefix: Padding(
+                  padding: const EdgeInsets.only(top: 4.0),
+                  child: SvgPicture.asset(
+                    'assets/icons/search.svg',
+                    color: AppColors.button,
+                  ),
                 ),
                 hintText: 'Поиск',
-                hintStyle: AppTextStyles.textStyle14w400.copyWith(
-                  color: AppColors.colorScheme.outline,
+                hintStyle: AppTextStyles.textStyle16w400.copyWith(
+                  color: AppColors.colorScheme.primary.withOpacity(0.9),
                 ),
                 textController: currencyController,
-                colorBorder: AppColors.colorScheme.outline,
+                colorBorder: AppColors.colorScheme.primary,
                 onChange: (value) {
                   curCurrencies = currencies
                       .where(
@@ -99,22 +110,27 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                 decoration: BoxDecoration(
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: AppColors.primary.withOpacity(0.8),
                       blurRadius: 20,
                       offset: const Offset(0, 6),
                     ),
                   ],
-                  color: Colors.white,
+                  color: AppColors.onSecondary.withOpacity(0.94),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30),
-                  constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
-                        child: Text(first == null ? '???' : first!.value),
+                        child: Text(
+                          first == null ? '???' : first!.value,
+                          style: AppTextStyles.textStyle18w500
+                              .copyWith(color: AppColors.secondary),
+                        ),
                         onTap: () {
                           if (first != null) {
                             first = null;
@@ -125,49 +141,90 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                       const SizedBox(
                         width: 10,
                       ),
-                      SizedBox(
-                        width: 70,
+                      Flexible(
                         child: TextField(
                           textAlign: TextAlign.center,
                           controller: firstCountController,
-                          decoration: InputDecoration(
-                              border: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                            color: AppColors.colorScheme.primary,
-                          ))),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      const Text(' = '),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: SizedBox(
-                          width: 70,
-                          child: Column(
-                            children: [
-                              answer != null ? Text('$answer') : const Text(''),
-                              const SizedBox(
-                                height: 16,
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: AppColors.complementaryBlue,
                               ),
-                              Container(
-                                color: AppColors.success,
-                                width: 70,
-                                height: 1.3,
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: AppColors.complementaryBlue,
                               ),
-                            ],
+                            ),
+                            disabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: AppColors.complementaryBlue,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                                color: AppColors.complementaryBlue,
+                              ),
+                            ),
                           ),
                         ),
                       ),
                       const SizedBox(
                         width: 10,
                       ),
+                      Text(
+                        ' = ',
+                        style: AppTextStyles.textStyle18w500
+                            .copyWith(color: AppColors.secondary),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Flexible(
+                        child: TextField(
+                          readOnly: true,
+                          textAlign: TextAlign.center,
+                          controller: secondCountController,
+                          decoration: const InputDecoration(
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              disabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  width: 2,
+                                  color: AppColors.primary,
+                                ),
+                              )),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
                       InkWell(
-                        child: Text(second == null ? '???' : second!.value),
+                        child: Text(
+                          second == null ? '???' : second!.value,
+                          style: AppTextStyles.textStyle18w500
+                              .copyWith(color: AppColors.secondary),
+                        ),
                         onTap: () {
                           if (second != null) {
                             setState(() {
@@ -184,10 +241,18 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                 height: 20,
               ),
               AppButton(
-                color: AppColors.colorScheme.onPrimary,
+                gradientColors: const [
+                  AppColors.complementaryBlue,
+                  AppColors.primary,
+                  AppColors.primary,
+                  AppColors.complementaryBlue
+                ],
                 title: 'Посчитать',
                 onPressed: () {
-                  if (first != null && second != null && firstCountController.text != '' && double.tryParse(firstCountController.text) != null) {
+                  if (first != null &&
+                      second != null &&
+                      firstCountController.text != '' &&
+                      double.tryParse(firstCountController.text) != null) {
                     context.read<CalculatorBloc>().add(
                           CalculatorEvent.calculate(
                             first: first!,
@@ -203,117 +268,131 @@ class _CalculatorBodyState extends State<CalculatorBody> {
               const SizedBox(
                 height: 20,
               ),
-              Expanded(
-                child: SizedBox(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ...List.generate(
-                          curCurrencies.length,
-                          (index) => SizedBox(
-                            child: InkWell(
-                              onTap: () {
-                                if (first == null) {
-                                  first = curCurrencies[index];
-                                } else if (second == null) {
-                                  second = curCurrencies[index];
-                                } else {
-                                  if (first == curCurrencies[index]) {
-                                    first = null;
-                                  } else if (second == curCurrencies[index]) {
-                                    second = null;
-                                  } else {
+              if (curCurrencies.isNotEmpty)
+                Expanded(
+                  child: SizedBox(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ...List.generate(
+                            curCurrencies.length,
+                            (index) => SizedBox(
+                              child: InkWell(
+                                onTap: () {
+                                  if (first == null) {
+                                    first = curCurrencies[index];
+                                  } else if (second == null) {
                                     second = curCurrencies[index];
+                                  } else {
+                                    if (first == curCurrencies[index]) {
+                                      first = null;
+                                    } else if (second == curCurrencies[index]) {
+                                      second = null;
+                                    } else {
+                                      second = curCurrencies[index];
+                                    }
                                   }
-                                }
-                                setState(() {});
-                              },
-                              child: Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.06),
-                                      blurRadius: 20,
-                                      offset: const Offset(0, 6),
-                                    ),
-                                  ],
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Center(
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        children: [
-                                          if (first == curCurrencies[index])
-                                            Container(
-                                              height: 30,
-                                              width: 10,
-                                              decoration: BoxDecoration(
-                                                color: AppColors.colorScheme.primary,
-                                                borderRadius: const BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  bottomLeft: Radius.circular(10),
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.06),
+                                        blurRadius: 20,
+                                        offset: const Offset(0, 6),
+                                      ),
+                                    ],
+                                    color:
+                                        AppColors.onSecondary.withOpacity(0.94),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            if (first == curCurrencies[index])
+                                              Container(
+                                                height: 30,
+                                                width: 10,
+                                                decoration: const BoxDecoration(
+                                                  color: AppColors
+                                                      .complementaryBlue,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                  ),
                                                 ),
+                                              )
+                                            else
+                                              const SizedBox(
+                                                width: 10,
                                               ),
-                                            )
-                                          else
+                                            const SizedBox(
+                                              width: 4,
+                                            ),
+                                            Text(curCurrencies[index].value),
                                             const SizedBox(
                                               width: 10,
                                             ),
-                                          const SizedBox(
-                                            width: 4,
-                                          ),
-                                          Text(curCurrencies[index].value),
+                                            Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width -
+                                                  120,
+                                              child: Text(
+                                                curCurrencies[index].name,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        if (second == curCurrencies[index])
+                                          Container(
+                                            height: 30,
+                                            width: 10,
+                                            decoration: const BoxDecoration(
+                                              color: AppColors.primary,
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                              ),
+                                            ),
+                                          )
+                                        else
                                           const SizedBox(
                                             width: 10,
                                           ),
-                                          Container( width: MediaQuery.of(context).size.width - 120,
-                                            child: Text(
-                                              curCurrencies[index].name,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      if (second == curCurrencies[index])
-                                        Container(
-                                          height: 30,
-                                          width: 10,
-                                          decoration: const BoxDecoration(
-                                            color: AppColors.success,
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(10),
-                                              bottomRight: Radius.circular(10),
-                                            ),
-                                          ),
-                                        )
-                                      else
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
+                            // CurrencyCard(),
                           ),
-                          // CurrencyCard(),
-                        ),
-                      ].separateBy(
-                        const SizedBox(
-                          height: 10,
+                        ].separateBy(
+                          const SizedBox(
+                            height: 10,
+                          ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

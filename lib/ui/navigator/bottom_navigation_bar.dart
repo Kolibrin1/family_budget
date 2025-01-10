@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:family_budget/app/app_router/app_router.dart';
+import 'package:family_budget/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hugeicons/hugeicons.dart';
 
-import '../../styles/app_colors.dart';
 import 'cubit/navigator_cubit.dart';
 
 class AppBottomNavigationBar extends StatelessWidget {
@@ -15,15 +16,15 @@ class AppBottomNavigationBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
         ),
+        color: AppColors.onBackground.withOpacity(0.94),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 1,
-            spreadRadius: 0,
-            offset: const Offset(0, -0.5),
+            color: AppColors.primary.withOpacity(0.15),
+            blurRadius: 6,
+            offset: const Offset(0, -3),
           ),
         ],
       ),
@@ -41,94 +42,64 @@ class AppBottomNavigationBar extends StatelessWidget {
           context.router.replaceAll([routesPerNavBarButton[i]]);
           context.read<NavigationCubit>().updateIndex(i);
         },
+        backgroundColor: Colors.transparent,
         unselectedLabelStyle: TextStyle(
-          color: AppColors.colorScheme.primary,
+          fontSize: 12,
+          color: AppColors.colorScheme.primary
+              .withOpacity(0.7),
         ),
-        unselectedItemColor: AppColors.colorScheme.primary,
+        unselectedItemColor: AppColors.colorScheme.primary.withOpacity(0.7),
         fixedColor: AppColors.colorScheme.secondary,
         items: [
           BottomNavigationBarItem(
             label: 'Диаграмма',
-            icon: context.watch<NavigationCubit>().state == 0
-                ? SvgPicture.asset(
-                    'assets/icons/diagram.svg',
-                    height: 35,
-                    color: AppColors.colorScheme.onSecondary,
-                  )
-                : SvgPicture.asset(
-                    'assets/icons/diagram.svg',
-                    height: 35,
-                    color: AppColors.colorScheme.primary,
-                  ),
+            icon: HugeIcon(
+              icon: HugeIcons.strokeRoundedBitcoinGraph,
+              color: context.watch<NavigationCubit>().state == 0
+                  ? AppColors.colorScheme.secondary
+                  : AppColors.colorScheme.primary.withOpacity(0.7),
+              size: 24.0,
+            ),
             activeIcon: SvgPicture.asset(
               'assets/icons/diagram.svg',
-              height: 35,
-              color: AppColors.colorScheme.onSecondary,
+              height: 24,
+              color: context.watch<NavigationCubit>().state == 0
+                  ? AppColors.colorScheme.secondary
+                  : AppColors.colorScheme.primary.withOpacity(0.7),
             ),
           ),
           BottomNavigationBarItem(
             label: 'Калькулятор',
-            icon: context.watch<NavigationCubit>().state == 1
-                ? Column(
-                    children: [
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      SvgPicture.asset(
-                        'assets/icons/calculator.svg',
-                        color: AppColors.colorScheme.onSecondary,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  )
-                : Column(
-                    children: [
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      SvgPicture.asset(
-                        'assets/icons/calculator.svg',
-                        color: AppColors.colorScheme.primary,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                    ],
-                  ),
-            activeIcon: Column(
-              children: [
-                const SizedBox(
-                  height: 5,
-                ),
-                SvgPicture.asset(
-                  'assets/icons/calculator.svg',
-                  color: AppColors.colorScheme.onSecondary,
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
+            icon: HugeIcon(
+              icon: HugeIcons.strokeRoundedCalculate,
+              color: context.watch<NavigationCubit>().state == 1
+                  ? AppColors.colorScheme.secondary
+                  : AppColors.colorScheme.primary.withOpacity(0.7),
+              size: 24.0,
+            ),
+            activeIcon: SvgPicture.asset(
+              'assets/icons/calculator.svg',
+              height: 24,
+              color: context.watch<NavigationCubit>().state == 1
+                  ? AppColors.colorScheme.secondary
+                  : AppColors.colorScheme.primary.withOpacity(0.7),
             ),
           ),
           BottomNavigationBarItem(
             label: 'Профиль',
-            icon: context.watch<NavigationCubit>().state == 2
-                ? SvgPicture.asset(
-                    'assets/icons/profile.svg',
-                    height: 35,
-                    color: AppColors.colorScheme.onSecondary,
-                  )
-                : SvgPicture.asset(
-                    'assets/icons/profile.svg',
-                    height: 35,
-                    color: AppColors.colorScheme.primary,
-                  ),
+            icon: HugeIcon(
+              icon: HugeIcons.strokeRoundedUser,
+              color: context.watch<NavigationCubit>().state == 2
+                  ? AppColors.colorScheme.secondary
+                  : AppColors.colorScheme.primary.withOpacity(0.7),
+              size: 24.0,
+            ),
             activeIcon: SvgPicture.asset(
               'assets/icons/profile.svg',
-              height: 35,
-              color: AppColors.colorScheme.onSecondary,
+              height: 24,
+              color: context.watch<NavigationCubit>().state == 2
+                  ? AppColors.colorScheme.secondary
+                  : AppColors.colorScheme.primary.withOpacity(0.7),
             ),
           ),
         ],

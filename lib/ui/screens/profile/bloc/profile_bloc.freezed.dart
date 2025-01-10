@@ -12,7 +12,7 @@ part of 'profile_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ProfileEvent {
@@ -83,6 +83,9 @@ class _$ProfileEventCopyWithImpl<$Res, $Val extends ProfileEvent>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -99,6 +102,9 @@ class __$$InitialEventImplCopyWithImpl<$Res>
   __$$InitialEventImplCopyWithImpl(
       _$InitialEventImpl _value, $Res Function(_$InitialEventImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -112,7 +118,7 @@ class _$InitialEventImpl implements _InitialEvent {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$InitialEventImpl);
   }
@@ -215,6 +221,8 @@ class __$$AddExpenseImplCopyWithImpl<$Res>
       _$AddExpenseImpl _value, $Res Function(_$AddExpenseImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -258,7 +266,7 @@ class _$AddExpenseImpl implements _AddExpense {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddExpenseImpl &&
@@ -271,7 +279,9 @@ class _$AddExpenseImpl implements _AddExpense {
   @override
   int get hashCode => Object.hash(runtimeType, title, totalCount, date);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddExpenseImplCopyWith<_$AddExpenseImpl> get copyWith =>
@@ -360,7 +370,10 @@ abstract class _AddExpense implements ProfileEvent {
   String get title;
   double get totalCount;
   DateTime get date;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddExpenseImplCopyWith<_$AddExpenseImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -382,6 +395,8 @@ class __$$AddIncomeImplCopyWithImpl<$Res>
       _$AddIncomeImpl _value, $Res Function(_$AddIncomeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -425,7 +440,7 @@ class _$AddIncomeImpl implements AddIncome {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddIncomeImpl &&
@@ -438,7 +453,9 @@ class _$AddIncomeImpl implements AddIncome {
   @override
   int get hashCode => Object.hash(runtimeType, title, totalCount, date);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddIncomeImplCopyWith<_$AddIncomeImpl> get copyWith =>
@@ -527,7 +544,10 @@ abstract class AddIncome implements ProfileEvent {
   String get title;
   double get totalCount;
   DateTime get date;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddIncomeImplCopyWith<_$AddIncomeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -597,6 +617,9 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -618,6 +641,8 @@ class __$$PhoneStateImplCopyWithImpl<$Res>
       _$PhoneStateImpl _value, $Res Function(_$PhoneStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -636,6 +661,8 @@ class __$$PhoneStateImplCopyWithImpl<$Res>
     ));
   }
 
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $UserModelCopyWith<$Res> get user {
@@ -668,7 +695,7 @@ class _$PhoneStateImpl implements _PhoneState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PhoneStateImpl &&
@@ -681,7 +708,9 @@ class _$PhoneStateImpl implements _PhoneState {
   int get hashCode => Object.hash(
       runtimeType, user, const DeepCollectionEquality().hash(_incomesList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PhoneStateImplCopyWith<_$PhoneStateImpl> get copyWith =>
@@ -764,7 +793,10 @@ abstract class _PhoneState implements ProfileState {
 
   UserModel get user;
   List<IncomeModel> get incomesList;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PhoneStateImplCopyWith<_$PhoneStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -783,6 +815,9 @@ class __$$LoadingStateImplCopyWithImpl<$Res>
   __$$LoadingStateImplCopyWithImpl(
       _$LoadingStateImpl _value, $Res Function(_$LoadingStateImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -796,7 +831,7 @@ class _$LoadingStateImpl implements _LoadingState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType && other is _$LoadingStateImpl);
   }
@@ -895,6 +930,8 @@ class __$$InfoStateImplCopyWithImpl<$Res>
       _$InfoStateImpl _value, $Res Function(_$InfoStateImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -930,7 +967,7 @@ class _$InfoStateImpl implements _InfoState {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$InfoStateImpl &&
@@ -942,7 +979,9 @@ class _$InfoStateImpl implements _InfoState {
   @override
   int get hashCode => Object.hash(runtimeType, message, pageState);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$InfoStateImplCopyWith<_$InfoStateImpl> get copyWith =>
@@ -1025,7 +1064,10 @@ abstract class _InfoState implements ProfileState {
 
   String get message;
   PageState get pageState;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InfoStateImplCopyWith<_$InfoStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

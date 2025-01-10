@@ -12,7 +12,7 @@ part of 'rate_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 RateModel _$RateModelFromJson(Map<String, dynamic> json) {
   return _RateModel.fromJson(json);
@@ -25,8 +25,12 @@ mixin _$RateModel {
   String get base => throw _privateConstructorUsedError;
   Map<String, double> get rates => throw _privateConstructorUsedError;
 
+  /// Serializes this RateModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of RateModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $RateModelCopyWith<RateModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$RateModelCopyWithImpl<$Res, $Val extends RateModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of RateModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -97,6 +103,8 @@ class __$$RateModelImplCopyWithImpl<$Res>
       _$RateModelImpl _value, $Res Function(_$RateModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of RateModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -159,7 +167,7 @@ class _$RateModelImpl implements _RateModel {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RateModelImpl &&
@@ -169,12 +177,14 @@ class _$RateModelImpl implements _RateModel {
             const DeepCollectionEquality().equals(other._rates, _rates));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, valid, updated, base,
       const DeepCollectionEquality().hash(_rates));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of RateModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$RateModelImplCopyWith<_$RateModelImpl> get copyWith =>
@@ -206,8 +216,11 @@ abstract class _RateModel implements RateModel {
   String get base;
   @override
   Map<String, double> get rates;
+
+  /// Create a copy of RateModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$RateModelImplCopyWith<_$RateModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

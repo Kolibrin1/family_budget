@@ -18,7 +18,7 @@ class AppTextField extends StatefulWidget {
     this.onTap,
     this.formKey,
     this.maxLines = 1,
-    this.readOnly = true,
+    this.readOnly = false,
     this.enableFocus = false,
     this.suffix,
     this.prefix,
@@ -72,138 +72,76 @@ class AppTextField extends StatefulWidget {
 }
 
 class _AppTextFieldState extends State<AppTextField> {
-  MaskTextInputFormatter? _mask;
-
-  // final _errorText = BehaviorSubject.seeded('');
-
-  // Stream<String> get getErrorText => _errorText.stream;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: (widget.maxLines * 20) + (widget.padding == null ? 20 : 12),
+          height: widget.height ?? (widget.maxLines * 24 + 20),
           alignment: Alignment.center,
           width: widget.width,
-          padding: EdgeInsets.symmetric(
-            horizontal: widget.prefix == null ? 10 : 0,
-            vertical: widget.padding ?? 8,
+          padding: EdgeInsets.only(
+            right: widget.suffix == null ? 12 : 0,
+            left: widget.prefix == null ? 12 : 0,
+            top: widget.padding ?? 0,
+            bottom: (widget.padding ?? 0) + 4,
+
+            // horizontal: widget.prefix == null ? 12 : 0,
+            // vertical: widget.padding ?? 0,
           ),
           decoration: BoxDecoration(
-            color: widget.color,
+            color: widget.color ?? Colors.black,
             borderRadius: BorderRadius.circular(widget.radius),
             border: Border.all(
               width: 1,
               color: widget.colorBorder,
             ),
-          ),
-          child: Form(
-            key: widget.formKey,
-            child: TextFormField(
-              enabled: true,
-              textAlignVertical: widget.prefix != null || widget.suffix != null
-                  ? TextAlignVertical.center
-                  : null,
-              inputFormatters: [
-                if (widget.inputFormatter != null) widget.inputFormatter!,
-                if (_mask != null) _mask!,
-                if (widget.textLength != null)
-                  LengthLimitingTextInputFormatter(widget.textLength!),
-                if (widget.textInputFormatter != null)
-                  widget.textInputFormatter!,
-              ],
-              keyboardType: widget.textInputType,
-              autofillHints: widget.autofillHints,
-              textInputAction: widget.textInputAction,
-              maxLines: widget.maxLines,
-              controller: widget.textController,
-              focusNode: widget.focusNode,
-              style: Theme.of(context).textTheme.bodyMedium!,
-              readOnly: !widget.readOnly,
-              autofocus: widget.enableFocus,
-              cursorColor: AppColors.subText,
-              onEditingComplete: widget.onComplete,
-              obscureText: widget.obscureText ?? false,
-              onChanged: (text) {
-                setState(() {
-                  if (widget.onChange != null) {
-                    widget.onChange!(text);
-                  }
-                });
-              },
-              decoration: InputDecoration(
-                suffixIconConstraints:
-                    BoxConstraints(minHeight: 16, minWidth: 16),
-                fillColor: widget.color,
-                filled: widget.color != null ? true : false,
-                label: widget.labelText != null
-                    ? Text(
-                        widget.labelText!,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      )
-                    : null,
-                alignLabelWithHint: widget.labelText == null,
-                errorStyle: const TextStyle(
-                  fontSize: 0,
-                  height: 0,
-                ),
-                hintText: widget.hintText,
-                hintStyle: widget.hintStyle ??
-                    Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Colors.grey,
-                        ),
-                isDense: true,
-                hoverColor: Colors.transparent,
-                border: InputBorder.none,
-                disabledBorder: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                focusedErrorBorder: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
-                suffixIcon: widget.suffix,
-                prefixIcon: widget.prefix,
-                suffix: widget.textLength != null
-                    ? Text(
-                        '${widget.textController.text.length.toString()}/${widget.textLength}',
-                        style: const TextStyle(
-                          fontSize: 10,
-                        ),
-                      )
-                    : null,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.onSecondary.withOpacity(0.9),
+                offset: const Offset(0, 2),
+                blurRadius: 4,
               ),
+            ],
+          ),
+          child: TextFormField(
+            cursorColor: AppColors.primary,
+            controller: widget.textController,
+            focusNode: widget.focusNode,
+            style: TextStyle(
+              color: AppColors.secondary,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+            readOnly: widget.readOnly,
+            maxLines: widget.maxLines,
+            keyboardType: widget.textInputType,
+            inputFormatters: [
+              if (widget.inputFormatter != null) widget.inputFormatter!,
+              if (widget.textInputFormatter != null) widget.textInputFormatter!,
+              if (widget.textLength != null)
+                LengthLimitingTextInputFormatter(widget.textLength!),
+            ],
+            onChanged: widget.onChange,
+            onEditingComplete: widget.onComplete,
+            obscureText: widget.obscureText ?? false,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              hintStyle: widget.hintStyle ??
+                  TextStyle(
+                    color: AppColors.white,
+                    fontSize: 14,
+                  ),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.zero,
+              prefixIcon: widget.prefix,
+              suffixIcon: widget.suffix,
             ),
           ),
         ),
-        // StreamBuilder<String>(
-        //   // stream: getErrorText,
-        //   initialData: '',
-        //   builder: (context, snapshot) {
-        //     return snapshot.data!.isEmpty
-        //         ? const SizedBox()
-        //         : Padding(
-        //             padding: const EdgeInsets.only(left: 10, top: 5),
-        //             child: Text(
-        //               snapshot.data!,
-        //               style: AppTextStyles.textStyle16w400,
-        //             ),
-        //           );
-        //   },
-        // ),
       ],
     );
   }
 }
+

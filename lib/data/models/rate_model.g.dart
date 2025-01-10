@@ -9,7 +9,7 @@ part of 'rate_model.dart';
 _$RateModelImpl _$$RateModelImplFromJson(Map<String, dynamic> json) =>
     _$RateModelImpl(
       valid: json['valid'] as bool,
-      updated: json['updated'] as int,
+      updated: (json['updated'] as num).toInt(),
       base: json['base'] as String,
       rates: (json['rates'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, (e as num).toDouble()),

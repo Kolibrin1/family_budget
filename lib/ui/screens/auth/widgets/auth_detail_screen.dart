@@ -45,11 +45,20 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
+      statusBarPadding: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.router.push(
-              const DiagramRoute(),
+            // context.router.push(
+            //   const DiagramRoute(),
+            // );
+            context.read<AuthBloc>().add(
+              AuthEvent.detail(
+                authType: AuthType.register,
+                login: widget.login,
+                pass: widget.pass,
+                onAuthCompleted: widget.onAuthCompleted,
+              ),
             );
           },
           icon: const Icon(
@@ -61,38 +70,30 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
           'Регистрация',
           style: TextStyle(fontSize: 20),
         ),
-        toolbarHeight: 60,
         centerTitle: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
       ),
       willPop: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+        padding: const EdgeInsets.only(bottom: 15, right: 15, left: 15),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: 16,
           children: [
             Text(
               'Начальный баланс',
               style: GoogleFonts.montserrat(
-                  fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 15,
+                  fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.white),
             ),
             AppTextField(
               textController: _balanceController,
               colorBorder: AppColors.colorScheme.primary,
             ),
-            const SizedBox(
-              height: 20,
-            ),
             Text(
               'Валюта',
               style: GoogleFonts.montserrat(
-                  fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 15,
+                  fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.white),
             ),
             AppTextField(
               textController: _currencyController,
@@ -136,7 +137,17 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Text(currencies[index].name),
+                                    Container(
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width -
+                                          110,
+                                      child: Text(
+                                        currencies[index].name,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -171,7 +182,12 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
                     );
               },
               height: 39,
-              color: AppColors.colorScheme.primary,
+              gradientColors: const [
+                AppColors.complementaryBlue,
+                AppColors.primary,
+                AppColors.primary,
+                AppColors.complementaryBlue
+              ],
               radius: 10,
             )
           ],

@@ -8,95 +8,98 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:family_budget/app/app_router/app_router.dart' as _i15;
-import 'package:family_budget/app/app_router/auth_guard.dart' as _i10;
-import 'package:family_budget/app/di/di.dart' as _i20;
-import 'package:family_budget/data/api_client.dart' as _i8;
-import 'package:family_budget/data/api_service.dart' as _i9;
+import 'package:family_budget/app/app_router/app_router.dart' as _i185;
+import 'package:family_budget/app/app_router/auth_guard.dart' as _i1057;
+import 'package:family_budget/app/di/di.dart' as _i837;
+import 'package:family_budget/data/api_client.dart' as _i789;
+import 'package:family_budget/data/api_service.dart' as _i825;
 import 'package:family_budget/data/repositories/currency_repository.dart'
-    as _i11;
+    as _i197;
 import 'package:family_budget/data/repositories/expense_repository.dart'
-    as _i12;
-import 'package:family_budget/data/repositories/income_repository.dart' as _i13;
-import 'package:family_budget/data/repositories/user_repository.dart' as _i14;
-import 'package:family_budget/helpers/preferences.dart' as _i7;
-import 'package:family_budget/ui/navigator/cubit/navigator_cubit.dart' as _i5;
-import 'package:family_budget/ui/navigator/navbar_listener.dart' as _i4;
-import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart' as _i16;
+    as _i114;
+import 'package:family_budget/data/repositories/income_repository.dart'
+    as _i607;
+import 'package:family_budget/data/repositories/user_repository.dart' as _i270;
+import 'package:family_budget/helpers/preferences.dart' as _i149;
+import 'package:family_budget/ui/navigator/cubit/navigator_cubit.dart' as _i359;
+import 'package:family_budget/ui/navigator/navbar_listener.dart' as _i617;
+import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart' as _i450;
 import 'package:family_budget/ui/screens/calculator/bloc/calc_bloc.dart'
-    as _i17;
+    as _i595;
 import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart'
-    as _i18;
+    as _i239;
 import 'package:family_budget/ui/screens/profile/bloc/profile_bloc.dart'
-    as _i19;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as _i3;
-import 'package:get_it/get_it.dart' as _i1;
-import 'package:injectable/injectable.dart' as _i2;
-import 'package:shared_preferences/shared_preferences.dart' as _i6;
+    as _i302;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as _i170;
+import 'package:get_it/get_it.dart' as _i174;
+import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 const String _dev = 'dev';
 
-extension GetItInjectableX on _i1.GetIt {
+extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
-  Future<_i1.GetIt> init({
+  Future<_i174.GetIt> init({
     String? environment,
-    _i2.EnvironmentFilter? environmentFilter,
+    _i526.EnvironmentFilter? environmentFilter,
   }) async {
-    final gh = _i2.GetItHelper(
+    final gh = _i526.GetItHelper(
       this,
       environment,
       environmentFilter,
     );
     final appModule = _$AppModule();
-    await gh.singletonAsync<_i3.DotEnv>(
-      () => appModule.dotEnvTest(),
-      registerFor: {_dev},
-      preResolve: true,
-    );
-    gh.lazySingleton<_i4.NavBarRoutesObserver>(
-        () => _i4.NavBarRoutesObserver());
-    gh.singleton<_i5.NavigationCubit>(_i5.NavigationCubit());
-    await gh.singletonAsync<_i6.SharedPreferences>(
+    gh.singleton<_i359.NavigationCubit>(() => _i359.NavigationCubit());
+    gh.lazySingleton<_i617.NavBarRoutesObserver>(
+        () => _i617.NavBarRoutesObserver());
+    await gh.singletonAsync<_i460.SharedPreferences>(
       () => appModule.prefs(),
       registerFor: {_dev},
       preResolve: true,
     );
-    gh.lazySingleton<_i7.Preferences>(
-        () => _i7.Preferences(gh<_i6.SharedPreferences>()));
-    gh.lazySingleton<_i8.ApiClient>(() => _i8.ApiClient(
-          gh<_i7.Preferences>(),
-          gh<_i3.DotEnv>(),
+    await gh.singletonAsync<_i170.DotEnv>(
+      () => appModule.dotEnvTest(),
+      registerFor: {_dev},
+      preResolve: true,
+    );
+    gh.lazySingleton<_i149.Preferences>(
+        () => _i149.Preferences(gh<_i460.SharedPreferences>()));
+    gh.factory<_i1057.AuthGuard>(
+        () => _i1057.AuthGuard(gh<_i149.Preferences>()));
+    gh.lazySingleton<_i789.ApiClient>(() => _i789.ApiClient(
+          gh<_i149.Preferences>(),
+          gh<_i170.DotEnv>(),
         ));
-    gh.lazySingleton<_i9.ApiService>(() => _i9.ApiService(gh<_i8.ApiClient>()));
-    gh.factory<_i10.AuthGuard>(() => _i10.AuthGuard(gh<_i7.Preferences>()));
-    gh.lazySingleton<_i11.CurrencyRepository>(
-        () => _i11.CurrencyRepository(gh<_i9.ApiService>()));
-    gh.lazySingleton<_i12.ExpenseRepository>(
-        () => _i12.ExpenseRepository(gh<_i9.ApiService>()));
-    gh.lazySingleton<_i13.IncomeRepository>(
-        () => _i13.IncomeRepository(gh<_i9.ApiService>()));
-    gh.lazySingleton<_i14.UserRepository>(
-        () => _i14.UserRepository(gh<_i9.ApiService>()));
-    gh.factory<_i15.AppRouter>(() => _i15.AppRouter(gh<_i10.AuthGuard>()));
-    gh.factory<_i16.AuthBloc>(() => _i16.AuthBloc(
-          gh<_i7.Preferences>(),
-          gh<_i14.UserRepository>(),
+    gh.factory<_i185.AppRouter>(() => _i185.AppRouter(gh<_i1057.AuthGuard>()));
+    gh.lazySingleton<_i825.ApiService>(
+        () => _i825.ApiService(gh<_i789.ApiClient>()));
+    gh.lazySingleton<_i607.IncomeRepository>(
+        () => _i607.IncomeRepository(gh<_i825.ApiService>()));
+    gh.lazySingleton<_i197.CurrencyRepository>(
+        () => _i197.CurrencyRepository(gh<_i825.ApiService>()));
+    gh.lazySingleton<_i270.UserRepository>(
+        () => _i270.UserRepository(gh<_i825.ApiService>()));
+    gh.lazySingleton<_i114.ExpenseRepository>(
+        () => _i114.ExpenseRepository(gh<_i825.ApiService>()));
+    gh.factory<_i450.AuthBloc>(() => _i450.AuthBloc(
+          gh<_i149.Preferences>(),
+          gh<_i270.UserRepository>(),
         ));
-    gh.factory<_i17.CalculatorBloc>(
-        () => _i17.CalculatorBloc(gh<_i11.CurrencyRepository>()));
-    gh.factory<_i18.DiagramBloc>(() => _i18.DiagramBloc(
-          gh<_i7.Preferences>(),
-          gh<_i14.UserRepository>(),
-          gh<_i12.ExpenseRepository>(),
+    gh.factory<_i239.DiagramBloc>(() => _i239.DiagramBloc(
+          gh<_i149.Preferences>(),
+          gh<_i270.UserRepository>(),
+          gh<_i114.ExpenseRepository>(),
         ));
-    gh.factory<_i19.ProfileBloc>(() => _i19.ProfileBloc(
-          gh<_i7.Preferences>(),
-          gh<_i14.UserRepository>(),
-          gh<_i12.ExpenseRepository>(),
-          gh<_i13.IncomeRepository>(),
+    gh.factory<_i302.ProfileBloc>(() => _i302.ProfileBloc(
+          gh<_i149.Preferences>(),
+          gh<_i270.UserRepository>(),
+          gh<_i114.ExpenseRepository>(),
+          gh<_i607.IncomeRepository>(),
         ));
+    gh.factory<_i595.CalculatorBloc>(
+        () => _i595.CalculatorBloc(gh<_i197.CurrencyRepository>()));
     return this;
   }
 }
 
-class _$AppModule extends _i20.AppModule {}
+class _$AppModule extends _i837.AppModule {}

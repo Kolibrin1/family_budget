@@ -178,7 +178,12 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
           radius: 10,
           title: widget.okButtonTitle,
           textColor: AppColors.white,
-          color: Theme.of(context).colorScheme.primary,
+          gradientColors: const [
+            AppColors.complementaryBlue,
+            AppColors.primary,
+            AppColors.primary,
+            AppColors.complementaryBlue
+          ],
           onPressed: () {
             if (validate()) {
               Navigator.of(context).pop();

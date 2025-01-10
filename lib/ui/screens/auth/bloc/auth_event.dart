@@ -4,6 +4,8 @@ part of 'auth_bloc.dart';
 class AuthEvent with _$AuthEvent {
   const factory AuthEvent.initial({
     required AuthType authType,
+    String? login,
+    String? pass,
   }) = _InitialEvent;
 
   const factory AuthEvent.detail({
