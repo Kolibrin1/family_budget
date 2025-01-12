@@ -22,13 +22,17 @@ class ProfileBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: AppBar(
-        title: const Text('Профиль'),
+        title: const Text(
+          'Профиль',
+          style: TextStyle(fontSize: 20),
+        ),
         centerTitle: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
       ),
+      statusBarPadding: false,
       willPop: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -43,6 +47,7 @@ class ProfileBody extends StatelessWidget {
                     'assets/icons/pig_and_coin.svg',
                     height: 36,
                     width: 3,
+                    color: AppColors.white,
                   ),
                   const SizedBox(
                     width: 10,
@@ -50,7 +55,9 @@ class ProfileBody extends StatelessWidget {
                   Text(
                     'Баланс: ',
                     style: GoogleFonts.inter(
-                        fontSize: 16, fontWeight: FontWeight.w600),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white),
                   ),
                   const SizedBox(
                     width: 10,
@@ -58,7 +65,9 @@ class ProfileBody extends StatelessWidget {
                   Text(
                     user.balance.toString(),
                     style: GoogleFonts.inter(
-                        fontSize: 16, fontWeight: FontWeight.w600),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white),
                   ),
                   const SizedBox(
                     width: 10,
@@ -66,7 +75,9 @@ class ProfileBody extends StatelessWidget {
                   Text(
                     user.currency!,
                     style: GoogleFonts.inter(
-                        fontSize: 16, fontWeight: FontWeight.w600),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white),
                   ),
                 ],
               ),
@@ -95,14 +106,23 @@ class ProfileBody extends StatelessWidget {
                     Icon(
                       Icons.add_circle_outline,
                       size: 24,
-                      color: AppColors.colorScheme.secondary,
+                      color: AppColors.colorScheme.primary,
                     ),
-                    Text(
-                      'Добавить расходы',
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.colorScheme.secondary,
+                    ShaderMask(
+                      blendMode: BlendMode.srcIn,
+                      shaderCallback: (bounds) => LinearGradient(
+                        colors: [AppColors.primary, AppColors.primary, AppColors.complementaryBlue],
+                        stops: [0.0, 0.38, 1.0],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds),
+                      child: Text(
+                        'Добавить расходы',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.colorScheme.primary,
+                        ),
                       ),
                     ),
                   ],
@@ -133,14 +153,23 @@ class ProfileBody extends StatelessWidget {
                     Icon(
                       Icons.add_circle_outline,
                       size: 24,
-                      color: AppColors.colorScheme.secondary,
+                      color: AppColors.colorScheme.primary,
                     ),
-                    Text(
-                      'Добавить доходы',
-                      style: GoogleFonts.inter(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.colorScheme.secondary,
+                    ShaderMask(
+                      blendMode: BlendMode.srcIn,
+                      shaderCallback: (bounds) => LinearGradient(
+                        colors: [AppColors.primary, AppColors.primary, AppColors.complementaryBlue],
+                        stops: [0.0, 0.38, 1.0],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ).createShader(bounds),
+                      child: Text(
+                        'Добавить доходы',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.colorScheme.primary,
+                        ),
                       ),
                     ),
                   ],
@@ -154,6 +183,7 @@ class ProfileBody extends StatelessWidget {
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: AppColors.white,
                 ),
               ),
               const SizedBox(
@@ -217,7 +247,7 @@ Widget getRowIncome(
       height: 49,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: AppColors.onSecondary.withOpacity(0.98),
       ),
       child: Center(
         child: Row(
@@ -242,15 +272,15 @@ Widget getRowIncome(
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(3),
-                color: AppColors.text,
+                color: AppColors.surface,
               ),
               height: 30,
-              width: 60,
+              width: 70,
               child: Center(
                 child: Text(
                   income.date!.formatNumberDate,
                   style: GoogleFonts.montserrat(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),

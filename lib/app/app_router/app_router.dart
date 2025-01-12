@@ -15,7 +15,7 @@ final _navKey = GlobalKey<NavigatorState>();
 
 @injectable
 @AutoRouterConfig()
-class AppRouter extends _$AppRouter {
+class AppRouter extends RootStackRouter {
   AppRouter(this._authGuard) : super(navigatorKey: _navKey);
   final AuthGuard _authGuard;
 

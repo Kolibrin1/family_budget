@@ -1,4 +1,5 @@
 import 'package:family_budget/helpers/extensions.dart';
+import 'package:family_budget/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -47,13 +48,13 @@ class _Body extends StatelessWidget {
             double.parse((totalCounts[i] * 100 / allCount).toStringAsFixed(2)));
         allPercents += percents[i];
       } else {
-        percents.add(100 - allPercents);
+        percents.add(double.parse((100 - allPercents).toStringAsFixed(2)));
       }
     }
     return Container(
       height: 30 * colors.length + 90,
-      decoration: const BoxDecoration(
-        color: Colors.white,
+      decoration:  BoxDecoration(
+        color: AppColors.onSecondary.withOpacity(0.98),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -67,7 +68,7 @@ class _Body extends StatelessWidget {
             Text(
               'Описание диаграммы',
               style: GoogleFonts.inter(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.w600,
               ),
             ),
@@ -94,7 +95,7 @@ class _Body extends StatelessWidget {
                             child: Text(
                               titles[index],
                               style: GoogleFonts.inter(
-                                fontSize: 14,
+                                fontSize: 16,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -102,7 +103,7 @@ class _Body extends StatelessWidget {
                           Text(
                             '${percents[index]}%',
                             style: GoogleFonts.inter(
-                              fontSize: 14,
+                              fontSize: 16,
                               fontWeight: FontWeight.w400,
                             ),
                           ),

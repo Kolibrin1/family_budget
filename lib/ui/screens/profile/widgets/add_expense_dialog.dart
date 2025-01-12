@@ -2,6 +2,7 @@ import 'package:family_budget/helpers/constants.dart';
 import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
+import 'package:family_budget/styles/app_text_styles.dart';
 import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ Future<void> showAddExpenseDialog({
   await showAppDialog(
     context: context,
     padding: const EdgeInsets.all(20),
-    margin: const EdgeInsets.all(16),
+    margin: const EdgeInsets.all(15),
     child: IntrinsicHeight(
       child: _WarningDialogBody(
         onTap: onTap,
@@ -116,6 +117,7 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: AppColors.white,
               ),
             ),
             const SizedBox(
@@ -125,6 +127,9 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
               textController: _titleController,
               colorBorder: AppColors.colorScheme.primary,
               hintText: 'Укажите название',
+              hintStyle: AppTextStyles.textStyle16w400.copyWith(
+                color: AppColors.colorScheme.primary.withOpacity(0.9),
+              ),
             ),
             const SizedBox(
               height: 10,
@@ -133,9 +138,12 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
               textController: _totalCountController,
               colorBorder: AppColors.colorScheme.primary,
               hintText: 'Укажите сумму',
+              hintStyle: AppTextStyles.textStyle16w400.copyWith(
+                color: AppColors.colorScheme.primary.withOpacity(0.9),
+              ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             InkWell(
               onTap: () async {
@@ -148,7 +156,7 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.colorScheme.secondary,
+                        color: AppColors.colorScheme.primary,
                       ),
                     )
                   : Text(
@@ -156,10 +164,11 @@ class _WarningDialogBodyState extends State<_WarningDialogBody> {
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.colorScheme.secondary,
+                        color: AppColors.colorScheme.primary,
                       ),
                     ),
             ),
+            if (hintText != null)
             const SizedBox(height: 20),
             if (hintText != null)
               Text(

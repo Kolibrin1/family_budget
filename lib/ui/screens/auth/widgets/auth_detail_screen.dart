@@ -1,5 +1,3 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:family_budget/app/app_router/app_router.dart';
 import 'package:family_budget/helpers/constants.dart';
 import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/styles/app_colors.dart';
@@ -49,15 +47,11 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            // context.router.push(
-            //   const DiagramRoute(),
-            // );
             context.read<AuthBloc>().add(
-              AuthEvent.detail(
+              AuthEvent.initial(
                 authType: AuthType.register,
                 login: widget.login,
                 pass: widget.pass,
-                onAuthCompleted: widget.onAuthCompleted,
               ),
             );
           },

@@ -1,3 +1,4 @@
+import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/widgets/app_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -136,6 +137,7 @@ Future<T?> showAppDialog<T>({
       padding: padding,
       maxWidth: maxWidth,
       child: child,
+      backgroundColor: AppColors.background,
     ),
   );
 }

@@ -17,9 +17,12 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AuthEvent {
   AuthType get authType => throw _privateConstructorUsedError;
+  String? get login => throw _privateConstructorUsedError;
+  String? get pass => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(AuthType authType) initial,
+    required TResult Function(AuthType authType, String? login, String? pass)
+        initial,
     required TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)
         detail,
@@ -35,7 +38,7 @@ mixin _$AuthEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(AuthType authType)? initial,
+    TResult? Function(AuthType authType, String? login, String? pass)? initial,
     TResult? Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -51,7 +54,7 @@ mixin _$AuthEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(AuthType authType)? initial,
+    TResult Function(AuthType authType, String? login, String? pass)? initial,
     TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -96,7 +99,7 @@ abstract class $AuthEventCopyWith<$Res> {
   factory $AuthEventCopyWith(AuthEvent value, $Res Function(AuthEvent) then) =
       _$AuthEventCopyWithImpl<$Res, AuthEvent>;
   @useResult
-  $Res call({AuthType authType});
+  $Res call({AuthType authType, String login, String pass});
 }
 
 /// @nodoc
@@ -115,12 +118,22 @@ class _$AuthEventCopyWithImpl<$Res, $Val extends AuthEvent>
   @override
   $Res call({
     Object? authType = null,
+    Object? login = null,
+    Object? pass = null,
   }) {
     return _then(_value.copyWith(
       authType: null == authType
           ? _value.authType
           : authType // ignore: cast_nullable_to_non_nullable
               as AuthType,
+      login: null == login
+          ? _value.login!
+          : login // ignore: cast_nullable_to_non_nullable
+              as String,
+      pass: null == pass
+          ? _value.pass!
+          : pass // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -133,7 +146,7 @@ abstract class _$$InitialEventImplCopyWith<$Res>
       __$$InitialEventImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({AuthType authType});
+  $Res call({AuthType authType, String? login, String? pass});
 }
 
 /// @nodoc
@@ -150,12 +163,22 @@ class __$$InitialEventImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? authType = null,
+    Object? login = freezed,
+    Object? pass = freezed,
   }) {
     return _then(_$InitialEventImpl(
       authType: null == authType
           ? _value.authType
           : authType // ignore: cast_nullable_to_non_nullable
               as AuthType,
+      login: freezed == login
+          ? _value.login
+          : login // ignore: cast_nullable_to_non_nullable
+              as String?,
+      pass: freezed == pass
+          ? _value.pass
+          : pass // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -163,14 +186,18 @@ class __$$InitialEventImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$InitialEventImpl implements _InitialEvent {
-  const _$InitialEventImpl({required this.authType});
+  const _$InitialEventImpl({required this.authType, this.login, this.pass});
 
   @override
   final AuthType authType;
+  @override
+  final String? login;
+  @override
+  final String? pass;
 
   @override
   String toString() {
-    return 'AuthEvent.initial(authType: $authType)';
+    return 'AuthEvent.initial(authType: $authType, login: $login, pass: $pass)';
   }
 
   @override
@@ -179,11 +206,13 @@ class _$InitialEventImpl implements _InitialEvent {
         (other.runtimeType == runtimeType &&
             other is _$InitialEventImpl &&
             (identical(other.authType, authType) ||
-                other.authType == authType));
+                other.authType == authType) &&
+            (identical(other.login, login) || other.login == login) &&
+            (identical(other.pass, pass) || other.pass == pass));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, authType);
+  int get hashCode => Object.hash(runtimeType, authType, login, pass);
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -196,7 +225,8 @@ class _$InitialEventImpl implements _InitialEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(AuthType authType) initial,
+    required TResult Function(AuthType authType, String? login, String? pass)
+        initial,
     required TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)
         detail,
@@ -209,13 +239,13 @@ class _$InitialEventImpl implements _InitialEvent {
             dynamic Function() onAuthCompleted)
         auth,
   }) {
-    return initial(authType);
+    return initial(authType, login, pass);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(AuthType authType)? initial,
+    TResult? Function(AuthType authType, String? login, String? pass)? initial,
     TResult? Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -228,13 +258,13 @@ class _$InitialEventImpl implements _InitialEvent {
             dynamic Function() onAuthCompleted)?
         auth,
   }) {
-    return initial?.call(authType);
+    return initial?.call(authType, login, pass);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(AuthType authType)? initial,
+    TResult Function(AuthType authType, String? login, String? pass)? initial,
     TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -244,7 +274,7 @@ class _$InitialEventImpl implements _InitialEvent {
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(authType);
+      return initial(authType, login, pass);
     }
     return orElse();
   }
@@ -285,11 +315,17 @@ class _$InitialEventImpl implements _InitialEvent {
 }
 
 abstract class _InitialEvent implements AuthEvent {
-  const factory _InitialEvent({required final AuthType authType}) =
-      _$InitialEventImpl;
+  const factory _InitialEvent(
+      {required final AuthType authType,
+      final String? login,
+      final String? pass}) = _$InitialEventImpl;
 
   @override
   AuthType get authType;
+  @override
+  String? get login;
+  @override
+  String? get pass;
 
   /// Create a copy of AuthEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -404,7 +440,8 @@ class _$DetailEventImpl implements _DetailEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(AuthType authType) initial,
+    required TResult Function(AuthType authType, String? login, String? pass)
+        initial,
     required TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)
         detail,
@@ -423,7 +460,7 @@ class _$DetailEventImpl implements _DetailEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(AuthType authType)? initial,
+    TResult? Function(AuthType authType, String? login, String? pass)? initial,
     TResult? Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -442,7 +479,7 @@ class _$DetailEventImpl implements _DetailEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(AuthType authType)? initial,
+    TResult Function(AuthType authType, String? login, String? pass)? initial,
     TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -499,7 +536,9 @@ abstract class _DetailEvent implements AuthEvent {
       required final AuthType authType,
       required final dynamic Function() onAuthCompleted}) = _$DetailEventImpl;
 
+  @override
   String get login;
+  @override
   String get pass;
   @override
   AuthType get authType;
@@ -639,7 +678,8 @@ class _$AuthEventImpl implements _AuthEvent {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(AuthType authType) initial,
+    required TResult Function(AuthType authType, String? login, String? pass)
+        initial,
     required TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)
         detail,
@@ -658,7 +698,7 @@ class _$AuthEventImpl implements _AuthEvent {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(AuthType authType)? initial,
+    TResult? Function(AuthType authType, String? login, String? pass)? initial,
     TResult? Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -678,7 +718,7 @@ class _$AuthEventImpl implements _AuthEvent {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(AuthType authType)? initial,
+    TResult Function(AuthType authType, String? login, String? pass)? initial,
     TResult Function(String login, String pass, AuthType authType,
             dynamic Function() onAuthCompleted)?
         detail,
@@ -737,7 +777,9 @@ abstract class _AuthEvent implements AuthEvent {
       required final AuthType authType,
       required final dynamic Function() onAuthCompleted}) = _$AuthEventImpl;
 
+  @override
   String get login;
+  @override
   String get pass;
   double get balance;
   String get currency;

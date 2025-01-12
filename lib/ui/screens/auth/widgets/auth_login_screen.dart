@@ -1,5 +1,3 @@
-import 'package:auto_route/auto_route.dart';
-import 'package:family_budget/app/app_router/app_router.dart';
 import 'package:family_budget/helpers/constants.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
@@ -64,9 +62,10 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
 
   @override
   void initState() {
-    if (widget.isError != null) {
+    if (widget.isError != null || widget.login != null && widget.pass != null) {
       _loginController.text = widget.login!;
       _passController.text = widget.pass!;
+      _confirmPassController.text = widget.pass!;
     }
     super.initState();
   }
@@ -74,13 +73,10 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.router.push(
-              const DiagramRoute(),
-            );
+            Navigator.of(context).pop();
           },
           icon: const Icon(
             Icons.chevron_left,

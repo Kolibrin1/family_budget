@@ -1,7 +1,6 @@
 import 'package:family_budget/data/models/expense_model.dart';
 import 'package:family_budget/data/models/income_model.dart';
 import 'package:family_budget/helpers/extensions.dart';
-import 'package:family_budget/helpers/strings.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart';
 import 'package:family_budget/ui/screens/diagram/widgets/description_bottom_sheet.dart';
@@ -49,9 +48,12 @@ class _DiagramBodyState extends State<DiagramBody> {
   Widget build(BuildContext context) {
     return AppScaffold(
       appBar: AppBar(
-        title: const Text('Анализ расходов'),
+        title: const Text(
+          'Анализ расходов',
+          style: TextStyle(fontSize: 20),
+        ),
         centerTitle: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.background,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 18.0),
@@ -59,7 +61,8 @@ class _DiagramBodyState extends State<DiagramBody> {
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               onTap: () {
-                showDescriptionBottomSheet(context, widget.colors, widget.titles, widget.totalCounts, widget.allCount);
+                showDescriptionBottomSheet(context, widget.colors,
+                    widget.titles, widget.totalCounts, widget.allCount);
               },
               child: SvgPicture.asset(
                 'assets/icons/info.svg',
@@ -69,30 +72,20 @@ class _DiagramBodyState extends State<DiagramBody> {
           )
         ],
       ),
+      statusBarPadding: false,
       willPop: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+        padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
         child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                AppWeekStrings.strings[9],
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: AppColors.colorScheme.secondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Text(
                 'Данные за:',
                 style: GoogleFonts.montserrat(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: AppColors.white,
                 ),
               ),
               const SizedBox(
@@ -118,9 +111,11 @@ class _DiagramBodyState extends State<DiagramBody> {
                     child: Text(
                       'Неделю',
                       style: GoogleFonts.inter(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: type == 1 ? AppColors.colorScheme.secondary : Colors.black,
+                        color: type == 1
+                            ? AppColors.colorScheme.primary
+                            : AppColors.white,
                       ),
                     ),
                   ),
@@ -138,9 +133,11 @@ class _DiagramBodyState extends State<DiagramBody> {
                     child: Text(
                       'Месяц',
                       style: GoogleFonts.inter(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: type == 2 ? AppColors.colorScheme.secondary : Colors.black,
+                        color: type == 2
+                            ? AppColors.colorScheme.primary
+                            : AppColors.white,
                       ),
                     ),
                   ),
@@ -156,11 +153,13 @@ class _DiagramBodyState extends State<DiagramBody> {
                           );
                     },
                     child: Text(
-                      'Год        ',
+                      'Год      ',
                       style: GoogleFonts.inter(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: type == 3 ? AppColors.colorScheme.secondary : Colors.black,
+                        color: type == 3
+                            ? AppColors.colorScheme.primary
+                            : AppColors.white,
                       ),
                     ),
                   ),
@@ -188,11 +187,13 @@ class _DiagramBodyState extends State<DiagramBody> {
                   ),
                 ),
               ),
+              if(widget.expenses.isNotEmpty)
               Text(
                 'Список расходов',
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: AppColors.white,
                 ),
               ),
               const SizedBox(
@@ -210,7 +211,8 @@ class _DiagramBodyState extends State<DiagramBody> {
                                   child: getRowIncome(
                                     IncomeModel(
                                       date: widget.expenses[index].date,
-                                      totalCount: widget.expenses[index].totalCount,
+                                      totalCount:
+                                          widget.expenses[index].totalCount,
                                       title: widget.expenses[index].title,
                                     ),
                                     context,
@@ -229,7 +231,14 @@ class _DiagramBodyState extends State<DiagramBody> {
                         ),
                       ),
                     )
-                  : const Text('Расходов пока не было'),
+                  : Text(
+                      'Расходов пока не было',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white,
+                      ),
+                    ),
             ],
           ),
         ),
@@ -260,7 +269,7 @@ Widget getRowIncome(
       height: 49,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: AppColors.onSecondary.withOpacity(0.98),
       ),
       child: Center(
         child: Row(
@@ -273,11 +282,12 @@ Widget getRowIncome(
                   color: AppColors.checkStatus,
                 ),
                 const SizedBox(
-                  width: 35,
+                  width: 12,
                 ),
                 Text(
                   "${income.title} - ${income.totalCount} $currency",
-                  style: GoogleFonts.inter(fontSize: 14, fontWeight: FontWeight.w400),
+                  style: GoogleFonts.inter(
+                      fontSize: 14, fontWeight: FontWeight.w400),
                 ),
               ],
             ),
@@ -287,12 +297,12 @@ Widget getRowIncome(
                 color: colors[titles.indexOf(income.title!)],
               ),
               height: 30,
-              width: 60,
+              width: 70,
               child: Center(
                 child: Text(
                   income.date!.formatNumberDate,
                   style: GoogleFonts.montserrat(
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),

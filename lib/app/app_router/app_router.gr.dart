@@ -9,43 +9,6 @@
 
 part of 'app_router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter({super.navigatorKey});
-
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    AuthRoute.name: (routeData) {
-      final args = routeData.argsAs<AuthRouteArgs>();
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: AuthScreen(
-          key: args.key,
-          onAuthCompleted: args.onAuthCompleted,
-        ),
-      );
-    },
-    CalculatorRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const CalculatorScreen(),
-      );
-    },
-    DiagramRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const DiagramScreen(),
-      );
-    },
-    ProfileRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const ProfileScreen(),
-      );
-    },
-  };
-}
-
 /// generated route for
 /// [AuthScreen]
 class AuthRoute extends PageRouteInfo<AuthRouteArgs> {
@@ -64,7 +27,16 @@ class AuthRoute extends PageRouteInfo<AuthRouteArgs> {
 
   static const String name = 'AuthRoute';
 
-  static const PageInfo<AuthRouteArgs> page = PageInfo<AuthRouteArgs>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<AuthRouteArgs>();
+      return AuthScreen(
+        key: args.key,
+        onAuthCompleted: args.onAuthCompleted,
+      );
+    },
+  );
 }
 
 class AuthRouteArgs {
@@ -94,7 +66,12 @@ class CalculatorRoute extends PageRouteInfo<void> {
 
   static const String name = 'CalculatorRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const CalculatorScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -108,7 +85,12 @@ class DiagramRoute extends PageRouteInfo<void> {
 
   static const String name = 'DiagramRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const DiagramScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -122,5 +104,10 @@ class ProfileRoute extends PageRouteInfo<void> {
 
   static const String name = 'ProfileRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const ProfileScreen();
+    },
+  );
 }
