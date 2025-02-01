@@ -28,6 +28,51 @@ class AppScaffold extends StatelessWidget {
       },
       child: Scaffold(
         appBar: appBar,
+        body: Container(
+          color: AppColors.background,
+          child: Padding(
+            padding: EdgeInsets.only(
+              top: statusBarPadding
+                  ? (MediaQuery.of(context).viewPadding.top + verticalPadding)
+                  : verticalPadding,
+              bottom: verticalPadding,
+              left: horizontalPadding,
+              right: horizontalPadding,
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RootScaffold extends StatelessWidget {
+  const RootScaffold({
+    Key? key,
+    this.appBar,
+    this.willPop = false,
+    this.statusBarPadding = false,
+    this.verticalPadding = 0,
+    this.horizontalPadding = 0,
+    required this.child,
+  }) : super(key: key);
+
+  final AppBar? appBar;
+  final Widget child;
+  final bool willPop;
+  final bool statusBarPadding;
+  final double horizontalPadding;
+  final double verticalPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async {
+        return willPop;
+      },
+      child: Scaffold(
+        appBar: null,
         bottomNavigationBar: const AppBottomNavigationBar(),
         body: Container(
           color: AppColors.background,
@@ -47,4 +92,6 @@ class AppScaffold extends StatelessWidget {
     );
   }
 }
+
+
 

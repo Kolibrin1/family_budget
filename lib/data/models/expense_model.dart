@@ -1,20 +1,38 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
+import 'package:family_budget/data/models/category_model.dart';
+import 'package:family_budget/app/di/di.dart';
 
 part 'expense_model.freezed.dart';
-part 'expense_model.g.dart';
 
 @Freezed()
 class ExpenseModel with _$ExpenseModel {
   const factory ExpenseModel({
-
     int? id,
-    double? totalCount,
-    String? title,
+    @JsonKey(name: 'total_count') double? totalCount,
+    CategoryModel? category,
     DateTime? date,
-    int? userId,
-
+    @JsonKey(name: 'user_id') int? userId,
   }) = _ExpenseModel;
 
-  factory ExpenseModel.fromJson(Map<String, Object?> json) => _$ExpenseModelFromJson(json);
+  factory ExpenseModel.fromJson(Map<String, Object?> json) {
+    final categoriesCubit = getIt<CategoriesCubit>();
+    final categories = categoriesCubit.state is CategoriesLoaded
+        ? (categoriesCubit.state as CategoriesLoaded).categories
+        : [];
+
+    final categoryId = json['category_id'] as int?;
+    final category = categories.firstWhere(
+          (c) => c.id == categoryId,
+      orElse: () => CategoryModel(id: categoryId, name: 'Неизвестная', icon: '', color: '#FFFFFF'),
+    );
+
+    return ExpenseModel(
+      id: json['id'] as int?,
+      totalCount: (json['total_count'] as num?)?.toDouble(),
+      category: category,
+      date: json['date'] != null ? DateTime.parse(json['date'] as String) : null,
+      userId: json['user_id'] as int?,
+    );
+  }
 }

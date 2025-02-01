@@ -19,18 +19,33 @@ mixin _$DiagramEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initEditExpense,
+    required TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)
+        editExpense,
+    required TResult Function(int expenseId) deleteExpense,
     required TResult Function(int type) selectTypeView,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initEditExpense,
+    TResult? Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult? Function(int expenseId)? deleteExpense,
     TResult? Function(int type)? selectTypeView,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initEditExpense,
+    TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult Function(int expenseId)? deleteExpense,
     TResult Function(int type)? selectTypeView,
     required TResult orElse(),
   }) =>
@@ -38,18 +53,27 @@ mixin _$DiagramEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitEditExpenseEvent value) initEditExpense,
+    required TResult Function(_EditExpense value) editExpense,
+    required TResult Function(_DeleteExpense value) deleteExpense,
     required TResult Function(_SelectTypeView value) selectTypeView,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult? Function(_EditExpense value)? editExpense,
+    TResult? Function(_DeleteExpense value)? deleteExpense,
     TResult? Function(_SelectTypeView value)? selectTypeView,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult Function(_EditExpense value)? editExpense,
+    TResult Function(_DeleteExpense value)? deleteExpense,
     TResult Function(_SelectTypeView value)? selectTypeView,
     required TResult orElse(),
   }) =>
@@ -119,6 +143,11 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initEditExpense,
+    required TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)
+        editExpense,
+    required TResult Function(int expenseId) deleteExpense,
     required TResult Function(int type) selectTypeView,
   }) {
     return initial();
@@ -128,6 +157,11 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initEditExpense,
+    TResult? Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult? Function(int expenseId)? deleteExpense,
     TResult? Function(int type)? selectTypeView,
   }) {
     return initial?.call();
@@ -137,6 +171,11 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initEditExpense,
+    TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult Function(int expenseId)? deleteExpense,
     TResult Function(int type)? selectTypeView,
     required TResult orElse(),
   }) {
@@ -150,6 +189,9 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitEditExpenseEvent value) initEditExpense,
+    required TResult Function(_EditExpense value) editExpense,
+    required TResult Function(_DeleteExpense value) deleteExpense,
     required TResult Function(_SelectTypeView value) selectTypeView,
   }) {
     return initial(this);
@@ -159,6 +201,9 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult? Function(_EditExpense value)? editExpense,
+    TResult? Function(_DeleteExpense value)? deleteExpense,
     TResult? Function(_SelectTypeView value)? selectTypeView,
   }) {
     return initial?.call(this);
@@ -168,6 +213,9 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult Function(_EditExpense value)? editExpense,
+    TResult Function(_DeleteExpense value)? deleteExpense,
     TResult Function(_SelectTypeView value)? selectTypeView,
     required TResult orElse(),
   }) {
@@ -180,6 +228,558 @@ class _$InitialEventImpl implements _InitialEvent {
 
 abstract class _InitialEvent implements DiagramEvent {
   const factory _InitialEvent() = _$InitialEventImpl;
+}
+
+/// @nodoc
+abstract class _$$InitEditExpenseEventImplCopyWith<$Res> {
+  factory _$$InitEditExpenseEventImplCopyWith(_$InitEditExpenseEventImpl value,
+          $Res Function(_$InitEditExpenseEventImpl) then) =
+      __$$InitEditExpenseEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({ExpenseModel? expense});
+
+  $ExpenseModelCopyWith<$Res>? get expense;
+}
+
+/// @nodoc
+class __$$InitEditExpenseEventImplCopyWithImpl<$Res>
+    extends _$DiagramEventCopyWithImpl<$Res, _$InitEditExpenseEventImpl>
+    implements _$$InitEditExpenseEventImplCopyWith<$Res> {
+  __$$InitEditExpenseEventImplCopyWithImpl(_$InitEditExpenseEventImpl _value,
+      $Res Function(_$InitEditExpenseEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? expense = freezed,
+  }) {
+    return _then(_$InitEditExpenseEventImpl(
+      expense: freezed == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as ExpenseModel?,
+    ));
+  }
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ExpenseModelCopyWith<$Res>? get expense {
+    if (_value.expense == null) {
+      return null;
+    }
+
+    return $ExpenseModelCopyWith<$Res>(_value.expense!, (value) {
+      return _then(_value.copyWith(expense: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$InitEditExpenseEventImpl implements _InitEditExpenseEvent {
+  const _$InitEditExpenseEventImpl({this.expense});
+
+  @override
+  final ExpenseModel? expense;
+
+  @override
+  String toString() {
+    return 'DiagramEvent.initEditExpense(expense: $expense)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InitEditExpenseEventImpl &&
+            (identical(other.expense, expense) || other.expense == expense));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, expense);
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InitEditExpenseEventImplCopyWith<_$InitEditExpenseEventImpl>
+      get copyWith =>
+          __$$InitEditExpenseEventImplCopyWithImpl<_$InitEditExpenseEventImpl>(
+              this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initEditExpense,
+    required TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)
+        editExpense,
+    required TResult Function(int expenseId) deleteExpense,
+    required TResult Function(int type) selectTypeView,
+  }) {
+    return initEditExpense(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initEditExpense,
+    TResult? Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult? Function(int expenseId)? deleteExpense,
+    TResult? Function(int type)? selectTypeView,
+  }) {
+    return initEditExpense?.call(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initEditExpense,
+    TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult Function(int expenseId)? deleteExpense,
+    TResult Function(int type)? selectTypeView,
+    required TResult orElse(),
+  }) {
+    if (initEditExpense != null) {
+      return initEditExpense(expense);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitEditExpenseEvent value) initEditExpense,
+    required TResult Function(_EditExpense value) editExpense,
+    required TResult Function(_DeleteExpense value) deleteExpense,
+    required TResult Function(_SelectTypeView value) selectTypeView,
+  }) {
+    return initEditExpense(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult? Function(_EditExpense value)? editExpense,
+    TResult? Function(_DeleteExpense value)? deleteExpense,
+    TResult? Function(_SelectTypeView value)? selectTypeView,
+  }) {
+    return initEditExpense?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult Function(_EditExpense value)? editExpense,
+    TResult Function(_DeleteExpense value)? deleteExpense,
+    TResult Function(_SelectTypeView value)? selectTypeView,
+    required TResult orElse(),
+  }) {
+    if (initEditExpense != null) {
+      return initEditExpense(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InitEditExpenseEvent implements DiagramEvent {
+  const factory _InitEditExpenseEvent({final ExpenseModel? expense}) =
+      _$InitEditExpenseEventImpl;
+
+  ExpenseModel? get expense;
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InitEditExpenseEventImplCopyWith<_$InitEditExpenseEventImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$EditExpenseImplCopyWith<$Res> {
+  factory _$$EditExpenseImplCopyWith(
+          _$EditExpenseImpl value, $Res Function(_$EditExpenseImpl) then) =
+      __$$EditExpenseImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int expenseId, int categoryId, double totalCount, DateTime date});
+}
+
+/// @nodoc
+class __$$EditExpenseImplCopyWithImpl<$Res>
+    extends _$DiagramEventCopyWithImpl<$Res, _$EditExpenseImpl>
+    implements _$$EditExpenseImplCopyWith<$Res> {
+  __$$EditExpenseImplCopyWithImpl(
+      _$EditExpenseImpl _value, $Res Function(_$EditExpenseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? expenseId = null,
+    Object? categoryId = null,
+    Object? totalCount = null,
+    Object? date = null,
+  }) {
+    return _then(_$EditExpenseImpl(
+      expenseId: null == expenseId
+          ? _value.expenseId
+          : expenseId // ignore: cast_nullable_to_non_nullable
+              as int,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
+      totalCount: null == totalCount
+          ? _value.totalCount
+          : totalCount // ignore: cast_nullable_to_non_nullable
+              as double,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$EditExpenseImpl implements _EditExpense {
+  const _$EditExpenseImpl(
+      {required this.expenseId,
+      required this.categoryId,
+      required this.totalCount,
+      required this.date});
+
+  @override
+  final int expenseId;
+  @override
+  final int categoryId;
+  @override
+  final double totalCount;
+  @override
+  final DateTime date;
+
+  @override
+  String toString() {
+    return 'DiagramEvent.editExpense(expenseId: $expenseId, categoryId: $categoryId, totalCount: $totalCount, date: $date)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EditExpenseImpl &&
+            (identical(other.expenseId, expenseId) ||
+                other.expenseId == expenseId) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
+            (identical(other.totalCount, totalCount) ||
+                other.totalCount == totalCount) &&
+            (identical(other.date, date) || other.date == date));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, expenseId, categoryId, totalCount, date);
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EditExpenseImplCopyWith<_$EditExpenseImpl> get copyWith =>
+      __$$EditExpenseImplCopyWithImpl<_$EditExpenseImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initEditExpense,
+    required TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)
+        editExpense,
+    required TResult Function(int expenseId) deleteExpense,
+    required TResult Function(int type) selectTypeView,
+  }) {
+    return editExpense(expenseId, categoryId, totalCount, date);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initEditExpense,
+    TResult? Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult? Function(int expenseId)? deleteExpense,
+    TResult? Function(int type)? selectTypeView,
+  }) {
+    return editExpense?.call(expenseId, categoryId, totalCount, date);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initEditExpense,
+    TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult Function(int expenseId)? deleteExpense,
+    TResult Function(int type)? selectTypeView,
+    required TResult orElse(),
+  }) {
+    if (editExpense != null) {
+      return editExpense(expenseId, categoryId, totalCount, date);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitEditExpenseEvent value) initEditExpense,
+    required TResult Function(_EditExpense value) editExpense,
+    required TResult Function(_DeleteExpense value) deleteExpense,
+    required TResult Function(_SelectTypeView value) selectTypeView,
+  }) {
+    return editExpense(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult? Function(_EditExpense value)? editExpense,
+    TResult? Function(_DeleteExpense value)? deleteExpense,
+    TResult? Function(_SelectTypeView value)? selectTypeView,
+  }) {
+    return editExpense?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult Function(_EditExpense value)? editExpense,
+    TResult Function(_DeleteExpense value)? deleteExpense,
+    TResult Function(_SelectTypeView value)? selectTypeView,
+    required TResult orElse(),
+  }) {
+    if (editExpense != null) {
+      return editExpense(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EditExpense implements DiagramEvent {
+  const factory _EditExpense(
+      {required final int expenseId,
+      required final int categoryId,
+      required final double totalCount,
+      required final DateTime date}) = _$EditExpenseImpl;
+
+  int get expenseId;
+  int get categoryId;
+  double get totalCount;
+  DateTime get date;
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EditExpenseImplCopyWith<_$EditExpenseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DeleteExpenseImplCopyWith<$Res> {
+  factory _$$DeleteExpenseImplCopyWith(
+          _$DeleteExpenseImpl value, $Res Function(_$DeleteExpenseImpl) then) =
+      __$$DeleteExpenseImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int expenseId});
+}
+
+/// @nodoc
+class __$$DeleteExpenseImplCopyWithImpl<$Res>
+    extends _$DiagramEventCopyWithImpl<$Res, _$DeleteExpenseImpl>
+    implements _$$DeleteExpenseImplCopyWith<$Res> {
+  __$$DeleteExpenseImplCopyWithImpl(
+      _$DeleteExpenseImpl _value, $Res Function(_$DeleteExpenseImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? expenseId = null,
+  }) {
+    return _then(_$DeleteExpenseImpl(
+      expenseId: null == expenseId
+          ? _value.expenseId
+          : expenseId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$DeleteExpenseImpl implements _DeleteExpense {
+  const _$DeleteExpenseImpl({required this.expenseId});
+
+  @override
+  final int expenseId;
+
+  @override
+  String toString() {
+    return 'DiagramEvent.deleteExpense(expenseId: $expenseId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DeleteExpenseImpl &&
+            (identical(other.expenseId, expenseId) ||
+                other.expenseId == expenseId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, expenseId);
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DeleteExpenseImplCopyWith<_$DeleteExpenseImpl> get copyWith =>
+      __$$DeleteExpenseImplCopyWithImpl<_$DeleteExpenseImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initEditExpense,
+    required TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)
+        editExpense,
+    required TResult Function(int expenseId) deleteExpense,
+    required TResult Function(int type) selectTypeView,
+  }) {
+    return deleteExpense(expenseId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initEditExpense,
+    TResult? Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult? Function(int expenseId)? deleteExpense,
+    TResult? Function(int type)? selectTypeView,
+  }) {
+    return deleteExpense?.call(expenseId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initEditExpense,
+    TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult Function(int expenseId)? deleteExpense,
+    TResult Function(int type)? selectTypeView,
+    required TResult orElse(),
+  }) {
+    if (deleteExpense != null) {
+      return deleteExpense(expenseId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitEditExpenseEvent value) initEditExpense,
+    required TResult Function(_EditExpense value) editExpense,
+    required TResult Function(_DeleteExpense value) deleteExpense,
+    required TResult Function(_SelectTypeView value) selectTypeView,
+  }) {
+    return deleteExpense(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult? Function(_EditExpense value)? editExpense,
+    TResult? Function(_DeleteExpense value)? deleteExpense,
+    TResult? Function(_SelectTypeView value)? selectTypeView,
+  }) {
+    return deleteExpense?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult Function(_EditExpense value)? editExpense,
+    TResult Function(_DeleteExpense value)? deleteExpense,
+    TResult Function(_SelectTypeView value)? selectTypeView,
+    required TResult orElse(),
+  }) {
+    if (deleteExpense != null) {
+      return deleteExpense(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DeleteExpense implements DiagramEvent {
+  const factory _DeleteExpense({required final int expenseId}) =
+      _$DeleteExpenseImpl;
+
+  int get expenseId;
+
+  /// Create a copy of DiagramEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DeleteExpenseImplCopyWith<_$DeleteExpenseImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -252,6 +852,11 @@ class _$SelectTypeViewImpl implements _SelectTypeView {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initEditExpense,
+    required TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)
+        editExpense,
+    required TResult Function(int expenseId) deleteExpense,
     required TResult Function(int type) selectTypeView,
   }) {
     return selectTypeView(type);
@@ -261,6 +866,11 @@ class _$SelectTypeViewImpl implements _SelectTypeView {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initEditExpense,
+    TResult? Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult? Function(int expenseId)? deleteExpense,
     TResult? Function(int type)? selectTypeView,
   }) {
     return selectTypeView?.call(type);
@@ -270,6 +880,11 @@ class _$SelectTypeViewImpl implements _SelectTypeView {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initEditExpense,
+    TResult Function(
+            int expenseId, int categoryId, double totalCount, DateTime date)?
+        editExpense,
+    TResult Function(int expenseId)? deleteExpense,
     TResult Function(int type)? selectTypeView,
     required TResult orElse(),
   }) {
@@ -283,6 +898,9 @@ class _$SelectTypeViewImpl implements _SelectTypeView {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitEditExpenseEvent value) initEditExpense,
+    required TResult Function(_EditExpense value) editExpense,
+    required TResult Function(_DeleteExpense value) deleteExpense,
     required TResult Function(_SelectTypeView value) selectTypeView,
   }) {
     return selectTypeView(this);
@@ -292,6 +910,9 @@ class _$SelectTypeViewImpl implements _SelectTypeView {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult? Function(_EditExpense value)? editExpense,
+    TResult? Function(_DeleteExpense value)? deleteExpense,
     TResult? Function(_SelectTypeView value)? selectTypeView,
   }) {
     return selectTypeView?.call(this);
@@ -301,6 +922,9 @@ class _$SelectTypeViewImpl implements _SelectTypeView {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitEditExpenseEvent value)? initEditExpense,
+    TResult Function(_EditExpense value)? editExpense,
+    TResult Function(_DeleteExpense value)? deleteExpense,
     TResult Function(_SelectTypeView value)? selectTypeView,
     required TResult orElse(),
   }) {
@@ -337,6 +961,7 @@ mixin _$DiagramState {
             List<double> totalCounts,
             double allCount)
         initial,
+    required TResult Function(ExpenseModel? expense) editExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) =>
@@ -352,6 +977,7 @@ mixin _$DiagramState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult? Function(ExpenseModel? expense)? editExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) =>
@@ -367,6 +993,7 @@ mixin _$DiagramState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult Function(ExpenseModel? expense)? editExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -375,6 +1002,7 @@ mixin _$DiagramState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialState value) initial,
+    required TResult Function(_EditExpenseState value) editExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) =>
@@ -382,6 +1010,7 @@ mixin _$DiagramState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialState value)? initial,
+    TResult? Function(_EditExpenseState value)? editExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) =>
@@ -389,6 +1018,7 @@ mixin _$DiagramState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialState value)? initial,
+    TResult Function(_EditExpenseState value)? editExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),
@@ -596,6 +1226,7 @@ class _$InitialStateImpl implements _InitialState {
             List<double> totalCounts,
             double allCount)
         initial,
+    required TResult Function(ExpenseModel? expense) editExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) {
@@ -615,6 +1246,7 @@ class _$InitialStateImpl implements _InitialState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult? Function(ExpenseModel? expense)? editExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) {
@@ -634,6 +1266,7 @@ class _$InitialStateImpl implements _InitialState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult Function(ExpenseModel? expense)? editExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -649,6 +1282,7 @@ class _$InitialStateImpl implements _InitialState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialState value) initial,
+    required TResult Function(_EditExpenseState value) editExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) {
@@ -659,6 +1293,7 @@ class _$InitialStateImpl implements _InitialState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialState value)? initial,
+    TResult? Function(_EditExpenseState value)? editExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) {
@@ -669,6 +1304,7 @@ class _$InitialStateImpl implements _InitialState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialState value)? initial,
+    TResult Function(_EditExpenseState value)? editExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),
@@ -702,6 +1338,200 @@ abstract class _InitialState implements DiagramState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$InitialStateImplCopyWith<_$InitialStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$EditExpenseStateImplCopyWith<$Res> {
+  factory _$$EditExpenseStateImplCopyWith(_$EditExpenseStateImpl value,
+          $Res Function(_$EditExpenseStateImpl) then) =
+      __$$EditExpenseStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({ExpenseModel? expense});
+
+  $ExpenseModelCopyWith<$Res>? get expense;
+}
+
+/// @nodoc
+class __$$EditExpenseStateImplCopyWithImpl<$Res>
+    extends _$DiagramStateCopyWithImpl<$Res, _$EditExpenseStateImpl>
+    implements _$$EditExpenseStateImplCopyWith<$Res> {
+  __$$EditExpenseStateImplCopyWithImpl(_$EditExpenseStateImpl _value,
+      $Res Function(_$EditExpenseStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of DiagramState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? expense = freezed,
+  }) {
+    return _then(_$EditExpenseStateImpl(
+      expense: freezed == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as ExpenseModel?,
+    ));
+  }
+
+  /// Create a copy of DiagramState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ExpenseModelCopyWith<$Res>? get expense {
+    if (_value.expense == null) {
+      return null;
+    }
+
+    return $ExpenseModelCopyWith<$Res>(_value.expense!, (value) {
+      return _then(_value.copyWith(expense: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$EditExpenseStateImpl implements _EditExpenseState {
+  const _$EditExpenseStateImpl({this.expense});
+
+  @override
+  final ExpenseModel? expense;
+
+  @override
+  String toString() {
+    return 'DiagramState.editExpense(expense: $expense)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$EditExpenseStateImpl &&
+            (identical(other.expense, expense) || other.expense == expense));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, expense);
+
+  /// Create a copy of DiagramState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$EditExpenseStateImplCopyWith<_$EditExpenseStateImpl> get copyWith =>
+      __$$EditExpenseStateImplCopyWithImpl<_$EditExpenseStateImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)
+        initial,
+    required TResult Function(ExpenseModel? expense) editExpense,
+    required TResult Function() loading,
+    required TResult Function(String message, PageState pageState) info,
+  }) {
+    return editExpense(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
+        initial,
+    TResult? Function(ExpenseModel? expense)? editExpense,
+    TResult? Function()? loading,
+    TResult? Function(String message, PageState pageState)? info,
+  }) {
+    return editExpense?.call(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            String currency,
+            List<ExpenseModel> expensesList,
+            int type,
+            List<Color> colors,
+            List<String> titles,
+            List<double> totalCounts,
+            double allCount)?
+        initial,
+    TResult Function(ExpenseModel? expense)? editExpense,
+    TResult Function()? loading,
+    TResult Function(String message, PageState pageState)? info,
+    required TResult orElse(),
+  }) {
+    if (editExpense != null) {
+      return editExpense(expense);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialState value) initial,
+    required TResult Function(_EditExpenseState value) editExpense,
+    required TResult Function(_LoadingState value) loading,
+    required TResult Function(_InfoState value) info,
+  }) {
+    return editExpense(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialState value)? initial,
+    TResult? Function(_EditExpenseState value)? editExpense,
+    TResult? Function(_LoadingState value)? loading,
+    TResult? Function(_InfoState value)? info,
+  }) {
+    return editExpense?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialState value)? initial,
+    TResult Function(_EditExpenseState value)? editExpense,
+    TResult Function(_LoadingState value)? loading,
+    TResult Function(_InfoState value)? info,
+    required TResult orElse(),
+  }) {
+    if (editExpense != null) {
+      return editExpense(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _EditExpenseState implements DiagramState {
+  const factory _EditExpenseState({final ExpenseModel? expense}) =
+      _$EditExpenseStateImpl;
+
+  ExpenseModel? get expense;
+
+  /// Create a copy of DiagramState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$EditExpenseStateImplCopyWith<_$EditExpenseStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -755,6 +1585,7 @@ class _$LoadingStateImpl implements _LoadingState {
             List<double> totalCounts,
             double allCount)
         initial,
+    required TResult Function(ExpenseModel? expense) editExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) {
@@ -773,6 +1604,7 @@ class _$LoadingStateImpl implements _LoadingState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult? Function(ExpenseModel? expense)? editExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) {
@@ -791,6 +1623,7 @@ class _$LoadingStateImpl implements _LoadingState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult Function(ExpenseModel? expense)? editExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -805,6 +1638,7 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialState value) initial,
+    required TResult Function(_EditExpenseState value) editExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) {
@@ -815,6 +1649,7 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialState value)? initial,
+    TResult? Function(_EditExpenseState value)? editExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) {
@@ -825,6 +1660,7 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialState value)? initial,
+    TResult Function(_EditExpenseState value)? editExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),
@@ -926,6 +1762,7 @@ class _$InfoStateImpl implements _InfoState {
             List<double> totalCounts,
             double allCount)
         initial,
+    required TResult Function(ExpenseModel? expense) editExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) {
@@ -944,6 +1781,7 @@ class _$InfoStateImpl implements _InfoState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult? Function(ExpenseModel? expense)? editExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) {
@@ -962,6 +1800,7 @@ class _$InfoStateImpl implements _InfoState {
             List<double> totalCounts,
             double allCount)?
         initial,
+    TResult Function(ExpenseModel? expense)? editExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -976,6 +1815,7 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialState value) initial,
+    required TResult Function(_EditExpenseState value) editExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) {
@@ -986,6 +1826,7 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialState value)? initial,
+    TResult? Function(_EditExpenseState value)? editExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) {
@@ -996,6 +1837,7 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialState value)? initial,
+    TResult Function(_EditExpenseState value)? editExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),

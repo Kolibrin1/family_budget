@@ -36,6 +36,14 @@ class Preferences {
   //   return _prefs.getBool(Keys.afterReg);
   // }
   //
+  bool checkToken() {
+    if (_prefs.containsKey("token")) {
+      final token = _prefs.getString("token");
+      return token != null ? true : false;
+    }
+    return false;
+  }
+
   String? loadUserLogin() {
     if (_prefs.containsKey(Keys.userLogin)) {
       final login = _prefs.getString(Keys.userLogin);

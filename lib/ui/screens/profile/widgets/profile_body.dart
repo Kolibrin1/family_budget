@@ -1,16 +1,18 @@
+import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
 import 'package:family_budget/data/models/income_model.dart';
 import 'package:family_budget/data/models/user_model.dart';
 import 'package:family_budget/helpers/extensions.dart';
+import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/profile/bloc/profile_bloc.dart';
-import 'package:family_budget/ui/screens/profile/widgets/add_expense_dialog.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
+import 'package:family_budget/widgets/confirm_dialog.dart';
+import 'package:family_budget/widgets/custom_slider_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart' hide SlidableAction;
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'add_income_dialog.dart';
 
 class ProfileBody extends StatelessWidget {
   const ProfileBody({super.key, required this.user, required this.incomes});
@@ -40,14 +42,24 @@ class ProfileBody extends StatelessWidget {
               const SizedBox(
                 height: 12,
               ),
+              Text(
+                '${user.login}',
+                style: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.white),
+              ),
+              const SizedBox(
+                height: 12,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    'assets/icons/pig_and_coin.svg',
+                    'assets/icons/balance_icon.svg',
                     height: 36,
                     width: 3,
-                    color: AppColors.white,
+                    // color: AppColors.white,
                   ),
                   const SizedBox(
                     width: 10,
@@ -86,19 +98,9 @@ class ProfileBody extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  showAddExpenseDialog(
-                    context: context,
-                    dialogTitle: 'Добавление расходов',
-                    onTap: (title, date, totalCount) {
-                      context.read<ProfileBloc>().add(
-                            ProfileEvent.addExpense(
-                              title: title,
-                              totalCount: totalCount,
-                              date: date,
-                            ),
-                          );
-                    },
-                  );
+                  context.read<ProfileBloc>().add(
+                        ProfileEvent.initExpense(),
+                      );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -106,13 +108,18 @@ class ProfileBody extends StatelessWidget {
                     Icon(
                       Icons.add_circle_outline,
                       size: 24,
-                      color: AppColors.colorScheme.primary,
+                      color: AppColors.lightPrimary,
                     ),
                     ShaderMask(
                       blendMode: BlendMode.srcIn,
                       shaderCallback: (bounds) => LinearGradient(
-                        colors: [AppColors.primary, AppColors.primary, AppColors.complementaryBlue],
-                        stops: [0.0, 0.38, 1.0],
+                        colors: [
+                          AppColors.lightPrimary,
+                          AppColors.primary,
+                          AppColors.primary,
+                          AppColors.complementaryBlue
+                        ],
+                        stops: [0.0, 0.15, 0.38, 1.0],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
@@ -133,19 +140,9 @@ class ProfileBody extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  showAddIncomeDialog(
-                    context: context,
-                    dialogTitle: 'Добавление доходов',
-                    onTap: (title, date, totalCount) {
-                      context.read<ProfileBloc>().add(
-                            ProfileEvent.addIncome(
-                              title: title,
-                              totalCount: totalCount,
-                              date: date,
-                            ),
-                          );
-                    },
-                  );
+                  context.read<ProfileBloc>().add(
+                        ProfileEvent.initIncome(),
+                      );
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -153,13 +150,18 @@ class ProfileBody extends StatelessWidget {
                     Icon(
                       Icons.add_circle_outline,
                       size: 24,
-                      color: AppColors.colorScheme.primary,
+                      color: AppColors.lightPrimary,
                     ),
                     ShaderMask(
                       blendMode: BlendMode.srcIn,
                       shaderCallback: (bounds) => LinearGradient(
-                        colors: [AppColors.primary, AppColors.primary, AppColors.complementaryBlue],
-                        stops: [0.0, 0.38, 1.0],
+                        colors: [
+                          AppColors.lightPrimary,
+                          AppColors.primary,
+                          AppColors.primary,
+                          AppColors.complementaryBlue
+                        ],
+                        stops: [0.0, 0.15, 0.38, 1.0],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ).createShader(bounds),
@@ -202,7 +204,7 @@ class ProfileBody extends StatelessWidget {
                                     IncomeModel(
                                       date: incomes[index].date,
                                       totalCount: incomes[index].totalCount,
-                                      title: incomes[index].title,
+                                      category: incomes[index].category,
                                     ),
                                     context,
                                     user,
@@ -218,7 +220,14 @@ class ProfileBody extends StatelessWidget {
                         ),
                       ),
                     )
-                  : const Text('Доходов пока не было'),
+                  : Text(
+                      'Доходов пока не было',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.white,
+                      ),
+                    ),
             ],
           ),
         ),
@@ -232,64 +241,157 @@ Widget getRowIncome(
   BuildContext context,
   UserModel user,
 ) {
-  return Material(
-    elevation: 0.3,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.all(
-        Radius.circular(
-          10,
+  final color = hexToColor(income.category?.color ?? '');
+  return Container(
+    decoration: BoxDecoration(
+      boxShadow: [
+        BoxShadow(
+          color: AppColors.primary.withOpacity(0.8),
+          blurRadius: 12,
+          offset: const Offset(0, 6),
         ),
-      ),
+      ],
     ),
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      width: MediaQuery.of(context).size.width,
-      height: 49,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: AppColors.onSecondary.withOpacity(0.98),
-      ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
+    child: Stack(
+      children: [
+        // Фоновый контейнер (цвет первого экшена)
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            height: 49,
+            width: double.infinity,
+            color: AppColors.complementaryBlue,
+          ),
+        ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10), // Обрезаем границы Slidable
+          child: Slidable(
+            closeOnScroll: false,
+            endActionPane: ActionPane(
+              motion: const StretchMotion(),
+              extentRatio: 0.40,
               children: [
-                SvgPicture.asset(
-                  'assets/icons/coin_dollar.svg',
-                  color: AppColors.checkStatus,
+                SlidableAction(
+                  spacing: 0,
+                  onPressed: (ctx) {
+                    ctx.read<ProfileBloc>().add(
+                      ProfileEvent.initIncome(income: income),
+                    );
+                  },
+                  backgroundColor: AppColors.complementaryBlue, // Совпадает с задним фоном
+                  foregroundColor: Colors.white,
+                  icon: SvgPicture.asset(
+                    'assets/icons/edit_icon.svg',
+                    height: 26,
+                    width: 26,
+                    color: getIconColor(color),
+                  ),
+                  label: 'Изменить',
+                  padding: EdgeInsets.zero,
                 ),
-                const SizedBox(
-                  width: 35,
-                ),
-                Text(
-                  "${income.title} - ${income.totalCount} ${user.currency}",
-                  style: GoogleFonts.inter(
-                      fontSize: 14, fontWeight: FontWeight.w400),
+                SlidableAction(
+                  spacing: 0,
+                  onPressed: (ctx) {
+                    showConfirmDialog(
+                      context: ctx,
+                      title: "Удаление дохода",
+                      message: "Вы точно хотите удалить доход от\"${income.date?.formatNumberDate}\"?",
+                      onConfirm: () {
+                        ctx.read<ProfileBloc>().add(
+                          ProfileEvent.deleteIncome(incomeId: income.id!),
+                        );
+                      },
+                    );
+                  },
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: Colors.white,
+                  icon:  SvgPicture.asset(
+                      'assets/icons/delete_icon.svg',
+                      height: 26,
+                      width: 26,
+                      color: getIconColor(color),
+                    ),
+                  label: 'Удалить',
+                  padding: EdgeInsets.zero,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
                 ),
               ],
             ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: AppColors.surface,
+            child: Material(
+              color: Colors.transparent,
+              elevation: 0.3,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(
+                    10,
+                  ),
+                ),
               ),
-              height: 30,
-              width: 70,
-              child: Center(
-                child: Text(
-                  income.date!.formatNumberDate,
-                  style: GoogleFonts.montserrat(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+              shadowColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                width: MediaQuery.of(context).size.width,
+                height: 49,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: AppColors.onSecondary.withOpacity(0.98),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: color,
+                            ),
+                            child: Center(
+                              child: SvgPicture.asset(
+                                income.category?.icon ?? '',
+                                height: 30,
+                                width: 30,
+                                color: getIconColor(color),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                            "${income.category?.name}\n${income.totalCount} ${user.currency}",
+                            style: GoogleFonts.inter(
+                                fontSize: 14, fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          income.date!.formatColumnDate,
+                          style: GoogleFonts.montserrat(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.background,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     ),
   );
 }

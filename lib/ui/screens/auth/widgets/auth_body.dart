@@ -4,6 +4,7 @@ import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart';
 import 'package:family_budget/ui/screens/auth/widgets/auth_login_screen.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
+import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,10 +37,8 @@ class AuthBodyScreen extends StatelessWidget {
         },
         builder: (context, state) {
           return state.maybeWhen(
-            loading: () => const AppScaffold(
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
+            loading: () => AppScaffold(
+              child: LoadingGif(),
             ),
             auth: (login,pass,isError) => AuthLoginScreen(
               title: authType == AuthType.login ? 'Вход' : 'Регистрация',
@@ -53,8 +52,8 @@ class AuthBodyScreen extends StatelessWidget {
               pass: pass,
               onAuthCompleted: onAuthCompleted,
             ),
-            orElse: () => const AppScaffold(
-              child: SizedBox(),
+            orElse: () => AppScaffold(
+              child: LoadingGif(),
             ),
           );
         },

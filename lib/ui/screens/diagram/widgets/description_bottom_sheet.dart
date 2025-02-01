@@ -14,7 +14,7 @@ Future<void> showDescriptionBottomSheet(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     clipBehavior: Clip.hardEdge,
-    constraints: BoxConstraints(maxHeight: colors.length * 30 + 90),
+    constraints: BoxConstraints(maxHeight: MediaQuery.sizeOf(context).height * 0.6,minHeight: colors.length * 30 + 200),
     context: context,
     builder: (context) {
       return FractionallySizedBox(
@@ -52,9 +52,9 @@ class _Body extends StatelessWidget {
       }
     }
     return Container(
-      height: 30 * colors.length + 90,
+      height: 30 * colors.length + 200,
       decoration:  BoxDecoration(
-        color: AppColors.onSecondary.withOpacity(0.98),
+        color: AppColors.background,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -70,6 +70,7 @@ class _Body extends StatelessWidget {
               style: GoogleFonts.inter(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
+                color: AppColors.onSurface.withOpacity(0.9),
               ),
             ),
             const SizedBox(
@@ -97,6 +98,7 @@ class _Body extends StatelessWidget {
                               style: GoogleFonts.inter(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
+                                color: AppColors.onSurface.withOpacity(0.9),
                               ),
                             ),
                           ),
@@ -105,6 +107,7 @@ class _Body extends StatelessWidget {
                             style: GoogleFonts.inter(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
+                              color: AppColors.onSurface.withOpacity(0.9),
                             ),
                           ),
                         ],

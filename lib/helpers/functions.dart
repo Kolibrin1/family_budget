@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'constants.dart';
@@ -142,15 +143,28 @@ Future<T?> showAppDialog<T>({
   );
 }
 
-class Format {
-  static final phoneFormat = MaskTextInputFormatter(
-    mask: '+7 (###) ###-##-##',
-    filter: {
-      "#": RegExp(r'[0-9]'),
-    },
-  );
+/// Преобразует Color в строку HEX формата #RRGGBB
+String colorToHex(Color color) {
+  return '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
 }
 
-String getPhoneFormat(String phone) {
-  return '${phone.substring(0, 2)}${phone.substring(4, 7)}${phone.substring(9, 12)}${phone.substring(13, 15)}${phone.substring(16, 18)}';
+/// Преобразует строку HEX в Color
+Color hexToColor(String hex) {
+  hex = hex.replaceAll('#', '');
+
+  if (hex.length == 6) {
+    hex = 'FF$hex';
+  }
+
+  return Color(int.parse(hex, radix: 16));
+}
+
+// Метод для определения цвета иконки по цвету фона
+Color getIconColor(Color backgroundColor) {
+  final hslColor = HSLColor.fromColor(backgroundColor);
+  return hslColor.lightness > 0.7 ? Colors.black : Colors.white;
+}
+
+getRequestFormatDate(DateTime date) {
+  return DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(date.toUtc());
 }

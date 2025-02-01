@@ -14,20 +14,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-IncomeModel _$IncomeModelFromJson(Map<String, dynamic> json) {
-  return _IncomeModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$IncomeModel {
   int? get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'total_count')
   double? get totalCount => throw _privateConstructorUsedError;
-  String? get title => throw _privateConstructorUsedError;
+  CategoryModel? get category => throw _privateConstructorUsedError;
   DateTime? get date => throw _privateConstructorUsedError;
+  @JsonKey(name: 'user_id')
   int? get userId => throw _privateConstructorUsedError;
-
-  /// Serializes this IncomeModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of IncomeModel
   /// with the given fields replaced by the non-null parameter values.
@@ -44,10 +39,12 @@ abstract class $IncomeModelCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      double? totalCount,
-      String? title,
+      @JsonKey(name: 'total_count') double? totalCount,
+      CategoryModel? category,
       DateTime? date,
-      int? userId});
+      @JsonKey(name: 'user_id') int? userId});
+
+  $CategoryModelCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -67,7 +64,7 @@ class _$IncomeModelCopyWithImpl<$Res, $Val extends IncomeModel>
   $Res call({
     Object? id = freezed,
     Object? totalCount = freezed,
-    Object? title = freezed,
+    Object? category = freezed,
     Object? date = freezed,
     Object? userId = freezed,
   }) {
@@ -80,10 +77,10 @@ class _$IncomeModelCopyWithImpl<$Res, $Val extends IncomeModel>
           ? _value.totalCount
           : totalCount // ignore: cast_nullable_to_non_nullable
               as double?,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as CategoryModel?,
       date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -93,6 +90,20 @@ class _$IncomeModelCopyWithImpl<$Res, $Val extends IncomeModel>
           : userId // ignore: cast_nullable_to_non_nullable
               as int?,
     ) as $Val);
+  }
+
+  /// Create a copy of IncomeModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CategoryModelCopyWith<$Res>? get category {
+    if (_value.category == null) {
+      return null;
+    }
+
+    return $CategoryModelCopyWith<$Res>(_value.category!, (value) {
+      return _then(_value.copyWith(category: value) as $Val);
+    });
   }
 }
 
@@ -106,10 +117,13 @@ abstract class _$$IncomeModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? id,
-      double? totalCount,
-      String? title,
+      @JsonKey(name: 'total_count') double? totalCount,
+      CategoryModel? category,
       DateTime? date,
-      int? userId});
+      @JsonKey(name: 'user_id') int? userId});
+
+  @override
+  $CategoryModelCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -127,7 +141,7 @@ class __$$IncomeModelImplCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? totalCount = freezed,
-    Object? title = freezed,
+    Object? category = freezed,
     Object? date = freezed,
     Object? userId = freezed,
   }) {
@@ -140,10 +154,10 @@ class __$$IncomeModelImplCopyWithImpl<$Res>
           ? _value.totalCount
           : totalCount // ignore: cast_nullable_to_non_nullable
               as double?,
-      title: freezed == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as CategoryModel?,
       date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -157,28 +171,31 @@ class __$$IncomeModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$IncomeModelImpl implements _IncomeModel {
   const _$IncomeModelImpl(
-      {this.id, this.totalCount, this.title, this.date, this.userId});
-
-  factory _$IncomeModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$IncomeModelImplFromJson(json);
+      {this.id,
+      @JsonKey(name: 'total_count') this.totalCount,
+      this.category,
+      this.date,
+      @JsonKey(name: 'user_id') this.userId});
 
   @override
   final int? id;
   @override
+  @JsonKey(name: 'total_count')
   final double? totalCount;
   @override
-  final String? title;
+  final CategoryModel? category;
   @override
   final DateTime? date;
   @override
+  @JsonKey(name: 'user_id')
   final int? userId;
 
   @override
   String toString() {
-    return 'IncomeModel(id: $id, totalCount: $totalCount, title: $title, date: $date, userId: $userId)';
+    return 'IncomeModel(id: $id, totalCount: $totalCount, category: $category, date: $date, userId: $userId)';
   }
 
   @override
@@ -189,15 +206,15 @@ class _$IncomeModelImpl implements _IncomeModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.totalCount, totalCount) ||
                 other.totalCount == totalCount) &&
-            (identical(other.title, title) || other.title == title) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.userId, userId) || other.userId == userId));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, totalCount, title, date, userId);
+      Object.hash(runtimeType, id, totalCount, category, date, userId);
 
   /// Create a copy of IncomeModel
   /// with the given fields replaced by the non-null parameter values.
@@ -206,35 +223,27 @@ class _$IncomeModelImpl implements _IncomeModel {
   @pragma('vm:prefer-inline')
   _$$IncomeModelImplCopyWith<_$IncomeModelImpl> get copyWith =>
       __$$IncomeModelImplCopyWithImpl<_$IncomeModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$IncomeModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _IncomeModel implements IncomeModel {
   const factory _IncomeModel(
       {final int? id,
-      final double? totalCount,
-      final String? title,
+      @JsonKey(name: 'total_count') final double? totalCount,
+      final CategoryModel? category,
       final DateTime? date,
-      final int? userId}) = _$IncomeModelImpl;
-
-  factory _IncomeModel.fromJson(Map<String, dynamic> json) =
-      _$IncomeModelImpl.fromJson;
+      @JsonKey(name: 'user_id') final int? userId}) = _$IncomeModelImpl;
 
   @override
   int? get id;
   @override
+  @JsonKey(name: 'total_count')
   double? get totalCount;
   @override
-  String? get title;
+  CategoryModel? get category;
   @override
   DateTime? get date;
   @override
+  @JsonKey(name: 'user_id')
   int? get userId;
 
   /// Create a copy of IncomeModel

@@ -1,6 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
+import 'package:family_budget/app/di/di.dart';
+import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
 import 'package:family_budget/data/models/user_model.dart';
+import 'package:family_budget/data/repositories/auth_repository.dart';
 import 'package:family_budget/data/repositories/user_repository.dart';
 import 'package:family_budget/helpers/preferences.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +20,7 @@ part 'auth_bloc.freezed.dart';
 
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(this.prefs, this.userRepository)
+  AuthBloc(this.prefs, this.userRepository, this.authRepository)
       : super(
           const AuthState.loading(),
         ) {
@@ -28,6 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthState oldState = AuthState.loading();
   final UserRepository userRepository;
+  final AuthRepository authRepository;
   final Preferences prefs;
   UserModel? curUser;
 
@@ -69,25 +73,37 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (event.authType == AuthType.register) {
       try {
-        await userRepository.findUserByLogin(event.login);
+        final isExist = await authRepository.checkLogin(event.login);
+        if(isExist) {
+          emit(AuthState.auth(
+            login: event.login,
+            pass: event.pass,
+            isError: true,
+          ));
+          oldState = AuthState.auth(
+            login: event.login,
+            pass: event.pass,
+            isError: true,
+          );
+        } else {
+          emit(AuthState.detail(login: event.login, pass: event.pass));
+        }
+      } catch (ex) {
         emit(AuthState.auth(
           login: event.login,
           pass: event.pass,
-          isError: true,
         ));
         oldState = AuthState.auth(
           login: event.login,
           pass: event.pass,
-          isError: true,
         );
-      } catch (ex) {
-        emit(AuthState.detail(login: event.login, pass: event.pass));
       }
     } else {
       try {
-        curUser = await userRepository.getCurrentUser(event.login, event.pass);
+        await authRepository.login(event.login, event.pass);
         prefs.saveUserLogin(event.login);
         prefs.saveUserPass(event.pass);
+        await getIt<CategoriesCubit>().loadCategories();
         event.onAuthCompleted();
       } catch (ex) {
         emit(const AuthState.info(
@@ -106,10 +122,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       const _LoadingState(),
     );
     try {
-      curUser = await userRepository.createUser(
+      await authRepository.register(
           event.login, event.pass, event.balance, event.currency);
       prefs.saveUserLogin(event.login);
       prefs.saveUserPass(event.pass);
+      await getIt<CategoriesCubit>().loadCategories();
       event.onAuthCompleted();
     } catch (ex) {
       emit(oldState);

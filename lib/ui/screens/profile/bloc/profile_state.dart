@@ -7,6 +7,14 @@ class ProfileState with _$ProfileState {
     required List<IncomeModel> incomesList,
   }) = _PhoneState;
 
+  const factory ProfileState.addIncome({
+    IncomeModel? income,
+}) = _AddIncomeState;
+
+  const factory ProfileState.addExpense({
+    ExpenseModel? expense,
+}) = _AddExpenseState;
+
   const factory ProfileState.loading() = _LoadingState;
 
   const factory ProfileState.info({

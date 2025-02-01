@@ -13,6 +13,11 @@ import 'package:family_budget/app/app_router/auth_guard.dart' as _i1057;
 import 'package:family_budget/app/di/di.dart' as _i837;
 import 'package:family_budget/data/api_client.dart' as _i789;
 import 'package:family_budget/data/api_service.dart' as _i825;
+import 'package:family_budget/data/bloc_categories/categories_cubit.dart'
+    as _i240;
+import 'package:family_budget/data/repositories/auth_repository.dart' as _i380;
+import 'package:family_budget/data/repositories/category_repository.dart'
+    as _i1018;
 import 'package:family_budget/data/repositories/currency_repository.dart'
     as _i197;
 import 'package:family_budget/data/repositories/expense_repository.dart'
@@ -73,18 +78,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i185.AppRouter>(() => _i185.AppRouter(gh<_i1057.AuthGuard>()));
     gh.lazySingleton<_i825.ApiService>(
         () => _i825.ApiService(gh<_i789.ApiClient>()));
+    gh.lazySingleton<_i1018.CategoryRepository>(
+        () => _i1018.CategoryRepository(gh<_i825.ApiService>()));
     gh.lazySingleton<_i607.IncomeRepository>(
         () => _i607.IncomeRepository(gh<_i825.ApiService>()));
     gh.lazySingleton<_i197.CurrencyRepository>(
         () => _i197.CurrencyRepository(gh<_i825.ApiService>()));
+    gh.lazySingleton<_i380.AuthRepository>(
+        () => _i380.AuthRepository(gh<_i825.ApiService>()));
     gh.lazySingleton<_i270.UserRepository>(
         () => _i270.UserRepository(gh<_i825.ApiService>()));
     gh.lazySingleton<_i114.ExpenseRepository>(
         () => _i114.ExpenseRepository(gh<_i825.ApiService>()));
-    gh.factory<_i450.AuthBloc>(() => _i450.AuthBloc(
-          gh<_i149.Preferences>(),
-          gh<_i270.UserRepository>(),
-        ));
     gh.factory<_i239.DiagramBloc>(() => _i239.DiagramBloc(
           gh<_i149.Preferences>(),
           gh<_i270.UserRepository>(),
@@ -98,6 +103,13 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i595.CalculatorBloc>(
         () => _i595.CalculatorBloc(gh<_i197.CurrencyRepository>()));
+    gh.factory<_i450.AuthBloc>(() => _i450.AuthBloc(
+          gh<_i149.Preferences>(),
+          gh<_i270.UserRepository>(),
+          gh<_i380.AuthRepository>(),
+        ));
+    gh.singleton<_i240.CategoriesCubit>(
+        () => _i240.CategoriesCubit(gh<_i1018.CategoryRepository>()));
     return this;
   }
 }

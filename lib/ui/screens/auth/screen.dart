@@ -53,8 +53,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       willPop: false,
       child: Padding(
-        padding:
-            const EdgeInsets.only(bottom: 20.0, left: 30, right: 30),
+        padding: const EdgeInsets.only(bottom: 20.0, left: 30, right: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -63,10 +62,13 @@ class _AuthScreenState extends State<AuthScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 16,
               children: [
-                HugeIcon(
-                  icon: HugeIcons.strokeRoundedSaveMoneyDollar,
-                  color: AppColors.onPrimary,
-                  size: MediaQuery.sizeOf(context).width / 1.85,
+                // Image.asset(
+                //   'assets/images/init.png',
+                //   height: MediaQuery.sizeOf(context).width / 1.85,
+                // ),
+                SvgPicture.asset(
+                  'assets/icons/init_icon.svg',
+                  height: MediaQuery.sizeOf(context).width / 1.85,
                 ),
                 const Text(
                   "Добро пожаловать в ваш личный помощник финансов! Контролируйте свой бюджет и ваши расходы!",

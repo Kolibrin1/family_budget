@@ -13,6 +13,11 @@ extension StringExtension on DateTime {
     return dateFormat;
   }
 
+  String get formatColumnDate {
+    String dateFormat = DateFormat("dd.MM\nyyyy", 'ru').format(this);
+    return dateFormat;
+  }
+
   String get formatNumberDate {
     String dateFormat = DateFormat("dd.MM.yyyy", 'ru').format(this);
     return dateFormat;
@@ -34,7 +39,7 @@ extension StringExtension on DateTime {
   }
 
   String get sendFormat =>
-      '$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}';
+      '$year.${month.toString().padLeft(2, '0')}.${day.toString().padLeft(2, '0')}';
 
   String get getTime {
     String dateFormat = DateFormat("HH:mm", 'ru_RU').format(this);

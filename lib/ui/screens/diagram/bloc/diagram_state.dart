@@ -12,6 +12,10 @@ class DiagramState with _$DiagramState {
     required double allCount,
   }) = _InitialState;
 
+  const factory DiagramState.editExpense({
+    ExpenseModel? expense,
+  }) = _EditExpenseState;
+
   const factory DiagramState.loading() = _LoadingState;
 
   const factory DiagramState.info({

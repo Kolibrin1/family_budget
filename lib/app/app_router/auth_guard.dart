@@ -12,11 +12,11 @@ class AuthGuard extends AutoRouteGuard {
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
-    final isAuth = _prefs.loadUserLogin() != null;
+    final isAuth = _prefs.checkToken();
+    // final isAuth = _prefs.loadUserLogin() != null;
     if (isAuth) {
       resolver.next();
     } else {
-      //TODO когда появится авторизация надо оставить только этот сниппет
       resolver.redirect(
          AuthRoute(
           onAuthCompleted: resolver.next,

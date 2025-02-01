@@ -2,14 +2,14 @@ import 'package:family_budget/data/models/currency_model.dart';
 import 'package:family_budget/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 
-class RoflScreen extends StatefulWidget {
-  const RoflScreen({super.key});
+class FirstLoadCurrenciesScreen extends StatefulWidget {
+  const FirstLoadCurrenciesScreen({super.key});
 
   @override
-  State<RoflScreen> createState() => _RoflScreenState();
+  State<FirstLoadCurrenciesScreen> createState() => _FirstLoadCurrenciesScreenState();
 }
 
-class _RoflScreenState extends State<RoflScreen> {
+class _FirstLoadCurrenciesScreenState extends State<FirstLoadCurrenciesScreen> {
   CurrencyModel? currency;
 
   // Future<void> getCurrencies() async {

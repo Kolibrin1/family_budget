@@ -1,10 +1,9 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'app/app_router/app_router.dart';
 import 'app/di/di.dart';
+import 'data/bloc_categories/categories_cubit.dart';
 import 'helpers/preferences.dart';
 import 'styles/app_theme.dart';
 import 'ui/navigator/cubit/navigator_cubit.dart';
@@ -37,18 +36,27 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     final config = appRouter.config(
-      navigatorObservers: () => [
-        getIt<NavBarRoutesObserver>(),
-      ],
+      // navigatorObservers: () => [
+      //   getIt<NavBarRoutesObserver>(),
+      // ],
     );
-    return BlocProvider(
-      create: (context) => getIt<NavigationCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) => getIt<CategoriesCubit>()),
+        BlocProvider(
+          create: (context) => getIt<NavigationCubit>(),
+        ),
+      ],
       child: MaterialApp.router(
-        checkerboardOffscreenLayers: false,
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.theme,
-        routerConfig: config,
-      ),
+          checkerboardOffscreenLayers: false,
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.theme,
+          routerConfig: config,
+        ),
+      // ),
+      //
+      // child:
     );
   }
 }

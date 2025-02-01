@@ -1,6 +1,7 @@
 import 'package:family_budget/data/api_service.dart';
 import 'package:family_budget/data/models/expense_model.dart';
 import 'package:family_budget/helpers/extensions.dart';
+import 'package:family_budget/helpers/functions.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
@@ -9,42 +10,63 @@ class ExpenseRepository {
 
   final ApiService _service;
 
-  Future<List<ExpenseModel>> getAll(int userId, DateTime dateFrom, DateTime dateTo) async {
-    final res = await _service.getMethod(path: "/expense", params: {
-      "user_id": userId,
-      "dateFrom": dateFrom.sendFormat,
-      "dateTo": dateTo.sendFormat,
-    });
-    return (res.data as List).map((e) => ExpenseModel.fromJson(e)).toList();
+  Future<List<ExpenseModel>> getAll(DateTime dateFrom, DateTime dateTo) async {
+    try {
+      final res = await _service.getMethod(path: "/expenses/", params: {
+        "start_date": dateFrom.sendFormat,
+        "end_date": dateTo.sendFormat,
+      });
+      return (res.data as List).map((e) => ExpenseModel.fromJson(e)).toList();
+    } catch (e) {
+      throw e;
+    }
   }
 
   Future<ExpenseModel> createExpense(
-      String title, double totalCount, DateTime date, int userId) async {
-    final res = await _service.postMethod(path: "/expense", body: {
-      "title": title,
-      "totalCount": totalCount,
-      "date": date.sendFormat,
-      "user_id": userId,
-    });
-    return ExpenseModel.fromJson(res.data);
+      double totalCount, int categoryId, DateTime date) async {
+    try {
+      final res = await _service.postMethod(
+        path: "/expenses/",
+        body: {
+          "total_count": totalCount,
+          "category_id": categoryId,
+          "date": getRequestFormatDate(date),
+        },
+      );
+      return ExpenseModel.fromJson(res.data);
+    } catch (e) {
+      throw e;
+    }
   }
 
-  Future<ExpenseModel> updateExpense(
-      int id, String title, double totalCount, DateTime date, int userId) async {
-    final res = await _service.patchMethod(path: "/expense/$id", body: {
-      "title": title,
-      "totalCount": totalCount,
-      "date": date.sendFormat,
-      "user_id": userId,
-    });
+  Future<ExpenseModel> updateExpense(int expenseId,
+      int categoryId, double totalCount, DateTime date) async {
+    try {
+      final res = await _service.putMethod(
+        path: "/expenses/$expenseId",
+        params: {
+          'expense_id': expenseId,
+        },
+        body: {
+          "total_count": totalCount,
+          "category_id": categoryId,
+          "date": getRequestFormatDate(date),
+        },
+      );
 
-    return ExpenseModel.fromJson(res.data);
+      return ExpenseModel.fromJson(res.data);
+    } catch (e) {
+      throw e;
+    }
   }
 
-  Future<bool> delete(int id) async {
-    final res = await _service.deleteMethod(
-      path: "/expense/$id",
-    );
-    return res.data;
+  Future<void> delete(int id) async {
+    try {
+      await _service.deleteMethod(path: "/expenses/$id", params: {
+        'expense_id': id,
+      });
+    } catch (e) {
+      throw e;
+    }
   }
 }

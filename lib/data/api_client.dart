@@ -15,7 +15,8 @@ import 'interceptors/log.dart';
 @lazySingleton
 class ApiClient {
   ApiClient(this.prefs, DotEnv env) {
-    final url = env.env['BASE_URL']!;
+    final url = env.env['API_URL']!;
+    // final url = env.env['BASE_URL']!;
     client = Dio(
       BaseOptions(
         baseUrl: url,
@@ -79,6 +80,8 @@ class AppInterceptors extends Interceptor {
         .contains('convert?to=')) {
       options.baseUrl = 'https://api.apilayer.com';
       options.headers['apikey'] = '42rYJoyvTsdnmHwTj45WyiNQG1MbfN2V';
+    } else if(prefs.checkToken()) {
+      options.headers['Authorization'] = 'Bearer ${prefs.getStringByKey('token')}';
     }
     return handler.next(options);
   }

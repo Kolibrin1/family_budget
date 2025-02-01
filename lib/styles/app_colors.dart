@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Основные цвета для темной темы
   static const primary = Color(0xFF8E44AD); // Глубокий фиолетовый
+  static final lightPrimary = Color(0xFFAE49A1);
   static const complementaryBlue = Color(0xFF3498DB); // Насыщенный синий оттенок
   static const onPrimary = Color(0xFFF5EEF8); // Нежный светло-фиолетовый
   static const secondary = Color(0xFF5B2C6F); // Темный акцентный фиолетовый

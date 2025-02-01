@@ -48,12 +48,12 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
         leading: IconButton(
           onPressed: () {
             context.read<AuthBloc>().add(
-              AuthEvent.initial(
-                authType: AuthType.register,
-                login: widget.login,
-                pass: widget.pass,
-              ),
-            );
+                  AuthEvent.initial(
+                    authType: AuthType.register,
+                    login: widget.login,
+                    pass: widget.pass,
+                  ),
+                );
           },
           icon: const Icon(
             Icons.chevron_left,
@@ -78,7 +78,9 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
             Text(
               'Начальный баланс',
               style: GoogleFonts.montserrat(
-                  fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.white),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white),
             ),
             AppTextField(
               textController: _balanceController,
@@ -87,7 +89,9 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
             Text(
               'Валюта',
               style: GoogleFonts.montserrat(
-                  fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.white),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.white),
             ),
             AppTextField(
               textController: _currencyController,
@@ -132,9 +136,7 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
                                       width: 10,
                                     ),
                                     Container(
-                                      width: MediaQuery.of(context)
-                                          .size
-                                          .width -
+                                      width: MediaQuery.of(context).size.width -
                                           110,
                                       child: Text(
                                         currencies[index].name,

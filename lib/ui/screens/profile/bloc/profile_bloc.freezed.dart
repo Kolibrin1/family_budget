@@ -19,49 +19,80 @@ mixin _$ProfileEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addExpense,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String title, double totalCount, DateTime date)?
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult Function(String title, double totalCount, DateTime date)? addIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
     required TResult Function(_AddExpense value) addExpense,
-    required TResult Function(AddIncome value) addIncome,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
     TResult? Function(_AddExpense value)? addExpense,
-    TResult? Function(AddIncome value)? addIncome,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
     TResult Function(_AddExpense value)? addExpense,
-    TResult Function(AddIncome value)? addIncome,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -130,10 +161,16 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addExpense,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
   }) {
     return initial();
   }
@@ -142,10 +179,16 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
   }) {
     return initial?.call();
   }
@@ -154,9 +197,16 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String title, double totalCount, DateTime date)?
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult Function(String title, double totalCount, DateTime date)? addIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -169,8 +219,12 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
     required TResult Function(_AddExpense value) addExpense,
-    required TResult Function(AddIncome value) addIncome,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
   }) {
     return initial(this);
   }
@@ -179,8 +233,12 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
     TResult? Function(_AddExpense value)? addExpense,
-    TResult? Function(AddIncome value)? addIncome,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
   }) {
     return initial?.call(this);
   }
@@ -189,8 +247,12 @@ class _$InitialEventImpl implements _InitialEvent {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
     TResult Function(_AddExpense value)? addExpense,
-    TResult Function(AddIncome value)? addIncome,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -205,12 +267,412 @@ abstract class _InitialEvent implements ProfileEvent {
 }
 
 /// @nodoc
+abstract class _$$InitExpenseEventImplCopyWith<$Res> {
+  factory _$$InitExpenseEventImplCopyWith(_$InitExpenseEventImpl value,
+          $Res Function(_$InitExpenseEventImpl) then) =
+      __$$InitExpenseEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({ExpenseModel? expense});
+
+  $ExpenseModelCopyWith<$Res>? get expense;
+}
+
+/// @nodoc
+class __$$InitExpenseEventImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$InitExpenseEventImpl>
+    implements _$$InitExpenseEventImplCopyWith<$Res> {
+  __$$InitExpenseEventImplCopyWithImpl(_$InitExpenseEventImpl _value,
+      $Res Function(_$InitExpenseEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? expense = freezed,
+  }) {
+    return _then(_$InitExpenseEventImpl(
+      expense: freezed == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as ExpenseModel?,
+    ));
+  }
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ExpenseModelCopyWith<$Res>? get expense {
+    if (_value.expense == null) {
+      return null;
+    }
+
+    return $ExpenseModelCopyWith<$Res>(_value.expense!, (value) {
+      return _then(_value.copyWith(expense: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$InitExpenseEventImpl implements _InitExpenseEvent {
+  const _$InitExpenseEventImpl({this.expense});
+
+  @override
+  final ExpenseModel? expense;
+
+  @override
+  String toString() {
+    return 'ProfileEvent.initExpense(expense: $expense)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InitExpenseEventImpl &&
+            (identical(other.expense, expense) || other.expense == expense));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, expense);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InitExpenseEventImplCopyWith<_$InitExpenseEventImpl> get copyWith =>
+      __$$InitExpenseEventImplCopyWithImpl<_$InitExpenseEventImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addExpense,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
+  }) {
+    return initExpense(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
+  }) {
+    return initExpense?.call(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (initExpense != null) {
+      return initExpense(expense);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
+    required TResult Function(_AddExpense value) addExpense,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
+  }) {
+    return initExpense(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
+    TResult? Function(_AddExpense value)? addExpense,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
+  }) {
+    return initExpense?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
+    TResult Function(_AddExpense value)? addExpense,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (initExpense != null) {
+      return initExpense(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InitExpenseEvent implements ProfileEvent {
+  const factory _InitExpenseEvent({final ExpenseModel? expense}) =
+      _$InitExpenseEventImpl;
+
+  ExpenseModel? get expense;
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InitExpenseEventImplCopyWith<_$InitExpenseEventImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$InitIncomeEventImplCopyWith<$Res> {
+  factory _$$InitIncomeEventImplCopyWith(_$InitIncomeEventImpl value,
+          $Res Function(_$InitIncomeEventImpl) then) =
+      __$$InitIncomeEventImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({IncomeModel? income});
+
+  $IncomeModelCopyWith<$Res>? get income;
+}
+
+/// @nodoc
+class __$$InitIncomeEventImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$InitIncomeEventImpl>
+    implements _$$InitIncomeEventImplCopyWith<$Res> {
+  __$$InitIncomeEventImplCopyWithImpl(
+      _$InitIncomeEventImpl _value, $Res Function(_$InitIncomeEventImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? income = freezed,
+  }) {
+    return _then(_$InitIncomeEventImpl(
+      income: freezed == income
+          ? _value.income
+          : income // ignore: cast_nullable_to_non_nullable
+              as IncomeModel?,
+    ));
+  }
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $IncomeModelCopyWith<$Res>? get income {
+    if (_value.income == null) {
+      return null;
+    }
+
+    return $IncomeModelCopyWith<$Res>(_value.income!, (value) {
+      return _then(_value.copyWith(income: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$InitIncomeEventImpl implements _InitIncomeEvent {
+  const _$InitIncomeEventImpl({this.income});
+
+  @override
+  final IncomeModel? income;
+
+  @override
+  String toString() {
+    return 'ProfileEvent.initIncome(income: $income)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InitIncomeEventImpl &&
+            (identical(other.income, income) || other.income == income));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, income);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InitIncomeEventImplCopyWith<_$InitIncomeEventImpl> get copyWith =>
+      __$$InitIncomeEventImplCopyWithImpl<_$InitIncomeEventImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addExpense,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
+  }) {
+    return initIncome(income);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
+  }) {
+    return initIncome?.call(income);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (initIncome != null) {
+      return initIncome(income);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
+    required TResult Function(_AddExpense value) addExpense,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
+  }) {
+    return initIncome(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
+    TResult? Function(_AddExpense value)? addExpense,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
+  }) {
+    return initIncome?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
+    TResult Function(_AddExpense value)? addExpense,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (initIncome != null) {
+      return initIncome(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InitIncomeEvent implements ProfileEvent {
+  const factory _InitIncomeEvent({final IncomeModel? income}) =
+      _$InitIncomeEventImpl;
+
+  IncomeModel? get income;
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InitIncomeEventImplCopyWith<_$InitIncomeEventImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 abstract class _$$AddExpenseImplCopyWith<$Res> {
   factory _$$AddExpenseImplCopyWith(
           _$AddExpenseImpl value, $Res Function(_$AddExpenseImpl) then) =
       __$$AddExpenseImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String title, double totalCount, DateTime date});
+  $Res call({double totalCount, int categoryId, DateTime date});
 }
 
 /// @nodoc
@@ -226,19 +688,19 @@ class __$$AddExpenseImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
     Object? totalCount = null,
+    Object? categoryId = null,
     Object? date = null,
   }) {
     return _then(_$AddExpenseImpl(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
       totalCount: null == totalCount
           ? _value.totalCount
           : totalCount // ignore: cast_nullable_to_non_nullable
               as double,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
       date: null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -251,18 +713,18 @@ class __$$AddExpenseImplCopyWithImpl<$Res>
 
 class _$AddExpenseImpl implements _AddExpense {
   const _$AddExpenseImpl(
-      {required this.title, required this.totalCount, required this.date});
+      {required this.totalCount, required this.categoryId, required this.date});
 
   @override
-  final String title;
-  @override
   final double totalCount;
+  @override
+  final int categoryId;
   @override
   final DateTime date;
 
   @override
   String toString() {
-    return 'ProfileEvent.addExpense(title: $title, totalCount: $totalCount, date: $date)';
+    return 'ProfileEvent.addExpense(totalCount: $totalCount, categoryId: $categoryId, date: $date)';
   }
 
   @override
@@ -270,14 +732,15 @@ class _$AddExpenseImpl implements _AddExpense {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddExpenseImpl &&
-            (identical(other.title, title) || other.title == title) &&
             (identical(other.totalCount, totalCount) ||
                 other.totalCount == totalCount) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
             (identical(other.date, date) || other.date == date));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, title, totalCount, date);
+  int get hashCode => Object.hash(runtimeType, totalCount, categoryId, date);
 
   /// Create a copy of ProfileEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -291,37 +754,56 @@ class _$AddExpenseImpl implements _AddExpense {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addExpense,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
   }) {
-    return addExpense(title, totalCount, date);
+    return addExpense(totalCount, categoryId, date);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
   }) {
-    return addExpense?.call(title, totalCount, date);
+    return addExpense?.call(totalCount, categoryId, date);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String title, double totalCount, DateTime date)?
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult Function(String title, double totalCount, DateTime date)? addIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
     required TResult orElse(),
   }) {
     if (addExpense != null) {
-      return addExpense(title, totalCount, date);
+      return addExpense(totalCount, categoryId, date);
     }
     return orElse();
   }
@@ -330,8 +812,12 @@ class _$AddExpenseImpl implements _AddExpense {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
     required TResult Function(_AddExpense value) addExpense,
-    required TResult Function(AddIncome value) addIncome,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
   }) {
     return addExpense(this);
   }
@@ -340,8 +826,12 @@ class _$AddExpenseImpl implements _AddExpense {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
     TResult? Function(_AddExpense value)? addExpense,
-    TResult? Function(AddIncome value)? addIncome,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
   }) {
     return addExpense?.call(this);
   }
@@ -350,8 +840,12 @@ class _$AddExpenseImpl implements _AddExpense {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
     TResult Function(_AddExpense value)? addExpense,
-    TResult Function(AddIncome value)? addIncome,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
     required TResult orElse(),
   }) {
     if (addExpense != null) {
@@ -363,12 +857,12 @@ class _$AddExpenseImpl implements _AddExpense {
 
 abstract class _AddExpense implements ProfileEvent {
   const factory _AddExpense(
-      {required final String title,
-      required final double totalCount,
+      {required final double totalCount,
+      required final int categoryId,
       required final DateTime date}) = _$AddExpenseImpl;
 
-  String get title;
   double get totalCount;
+  int get categoryId;
   DateTime get date;
 
   /// Create a copy of ProfileEvent
@@ -384,7 +878,7 @@ abstract class _$$AddIncomeImplCopyWith<$Res> {
           _$AddIncomeImpl value, $Res Function(_$AddIncomeImpl) then) =
       __$$AddIncomeImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String title, double totalCount, DateTime date});
+  $Res call({double totalCount, int categoryId, DateTime date});
 }
 
 /// @nodoc
@@ -400,15 +894,226 @@ class __$$AddIncomeImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? title = null,
     Object? totalCount = null,
+    Object? categoryId = null,
     Object? date = null,
   }) {
     return _then(_$AddIncomeImpl(
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
+      totalCount: null == totalCount
+          ? _value.totalCount
+          : totalCount // ignore: cast_nullable_to_non_nullable
+              as double,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
+      date: null == date
+          ? _value.date
+          : date // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$AddIncomeImpl implements _AddIncome {
+  const _$AddIncomeImpl(
+      {required this.totalCount, required this.categoryId, required this.date});
+
+  @override
+  final double totalCount;
+  @override
+  final int categoryId;
+  @override
+  final DateTime date;
+
+  @override
+  String toString() {
+    return 'ProfileEvent.addIncome(totalCount: $totalCount, categoryId: $categoryId, date: $date)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AddIncomeImpl &&
+            (identical(other.totalCount, totalCount) ||
+                other.totalCount == totalCount) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
+            (identical(other.date, date) || other.date == date));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, totalCount, categoryId, date);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AddIncomeImplCopyWith<_$AddIncomeImpl> get copyWith =>
+      __$$AddIncomeImplCopyWithImpl<_$AddIncomeImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addExpense,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
+  }) {
+    return addIncome(totalCount, categoryId, date);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
+  }) {
+    return addIncome?.call(totalCount, categoryId, date);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (addIncome != null) {
+      return addIncome(totalCount, categoryId, date);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
+    required TResult Function(_AddExpense value) addExpense,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
+  }) {
+    return addIncome(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
+    TResult? Function(_AddExpense value)? addExpense,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
+  }) {
+    return addIncome?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
+    TResult Function(_AddExpense value)? addExpense,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (addIncome != null) {
+      return addIncome(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AddIncome implements ProfileEvent {
+  const factory _AddIncome(
+      {required final double totalCount,
+      required final int categoryId,
+      required final DateTime date}) = _$AddIncomeImpl;
+
+  double get totalCount;
+  int get categoryId;
+  DateTime get date;
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AddIncomeImplCopyWith<_$AddIncomeImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$EditIncomeImplCopyWith<$Res> {
+  factory _$$EditIncomeImplCopyWith(
+          _$EditIncomeImpl value, $Res Function(_$EditIncomeImpl) then) =
+      __$$EditIncomeImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int incomeId, int categoryId, double totalCount, DateTime date});
+}
+
+/// @nodoc
+class __$$EditIncomeImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$EditIncomeImpl>
+    implements _$$EditIncomeImplCopyWith<$Res> {
+  __$$EditIncomeImplCopyWithImpl(
+      _$EditIncomeImpl _value, $Res Function(_$EditIncomeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? incomeId = null,
+    Object? categoryId = null,
+    Object? totalCount = null,
+    Object? date = null,
+  }) {
+    return _then(_$EditIncomeImpl(
+      incomeId: null == incomeId
+          ? _value.incomeId
+          : incomeId // ignore: cast_nullable_to_non_nullable
+              as int,
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
       totalCount: null == totalCount
           ? _value.totalCount
           : totalCount // ignore: cast_nullable_to_non_nullable
@@ -423,12 +1128,17 @@ class __$$AddIncomeImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AddIncomeImpl implements AddIncome {
-  const _$AddIncomeImpl(
-      {required this.title, required this.totalCount, required this.date});
+class _$EditIncomeImpl implements _EditIncome {
+  const _$EditIncomeImpl(
+      {required this.incomeId,
+      required this.categoryId,
+      required this.totalCount,
+      required this.date});
 
   @override
-  final String title;
+  final int incomeId;
+  @override
+  final int categoryId;
   @override
   final double totalCount;
   @override
@@ -436,66 +1146,89 @@ class _$AddIncomeImpl implements AddIncome {
 
   @override
   String toString() {
-    return 'ProfileEvent.addIncome(title: $title, totalCount: $totalCount, date: $date)';
+    return 'ProfileEvent.editIncome(incomeId: $incomeId, categoryId: $categoryId, totalCount: $totalCount, date: $date)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AddIncomeImpl &&
-            (identical(other.title, title) || other.title == title) &&
+            other is _$EditIncomeImpl &&
+            (identical(other.incomeId, incomeId) ||
+                other.incomeId == incomeId) &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
             (identical(other.totalCount, totalCount) ||
                 other.totalCount == totalCount) &&
             (identical(other.date, date) || other.date == date));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, title, totalCount, date);
+  int get hashCode =>
+      Object.hash(runtimeType, incomeId, categoryId, totalCount, date);
 
   /// Create a copy of ProfileEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$AddIncomeImplCopyWith<_$AddIncomeImpl> get copyWith =>
-      __$$AddIncomeImplCopyWithImpl<_$AddIncomeImpl>(this, _$identity);
+  _$$EditIncomeImplCopyWith<_$EditIncomeImpl> get copyWith =>
+      __$$EditIncomeImplCopyWithImpl<_$EditIncomeImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addExpense,
-    required TResult Function(String title, double totalCount, DateTime date)
+    required TResult Function(double totalCount, int categoryId, DateTime date)
         addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
   }) {
-    return addIncome(title, totalCount, date);
+    return editIncome(incomeId, categoryId, totalCount, date);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult? Function(String title, double totalCount, DateTime date)?
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
         addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
   }) {
-    return addIncome?.call(title, totalCount, date);
+    return editIncome?.call(incomeId, categoryId, totalCount, date);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String title, double totalCount, DateTime date)?
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
         addExpense,
-    TResult Function(String title, double totalCount, DateTime date)? addIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
     required TResult orElse(),
   }) {
-    if (addIncome != null) {
-      return addIncome(title, totalCount, date);
+    if (editIncome != null) {
+      return editIncome(incomeId, categoryId, totalCount, date);
     }
     return orElse();
   }
@@ -504,51 +1237,249 @@ class _$AddIncomeImpl implements AddIncome {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
     required TResult Function(_AddExpense value) addExpense,
-    required TResult Function(AddIncome value) addIncome,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
   }) {
-    return addIncome(this);
+    return editIncome(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
     TResult? Function(_AddExpense value)? addExpense,
-    TResult? Function(AddIncome value)? addIncome,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
   }) {
-    return addIncome?.call(this);
+    return editIncome?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
     TResult Function(_AddExpense value)? addExpense,
-    TResult Function(AddIncome value)? addIncome,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
     required TResult orElse(),
   }) {
-    if (addIncome != null) {
-      return addIncome(this);
+    if (editIncome != null) {
+      return editIncome(this);
     }
     return orElse();
   }
 }
 
-abstract class AddIncome implements ProfileEvent {
-  const factory AddIncome(
-      {required final String title,
+abstract class _EditIncome implements ProfileEvent {
+  const factory _EditIncome(
+      {required final int incomeId,
+      required final int categoryId,
       required final double totalCount,
-      required final DateTime date}) = _$AddIncomeImpl;
+      required final DateTime date}) = _$EditIncomeImpl;
 
-  String get title;
+  int get incomeId;
+  int get categoryId;
   double get totalCount;
   DateTime get date;
 
   /// Create a copy of ProfileEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$AddIncomeImplCopyWith<_$AddIncomeImpl> get copyWith =>
+  _$$EditIncomeImplCopyWith<_$EditIncomeImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$DeleteIncomeImplCopyWith<$Res> {
+  factory _$$DeleteIncomeImplCopyWith(
+          _$DeleteIncomeImpl value, $Res Function(_$DeleteIncomeImpl) then) =
+      __$$DeleteIncomeImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int incomeId});
+}
+
+/// @nodoc
+class __$$DeleteIncomeImplCopyWithImpl<$Res>
+    extends _$ProfileEventCopyWithImpl<$Res, _$DeleteIncomeImpl>
+    implements _$$DeleteIncomeImplCopyWith<$Res> {
+  __$$DeleteIncomeImplCopyWithImpl(
+      _$DeleteIncomeImpl _value, $Res Function(_$DeleteIncomeImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? incomeId = null,
+  }) {
+    return _then(_$DeleteIncomeImpl(
+      incomeId: null == incomeId
+          ? _value.incomeId
+          : incomeId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$DeleteIncomeImpl implements _DeleteIncome {
+  const _$DeleteIncomeImpl({required this.incomeId});
+
+  @override
+  final int incomeId;
+
+  @override
+  String toString() {
+    return 'ProfileEvent.deleteIncome(incomeId: $incomeId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$DeleteIncomeImpl &&
+            (identical(other.incomeId, incomeId) ||
+                other.incomeId == incomeId));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, incomeId);
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$DeleteIncomeImplCopyWith<_$DeleteIncomeImpl> get copyWith =>
+      __$$DeleteIncomeImplCopyWithImpl<_$DeleteIncomeImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function(ExpenseModel? expense) initExpense,
+    required TResult Function(IncomeModel? income) initIncome,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addExpense,
+    required TResult Function(double totalCount, int categoryId, DateTime date)
+        addIncome,
+    required TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)
+        editIncome,
+    required TResult Function(int incomeId) deleteIncome,
+  }) {
+    return deleteIncome(incomeId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function(ExpenseModel? expense)? initExpense,
+    TResult? Function(IncomeModel? income)? initIncome,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult? Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult? Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult? Function(int incomeId)? deleteIncome,
+  }) {
+    return deleteIncome?.call(incomeId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function(ExpenseModel? expense)? initExpense,
+    TResult Function(IncomeModel? income)? initIncome,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addExpense,
+    TResult Function(double totalCount, int categoryId, DateTime date)?
+        addIncome,
+    TResult Function(
+            int incomeId, int categoryId, double totalCount, DateTime date)?
+        editIncome,
+    TResult Function(int incomeId)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (deleteIncome != null) {
+      return deleteIncome(incomeId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_InitialEvent value) initial,
+    required TResult Function(_InitExpenseEvent value) initExpense,
+    required TResult Function(_InitIncomeEvent value) initIncome,
+    required TResult Function(_AddExpense value) addExpense,
+    required TResult Function(_AddIncome value) addIncome,
+    required TResult Function(_EditIncome value) editIncome,
+    required TResult Function(_DeleteIncome value) deleteIncome,
+  }) {
+    return deleteIncome(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_InitialEvent value)? initial,
+    TResult? Function(_InitExpenseEvent value)? initExpense,
+    TResult? Function(_InitIncomeEvent value)? initIncome,
+    TResult? Function(_AddExpense value)? addExpense,
+    TResult? Function(_AddIncome value)? addIncome,
+    TResult? Function(_EditIncome value)? editIncome,
+    TResult? Function(_DeleteIncome value)? deleteIncome,
+  }) {
+    return deleteIncome?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_InitialEvent value)? initial,
+    TResult Function(_InitExpenseEvent value)? initExpense,
+    TResult Function(_InitIncomeEvent value)? initIncome,
+    TResult Function(_AddExpense value)? addExpense,
+    TResult Function(_AddIncome value)? addIncome,
+    TResult Function(_EditIncome value)? editIncome,
+    TResult Function(_DeleteIncome value)? deleteIncome,
+    required TResult orElse(),
+  }) {
+    if (deleteIncome != null) {
+      return deleteIncome(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _DeleteIncome implements ProfileEvent {
+  const factory _DeleteIncome({required final int incomeId}) =
+      _$DeleteIncomeImpl;
+
+  int get incomeId;
+
+  /// Create a copy of ProfileEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$DeleteIncomeImplCopyWith<_$DeleteIncomeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -558,6 +1489,8 @@ mixin _$ProfileState {
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel user, List<IncomeModel> incomesList)
         initial,
+    required TResult Function(IncomeModel? income) addIncome,
+    required TResult Function(ExpenseModel? expense) addExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) =>
@@ -565,6 +1498,8 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult? Function(IncomeModel? income)? addIncome,
+    TResult? Function(ExpenseModel? expense)? addExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) =>
@@ -572,6 +1507,8 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult Function(IncomeModel? income)? addIncome,
+    TResult Function(ExpenseModel? expense)? addExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -580,6 +1517,8 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_PhoneState value) initial,
+    required TResult Function(_AddIncomeState value) addIncome,
+    required TResult Function(_AddExpenseState value) addExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) =>
@@ -587,6 +1526,8 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_PhoneState value)? initial,
+    TResult? Function(_AddIncomeState value)? addIncome,
+    TResult? Function(_AddExpenseState value)? addExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) =>
@@ -594,6 +1535,8 @@ mixin _$ProfileState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_PhoneState value)? initial,
+    TResult Function(_AddIncomeState value)? addIncome,
+    TResult Function(_AddExpenseState value)? addExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),
@@ -721,6 +1664,8 @@ class _$PhoneStateImpl implements _PhoneState {
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel user, List<IncomeModel> incomesList)
         initial,
+    required TResult Function(IncomeModel? income) addIncome,
+    required TResult Function(ExpenseModel? expense) addExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) {
@@ -731,6 +1676,8 @@ class _$PhoneStateImpl implements _PhoneState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult? Function(IncomeModel? income)? addIncome,
+    TResult? Function(ExpenseModel? expense)? addExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) {
@@ -741,6 +1688,8 @@ class _$PhoneStateImpl implements _PhoneState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult Function(IncomeModel? income)? addIncome,
+    TResult Function(ExpenseModel? expense)? addExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -755,6 +1704,8 @@ class _$PhoneStateImpl implements _PhoneState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_PhoneState value) initial,
+    required TResult Function(_AddIncomeState value) addIncome,
+    required TResult Function(_AddExpenseState value) addExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) {
@@ -765,6 +1716,8 @@ class _$PhoneStateImpl implements _PhoneState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_PhoneState value)? initial,
+    TResult? Function(_AddIncomeState value)? addIncome,
+    TResult? Function(_AddExpenseState value)? addExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) {
@@ -775,6 +1728,8 @@ class _$PhoneStateImpl implements _PhoneState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_PhoneState value)? initial,
+    TResult Function(_AddIncomeState value)? addIncome,
+    TResult Function(_AddExpenseState value)? addExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),
@@ -798,6 +1753,360 @@ abstract class _PhoneState implements ProfileState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PhoneStateImplCopyWith<_$PhoneStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AddIncomeStateImplCopyWith<$Res> {
+  factory _$$AddIncomeStateImplCopyWith(_$AddIncomeStateImpl value,
+          $Res Function(_$AddIncomeStateImpl) then) =
+      __$$AddIncomeStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({IncomeModel? income});
+
+  $IncomeModelCopyWith<$Res>? get income;
+}
+
+/// @nodoc
+class __$$AddIncomeStateImplCopyWithImpl<$Res>
+    extends _$ProfileStateCopyWithImpl<$Res, _$AddIncomeStateImpl>
+    implements _$$AddIncomeStateImplCopyWith<$Res> {
+  __$$AddIncomeStateImplCopyWithImpl(
+      _$AddIncomeStateImpl _value, $Res Function(_$AddIncomeStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? income = freezed,
+  }) {
+    return _then(_$AddIncomeStateImpl(
+      income: freezed == income
+          ? _value.income
+          : income // ignore: cast_nullable_to_non_nullable
+              as IncomeModel?,
+    ));
+  }
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $IncomeModelCopyWith<$Res>? get income {
+    if (_value.income == null) {
+      return null;
+    }
+
+    return $IncomeModelCopyWith<$Res>(_value.income!, (value) {
+      return _then(_value.copyWith(income: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$AddIncomeStateImpl implements _AddIncomeState {
+  const _$AddIncomeStateImpl({this.income});
+
+  @override
+  final IncomeModel? income;
+
+  @override
+  String toString() {
+    return 'ProfileState.addIncome(income: $income)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AddIncomeStateImpl &&
+            (identical(other.income, income) || other.income == income));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, income);
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AddIncomeStateImplCopyWith<_$AddIncomeStateImpl> get copyWith =>
+      __$$AddIncomeStateImplCopyWithImpl<_$AddIncomeStateImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UserModel user, List<IncomeModel> incomesList)
+        initial,
+    required TResult Function(IncomeModel? income) addIncome,
+    required TResult Function(ExpenseModel? expense) addExpense,
+    required TResult Function() loading,
+    required TResult Function(String message, PageState pageState) info,
+  }) {
+    return addIncome(income);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult? Function(IncomeModel? income)? addIncome,
+    TResult? Function(ExpenseModel? expense)? addExpense,
+    TResult? Function()? loading,
+    TResult? Function(String message, PageState pageState)? info,
+  }) {
+    return addIncome?.call(income);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult Function(IncomeModel? income)? addIncome,
+    TResult Function(ExpenseModel? expense)? addExpense,
+    TResult Function()? loading,
+    TResult Function(String message, PageState pageState)? info,
+    required TResult orElse(),
+  }) {
+    if (addIncome != null) {
+      return addIncome(income);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_PhoneState value) initial,
+    required TResult Function(_AddIncomeState value) addIncome,
+    required TResult Function(_AddExpenseState value) addExpense,
+    required TResult Function(_LoadingState value) loading,
+    required TResult Function(_InfoState value) info,
+  }) {
+    return addIncome(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PhoneState value)? initial,
+    TResult? Function(_AddIncomeState value)? addIncome,
+    TResult? Function(_AddExpenseState value)? addExpense,
+    TResult? Function(_LoadingState value)? loading,
+    TResult? Function(_InfoState value)? info,
+  }) {
+    return addIncome?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PhoneState value)? initial,
+    TResult Function(_AddIncomeState value)? addIncome,
+    TResult Function(_AddExpenseState value)? addExpense,
+    TResult Function(_LoadingState value)? loading,
+    TResult Function(_InfoState value)? info,
+    required TResult orElse(),
+  }) {
+    if (addIncome != null) {
+      return addIncome(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AddIncomeState implements ProfileState {
+  const factory _AddIncomeState({final IncomeModel? income}) =
+      _$AddIncomeStateImpl;
+
+  IncomeModel? get income;
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AddIncomeStateImplCopyWith<_$AddIncomeStateImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$AddExpenseStateImplCopyWith<$Res> {
+  factory _$$AddExpenseStateImplCopyWith(_$AddExpenseStateImpl value,
+          $Res Function(_$AddExpenseStateImpl) then) =
+      __$$AddExpenseStateImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({ExpenseModel? expense});
+
+  $ExpenseModelCopyWith<$Res>? get expense;
+}
+
+/// @nodoc
+class __$$AddExpenseStateImplCopyWithImpl<$Res>
+    extends _$ProfileStateCopyWithImpl<$Res, _$AddExpenseStateImpl>
+    implements _$$AddExpenseStateImplCopyWith<$Res> {
+  __$$AddExpenseStateImplCopyWithImpl(
+      _$AddExpenseStateImpl _value, $Res Function(_$AddExpenseStateImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? expense = freezed,
+  }) {
+    return _then(_$AddExpenseStateImpl(
+      expense: freezed == expense
+          ? _value.expense
+          : expense // ignore: cast_nullable_to_non_nullable
+              as ExpenseModel?,
+    ));
+  }
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ExpenseModelCopyWith<$Res>? get expense {
+    if (_value.expense == null) {
+      return null;
+    }
+
+    return $ExpenseModelCopyWith<$Res>(_value.expense!, (value) {
+      return _then(_value.copyWith(expense: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$AddExpenseStateImpl implements _AddExpenseState {
+  const _$AddExpenseStateImpl({this.expense});
+
+  @override
+  final ExpenseModel? expense;
+
+  @override
+  String toString() {
+    return 'ProfileState.addExpense(expense: $expense)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AddExpenseStateImpl &&
+            (identical(other.expense, expense) || other.expense == expense));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, expense);
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AddExpenseStateImplCopyWith<_$AddExpenseStateImpl> get copyWith =>
+      __$$AddExpenseStateImplCopyWithImpl<_$AddExpenseStateImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(UserModel user, List<IncomeModel> incomesList)
+        initial,
+    required TResult Function(IncomeModel? income) addIncome,
+    required TResult Function(ExpenseModel? expense) addExpense,
+    required TResult Function() loading,
+    required TResult Function(String message, PageState pageState) info,
+  }) {
+    return addExpense(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult? Function(IncomeModel? income)? addIncome,
+    TResult? Function(ExpenseModel? expense)? addExpense,
+    TResult? Function()? loading,
+    TResult? Function(String message, PageState pageState)? info,
+  }) {
+    return addExpense?.call(expense);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult Function(IncomeModel? income)? addIncome,
+    TResult Function(ExpenseModel? expense)? addExpense,
+    TResult Function()? loading,
+    TResult Function(String message, PageState pageState)? info,
+    required TResult orElse(),
+  }) {
+    if (addExpense != null) {
+      return addExpense(expense);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_PhoneState value) initial,
+    required TResult Function(_AddIncomeState value) addIncome,
+    required TResult Function(_AddExpenseState value) addExpense,
+    required TResult Function(_LoadingState value) loading,
+    required TResult Function(_InfoState value) info,
+  }) {
+    return addExpense(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_PhoneState value)? initial,
+    TResult? Function(_AddIncomeState value)? addIncome,
+    TResult? Function(_AddExpenseState value)? addExpense,
+    TResult? Function(_LoadingState value)? loading,
+    TResult? Function(_InfoState value)? info,
+  }) {
+    return addExpense?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_PhoneState value)? initial,
+    TResult Function(_AddIncomeState value)? addIncome,
+    TResult Function(_AddExpenseState value)? addExpense,
+    TResult Function(_LoadingState value)? loading,
+    TResult Function(_InfoState value)? info,
+    required TResult orElse(),
+  }) {
+    if (addExpense != null) {
+      return addExpense(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _AddExpenseState implements ProfileState {
+  const factory _AddExpenseState({final ExpenseModel? expense}) =
+      _$AddExpenseStateImpl;
+
+  ExpenseModel? get expense;
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AddExpenseStateImplCopyWith<_$AddExpenseStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -844,6 +2153,8 @@ class _$LoadingStateImpl implements _LoadingState {
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel user, List<IncomeModel> incomesList)
         initial,
+    required TResult Function(IncomeModel? income) addIncome,
+    required TResult Function(ExpenseModel? expense) addExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) {
@@ -854,6 +2165,8 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult? Function(IncomeModel? income)? addIncome,
+    TResult? Function(ExpenseModel? expense)? addExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) {
@@ -864,6 +2177,8 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult Function(IncomeModel? income)? addIncome,
+    TResult Function(ExpenseModel? expense)? addExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -878,6 +2193,8 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_PhoneState value) initial,
+    required TResult Function(_AddIncomeState value) addIncome,
+    required TResult Function(_AddExpenseState value) addExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) {
@@ -888,6 +2205,8 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_PhoneState value)? initial,
+    TResult? Function(_AddIncomeState value)? addIncome,
+    TResult? Function(_AddExpenseState value)? addExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) {
@@ -898,6 +2217,8 @@ class _$LoadingStateImpl implements _LoadingState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_PhoneState value)? initial,
+    TResult Function(_AddIncomeState value)? addIncome,
+    TResult Function(_AddExpenseState value)? addExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),
@@ -992,6 +2313,8 @@ class _$InfoStateImpl implements _InfoState {
   TResult when<TResult extends Object?>({
     required TResult Function(UserModel user, List<IncomeModel> incomesList)
         initial,
+    required TResult Function(IncomeModel? income) addIncome,
+    required TResult Function(ExpenseModel? expense) addExpense,
     required TResult Function() loading,
     required TResult Function(String message, PageState pageState) info,
   }) {
@@ -1002,6 +2325,8 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult? Function(IncomeModel? income)? addIncome,
+    TResult? Function(ExpenseModel? expense)? addExpense,
     TResult? Function()? loading,
     TResult? Function(String message, PageState pageState)? info,
   }) {
@@ -1012,6 +2337,8 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(UserModel user, List<IncomeModel> incomesList)? initial,
+    TResult Function(IncomeModel? income)? addIncome,
+    TResult Function(ExpenseModel? expense)? addExpense,
     TResult Function()? loading,
     TResult Function(String message, PageState pageState)? info,
     required TResult orElse(),
@@ -1026,6 +2353,8 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_PhoneState value) initial,
+    required TResult Function(_AddIncomeState value) addIncome,
+    required TResult Function(_AddExpenseState value) addExpense,
     required TResult Function(_LoadingState value) loading,
     required TResult Function(_InfoState value) info,
   }) {
@@ -1036,6 +2365,8 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_PhoneState value)? initial,
+    TResult? Function(_AddIncomeState value)? addIncome,
+    TResult? Function(_AddExpenseState value)? addExpense,
     TResult? Function(_LoadingState value)? loading,
     TResult? Function(_InfoState value)? info,
   }) {
@@ -1046,6 +2377,8 @@ class _$InfoStateImpl implements _InfoState {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_PhoneState value)? initial,
+    TResult Function(_AddIncomeState value)? addIncome,
+    TResult Function(_AddExpenseState value)? addExpense,
     TResult Function(_LoadingState value)? loading,
     TResult Function(_InfoState value)? info,
     required TResult orElse(),

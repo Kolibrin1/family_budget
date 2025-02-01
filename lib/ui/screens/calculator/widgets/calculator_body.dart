@@ -6,6 +6,7 @@ import 'package:family_budget/ui/screens/calculator/bloc/calc_bloc.dart';
 import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:family_budget/widgets/app_text_field.dart';
+import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,13 +18,15 @@ class CalculatorBody extends StatefulWidget {
       this.second,
       this.count,
       this.answer,
-      this.searchText});
+      this.searchText,
+      required this.isLoading});
 
   final Currency? first;
   final Currency? second;
   final double? count;
   final double? answer;
   final String? searchText;
+  final bool isLoading;
 
   @override
   State<CalculatorBody> createState() => _CalculatorBodyState();
@@ -57,6 +60,8 @@ class _CalculatorBodyState extends State<CalculatorBody> {
 
   @override
   Widget build(BuildContext context) {
+    secondCountController.text =
+        widget.answer != null ? '${widget.answer}' : '';
     return AppScaffold(
       willPop: false,
       child: Padding(
@@ -171,6 +176,9 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                               ),
                             ),
                           ),
+                          onChanged: (v) {
+                            secondCountController.clear();
+                          },
                         ),
                       ),
                       const SizedBox(
@@ -240,30 +248,34 @@ class _CalculatorBodyState extends State<CalculatorBody> {
               const SizedBox(
                 height: 20,
               ),
-              AppButton(
-                gradientColors: const [
-                  AppColors.complementaryBlue,
-                  AppColors.primary,
-                  AppColors.primary,
-                  AppColors.complementaryBlue
-                ],
-                title: 'Посчитать',
-                onPressed: () {
-                  if (first != null &&
-                      second != null &&
-                      firstCountController.text != '' &&
-                      double.tryParse(firstCountController.text) != null) {
-                    context.read<CalculatorBloc>().add(
-                          CalculatorEvent.calculate(
-                            first: first!,
-                            second: second!,
-                            count: double.parse(
-                              firstCountController.text,
+              SizedBox(
+                height: 40,
+                child: AppButton(
+                  padding: 0,
+                  gradientColors: const [
+                    AppColors.complementaryBlue,
+                    AppColors.primary,
+                    AppColors.primary,
+                    AppColors.complementaryBlue
+                  ],
+                  title: widget.isLoading ? '' : 'Посчитать',
+                  isDisabled: widget.isLoading,
+                  onPressed: () {
+                    if (first != null &&
+                        second != null &&
+                        firstCountController.text.isNotEmpty &&
+                        double.tryParse(firstCountController.text) != null) {
+                      context.read<CalculatorBloc>().add(
+                            CalculatorEvent.calculate(
+                              first: first!,
+                              second: second!,
+                              count: double.parse(firstCountController.text),
                             ),
-                          ),
-                        );
-                  }
-                },
+                          );
+                    }
+                  },
+                  child: widget.isLoading ? LoadingGif() : null,
+                ),
               ),
               const SizedBox(
                 height: 20,
@@ -281,13 +293,13 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                                 onTap: () {
                                   if (first == null) {
                                     first = curCurrencies[index];
-                                  } else if (second == null) {
+                                  } else if (second == null && first != curCurrencies[index]) {
                                     second = curCurrencies[index];
                                   } else {
-                                    if (first == curCurrencies[index]) {
-                                      first = null;
-                                    } else if (second == curCurrencies[index]) {
+                                    if (second == curCurrencies[index]) {
                                       second = null;
+                                    } else if (first == curCurrencies[index]) {
+                                      first = null;
                                     } else {
                                       second = curCurrencies[index];
                                     }
@@ -400,3 +412,294 @@ class _CalculatorBodyState extends State<CalculatorBody> {
     );
   }
 }
+
+// class CalculatorBody extends StatefulWidget {
+//   const CalculatorBody({
+//     super.key,
+//     this.first,
+//     this.second,
+//     this.count,
+//     this.answer,
+//     this.searchText,
+//     required this.isLoading,
+//   });
+//
+//   final Currency? first;
+//   final Currency? second;
+//   final double? count;
+//   final double? answer;
+//   final String? searchText;
+//   final bool isLoading;
+//
+//   @override
+//   State<CalculatorBody> createState() => _CalculatorBodyState();
+// }
+//
+// class _CalculatorBodyState extends State<CalculatorBody> {
+//   final List<Currency> currencies = Currency.values;
+//   final currencyController = TextEditingController();
+//   final firstCountController = TextEditingController();
+//   final secondCountController = TextEditingController();
+//
+//   List<Currency> curCurrencies = [];
+//   Currency? first;
+//   Currency? second;
+//
+//   @override
+//   void initState() {
+//     curCurrencies = currencies;
+//     first = widget.first;
+//     second = widget.second;
+//     secondCountController.text = widget.answer?.toString() ?? '';
+//     firstCountController.text = widget.count?.toString() ?? '';
+//     currencyController.text = widget.searchText ?? '';
+//     super.initState();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return AppScaffold(
+//       willPop: false,
+//       child: Padding(
+//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+//         child: Column(
+//           children: [
+//             // Поле поиска
+//             AppTextField(
+//               padding: 4,
+//               prefix: Padding(
+//                 padding: const EdgeInsets.only(top: 4.0),
+//                 child: SvgPicture.asset(
+//                   'assets/icons/search.svg',
+//                   color: AppColors.button,
+//                 ),
+//               ),
+//               hintText: 'Поиск',
+//               hintStyle: AppTextStyles.textStyle16w400.copyWith(
+//                 color: AppColors.colorScheme.primary.withOpacity(0.9),
+//               ),
+//               textController: currencyController,
+//               colorBorder: AppColors.colorScheme.primary,
+//               onChange: (value) {
+//                 curCurrencies = currencies
+//                     .where((element) =>
+//                         element.value.contains(value.toUpperCase()) ||
+//                         element.name
+//                             .toUpperCase()
+//                             .contains(value.toUpperCase()))
+//                     .toList();
+//                 setState(() {});
+//               },
+//             ),
+//             const SizedBox(height: 20),
+//
+//             // Поле ввода валют
+//             Container(
+//               height: 100,
+//               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+//               decoration: BoxDecoration(
+//                 boxShadow: [
+//                   BoxShadow(
+//                     color: AppColors.primary.withOpacity(0.8),
+//                     blurRadius: 20,
+//                     offset: const Offset(0, 6),
+//                   ),
+//                 ],
+//                 color: AppColors.onSecondary.withOpacity(0.94),
+//                 borderRadius: BorderRadius.circular(10),
+//               ),
+//               child: Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 children: [
+//                   InkWell(
+//                     child: Text(
+//                       first == null ? '???' : first!.value,
+//                       style: AppTextStyles.textStyle18w500
+//                           .copyWith(color: AppColors.secondary),
+//                     ),
+//                     onTap: () {
+//                       setState(() => first = null);
+//                     },
+//                   ),
+//                   Flexible(
+//                     child: TextField(
+//                       textAlign: TextAlign.center,
+//                       controller: firstCountController,
+//                       decoration: const InputDecoration(
+//                         border: UnderlineInputBorder(
+//                           borderSide: BorderSide(
+//                               width: 2, color: AppColors.complementaryBlue),
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   const Text(' = ',
+//                       style:
+//                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+//                   Flexible(
+//                     child: TextField(
+//                       readOnly: true,
+//                       textAlign: TextAlign.center,
+//                       controller: secondCountController,
+//                       decoration: const InputDecoration(
+//                         border: UnderlineInputBorder(
+//                           borderSide:
+//                               BorderSide(width: 2, color: AppColors.primary),
+//                         ),
+//                       ),
+//                     ),
+//                   ),
+//                   InkWell(
+//                     child: Text(
+//                       second == null ? '???' : second!.value,
+//                       style: AppTextStyles.textStyle18w500
+//                           .copyWith(color: AppColors.secondary),
+//                     ),
+//                     onTap: () {
+//                       setState(() => second = null);
+//                     },
+//                   ),
+//                 ],
+//               ),
+//             ),
+//             const SizedBox(height: 20),
+//
+//             // Кнопка "Посчитать"
+//             AppButton(
+//               gradientColors: const [
+//                 AppColors.complementaryBlue,
+//                 AppColors.primary,
+//                 AppColors.primary,
+//                 AppColors.complementaryBlue
+//               ],
+//               title: widget.isLoading ? '' : 'Посчитать',
+//               onPressed: widget.isLoading
+//                   ? () {}
+//                   : () {
+//                       if (first != null &&
+//                           second != null &&
+//                           firstCountController.text.isNotEmpty &&
+//                           double.tryParse(firstCountController.text) != null) {
+//                         context.read<CalculatorBloc>().add(
+//                               CalculatorEvent.calculate(
+//                                 first: first!,
+//                                 second: second!,
+//                                 count: double.parse(firstCountController.text),
+//                               ),
+//                             );
+//                       }
+//                     },
+//               child: widget.isLoading ? LoadingGif() : null,
+//             ),
+//             const SizedBox(height: 20),
+//
+//             // Список доступных валют
+//             if (curCurrencies.isNotEmpty)
+//               Expanded(
+//                 child: ListView.builder(
+//                   itemCount: curCurrencies.length,
+//                   itemBuilder: (context, index) {
+//                     final currency = curCurrencies[index];
+//                     return InkWell(
+//                       onTap: () {
+//                         setState(() {
+//                           if (first == null) {
+//                             first = currency;
+//                           } else if (second == null) {
+//                             second = currency;
+//                           } else {
+//                             if (first == currency) {
+//                               first = null;
+//                             } else if (second == currency) {
+//                               second = null;
+//                             } else {
+//                               second = currency;
+//                             }
+//                           }
+//                         });
+//                       },
+//                       child: Container(
+//                         height: 30,
+//                         decoration: BoxDecoration(
+//                           boxShadow: [
+//                             BoxShadow(
+//                               color: Colors.black.withOpacity(0.06),
+//                               blurRadius: 20,
+//                               offset: const Offset(0, 6),
+//                             ),
+//                           ],
+//                           color: AppColors.onSecondary.withOpacity(0.94),
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                         child: Center(
+//                           child: Row(
+//                             crossAxisAlignment: CrossAxisAlignment.center,
+//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                             children: [
+//                               Row(
+//                                 crossAxisAlignment: CrossAxisAlignment.center,
+//                                 children: [
+//                                   if (first == curCurrencies[index])
+//                                     Container(
+//                                       height: 30,
+//                                       width: 10,
+//                                       decoration: const BoxDecoration(
+//                                         color: AppColors.complementaryBlue,
+//                                         borderRadius: BorderRadius.only(
+//                                           topLeft: Radius.circular(10),
+//                                           bottomLeft: Radius.circular(10),
+//                                         ),
+//                                       ),
+//                                     )
+//                                   else
+//                                     const SizedBox(
+//                                       width: 10,
+//                                     ),
+//                                   const SizedBox(
+//                                     width: 4,
+//                                   ),
+//                                   Text(curCurrencies[index].value),
+//                                   const SizedBox(
+//                                     width: 10,
+//                                   ),
+//                                   Container(
+//                                     width:
+//                                         MediaQuery.of(context).size.width - 120,
+//                                     child: Text(
+//                                       curCurrencies[index].name,
+//                                       overflow: TextOverflow.ellipsis,
+//                                       maxLines: 1,
+//                                     ),
+//                                   ),
+//                                 ],
+//                               ),
+//                               if (second == curCurrencies[index])
+//                                 Container(
+//                                   height: 30,
+//                                   width: 10,
+//                                   decoration: const BoxDecoration(
+//                                     color: AppColors.primary,
+//                                     borderRadius: BorderRadius.only(
+//                                       topRight: Radius.circular(10),
+//                                       bottomRight: Radius.circular(10),
+//                                     ),
+//                                   ),
+//                                 )
+//                               else
+//                                 const SizedBox(
+//                                   width: 10,
+//                                 ),
+//                             ],
+//                           ),
+//                         ),
+//                       ),
+//                     );
+//                   },
+//                 ),
+//               ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

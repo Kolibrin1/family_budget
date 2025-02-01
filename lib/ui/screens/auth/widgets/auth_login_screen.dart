@@ -1,3 +1,4 @@
+import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
 import 'package:family_budget/helpers/constants.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
@@ -138,15 +139,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                   padding: const EdgeInsets.only(top: 5.0),
                   child: isObscure
                       ? HugeIcon(
-                    icon: HugeIcons.strokeRoundedViewOffSlash,
-                    color: AppColors.colorScheme.secondary,
-                    size: 24.0,
-                  )
+                          icon: HugeIcons.strokeRoundedViewOffSlash,
+                          color: AppColors.colorScheme.secondary,
+                          size: 24.0,
+                        )
                       : HugeIcon(
-                    icon: HugeIcons.strokeRoundedView,
-                    color: AppColors.colorScheme.secondary,
-                    size: 24.0,
-                  ),
+                          icon: HugeIcons.strokeRoundedView,
+                          color: AppColors.colorScheme.secondary,
+                          size: 24.0,
+                        ),
                 ),
               ),
               obscureText: isObscure,
@@ -173,15 +174,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
                     padding: const EdgeInsets.only(top: 5.0),
                     child: isConfirmObscure
                         ? HugeIcon(
-                      icon: HugeIcons.strokeRoundedViewOffSlash,
-                      color: AppColors.colorScheme.secondary,
-                      size: 24.0,
-                    )
+                            icon: HugeIcons.strokeRoundedViewOffSlash,
+                            color: AppColors.colorScheme.secondary,
+                            size: 24.0,
+                          )
                         : HugeIcon(
-                      icon: HugeIcons.strokeRoundedView,
-                      color: AppColors.colorScheme.secondary,
-                      size: 24.0,
-                    ),
+                            icon: HugeIcons.strokeRoundedView,
+                            color: AppColors.colorScheme.secondary,
+                            size: 24.0,
+                          ),
                   ),
                 ),
                 obscureText: isConfirmObscure,
@@ -195,15 +196,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
               onPressed: () {
                 if (validate()) {
                   context.read<AuthBloc>().add(
-                    AuthEvent.detail(
-                      authType: widget.title == 'Вход'
-                          ? AuthType.login
-                          : AuthType.register,
-                      login: _loginController.text,
-                      pass: _passController.text,
-                      onAuthCompleted: widget.onAuthCompleted,
-                    ),
-                  );
+                        AuthEvent.detail(
+                          authType: widget.title == 'Вход'
+                              ? AuthType.login
+                              : AuthType.register,
+                          login: _loginController.text,
+                          pass: _passController.text,
+                          onAuthCompleted: widget.onAuthCompleted,
+                        ),
+                      );
                 }
               },
               height: 39,
