@@ -1,5 +1,4 @@
-import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
-import 'package:family_budget/helpers/constants.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart';
@@ -7,7 +6,6 @@ import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
 
@@ -73,6 +71,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppScaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -86,7 +85,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
         ),
         title: Text(
           widget.title,
-          style: const TextStyle(fontSize: 20),
+          style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
         backgroundColor: AppColors.background,
@@ -96,34 +95,38 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16,
+          // spacing: 16,
           children: [
             Text(
               'Логин',
-              style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.white),
+              style: theme.textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              height: 16,
             ),
             AppTextField(
               textController: _loginController,
               colorBorder: AppColors.colorScheme.primary,
             ),
             if (widget.isError != null)
-              Text(
-                'Данный логин занят',
-                style: GoogleFonts.montserrat(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.error,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Text(
+                  'Данный логин занят',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: AppColors.error,
+                  ),
                 ),
               ),
+            const SizedBox(
+              height: 16,
+            ),
             Text(
               'Пароль',
-              style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.white),
+              style: theme.textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              height: 16,
             ),
             AppTextField(
               padding: 4,
@@ -153,12 +156,15 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
               obscureText: isObscure,
             ),
             if (widget.title == 'Регистрация') ...[
+              const SizedBox(
+                height: 16,
+              ),
               Text(
                 'Подтвердите пароль',
-                style: GoogleFonts.montserrat(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.white),
+                style: theme.textTheme.bodyLarge,
+              ),
+              const SizedBox(
+                height: 16,
               ),
               AppTextField(
                 padding: 4,
@@ -196,7 +202,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
               onPressed: () {
                 if (validate()) {
                   context.read<AuthBloc>().add(
-                        AuthEvent.detail(
+                        AuthDetailEvent(
                           authType: widget.title == 'Вход'
                               ? AuthType.login
                               : AuthType.register,

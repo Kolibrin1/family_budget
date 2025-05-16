@@ -1,14 +1,15 @@
 import 'package:auto_route/annotations.dart';
 import 'package:family_budget/app/di/di.dart';
+import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/profile/widgets/add_expense_body.dart';
+import 'package:family_budget/ui/screens/diagram/widgets/date_range_picker.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'bloc/diagram_bloc.dart';
 import 'widgets/description_bottom_sheet.dart';
@@ -21,160 +22,207 @@ class DiagramScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DiagramBloc>(
-      create: (context) => getIt<DiagramBloc>()..add(DiagramEvent.initial()),
+      create: (_) => getIt<DiagramBloc>()..add(const DiagramInitialEvent()),
       child: BlocConsumer<DiagramBloc, DiagramState>(
+        listenWhen: (prev, cur) => cur is DiagramInfoState,
         listener: (context, state) {
-          state.mapOrNull(
-            info: (info) {
-              showMessage(
-                message: info.message,
-                type: info.pageState,
-              );
-            },
-          );
+          final info = state as DiagramInfoState;
+          showMessage(message: info.message, type: info.pageState);
         },
         builder: (context, state) {
-          return state.maybeWhen(
-            editExpense: (expense) => AddExpenseBody(
-              expense: expense,
-            ),
-            orElse: () => AppScaffold(
-              appBar: AppBar(
-                title: const Text(
-                  'Анализ расходов',
-                  style: TextStyle(fontSize: 20),
-                ),
-                centerTitle: true,
-                backgroundColor: AppColors.background,
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 18.0),
-                    child: InkWell(
-                      highlightColor: Colors.transparent,
-                      splashColor: Colors.transparent,
-                      onTap: () {
-                        final bodyState = context.read<DiagramBloc>().state;
-                        bodyState.maybeWhen(
-                          initial: (currency, expensesList, type, colors,
-                              titles, totalCounts, allCount) {
-                            showDescriptionBottomSheet(
-                              context,
-                              colors,
-                              titles,
-                              totalCounts,
-                              allCount,
-                            );
-                          },
-                          orElse: () {},
-                        );
-                      },
-                      child: SvgPicture.asset(
-                        'assets/icons/info.svg',
-                        color: AppColors.colorScheme.primary,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              statusBarPadding: false,
-              willPop: false,
-              child: Column(
-                children: [
-                  const SizedBox(height: 14),
-                  Text(
-                    'Данные за:',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  _FilterSelection(
-                    selectedType: context.read<DiagramBloc>().type,
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: BlocBuilder<DiagramBloc, DiagramState>(
-                      builder: (context, state) {
-                        return state.maybeWhen(
-                          loading: () => LoadingGif(),
-                          initial: (currency, expensesList, type, colors,
-                                  titles, totalCounts, allCount) =>
-                              DiagramBody(
-                            currency: currency,
-                            expenses: expensesList,
-                            colors: colors,
-                            titles: titles,
-                            totalCounts: totalCounts,
-                            allCount: allCount,
-                          ),
-                          orElse: () => LoadingGif(),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
+          return switch (state) {
+            DiagramEditExpenseState s => AddExpenseBody(expense: s.expense),
+            _ => _buildMainLayout(context, state),
+          };
         },
       ),
     );
   }
+
+  Widget _buildMainLayout(BuildContext context, DiagramState state) {
+    final bloc = context.read<DiagramBloc>();
+    final theme = Theme.of(context);
+
+    return AppScaffold(
+      appBar: AppBar(
+        title: Text('Анализ расходов', style: theme.textTheme.headlineLarge),
+        centerTitle: true,
+        backgroundColor: AppColors.background,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 18),
+            child: InkWell(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              onTap: () => _showDescription(context),
+              child: SvgPicture.asset(
+                'assets/icons/info.svg',
+                color: AppColors.colorScheme.primary,
+              ),
+            ),
+          ),
+        ],
+      ),
+      statusBarPadding: false,
+      willPop: false,
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.primary.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child:
+                _FilterSelection(
+                  selectedType: bloc.type,
+                  customPeriod: bloc.customPeriod,
+                ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: BlocBuilder<DiagramBloc, DiagramState>(
+              buildWhen: (previous, current) => current is DiagramLoadingState || current is DiagramInitialState,
+              builder: (_, state) {
+                return switch (state) {
+                  DiagramLoadingState _ => AppScaffold(
+                      child: LoadingGif(),
+                    ),
+                  DiagramInitialState s => DiagramBody(
+                      currency: s.currency,
+                      expenses: s.expensesList,
+                      analyticsData: s.analytics,
+                    ),
+                  _ => const SizedBox.shrink(),
+                };
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDescription(BuildContext context) {
+    final state = context.read<DiagramBloc>().state;
+    if (state is DiagramInitialState) {
+      showDescriptionBottomSheet(context, state.analytics);
+    }
+  }
 }
 
-/// Виджет выбора периода (День/Неделя/Месяц)
-class _FilterSelection extends StatefulWidget {
-  const _FilterSelection({super.key, required this.selectedType});
+class _FilterSelection extends StatelessWidget {
+  const _FilterSelection({
+    required this.selectedType,
+    required this.customPeriod,
+  });
 
   final int selectedType;
+  final ({DateTime dateFrom, DateTime dateTo})? customPeriod;
 
-  @override
-  State<_FilterSelection> createState() => _FilterSelectionState();
-}
-
-class _FilterSelectionState extends State<_FilterSelection> {
-  int selectedType = 1;
-
-  @override
-  void initState() {
-    selectedType = widget.selectedType;
-    super.initState();
-  }
+  static const _options = [
+    ('День', 1, Icons.today),
+    ('Неделя', 2, Icons.date_range),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const SizedBox(width: 14),
-        _filterOption('День  ', 1),
-        _filterOption('Неделю', 2),
-        _filterOption('Период', 3),
-        const SizedBox(width: 1),
+        ..._options.map((option) => _buildFilterOption(context, option.$1, option.$2, option.$3)),
+        _buildCustomPeriodOption(context),
       ],
     );
   }
 
-  Widget _filterOption(String label, int type) {
+  Widget _buildFilterOption(BuildContext context, String label, int type, IconData icon) {
+    final isSelected = selectedType == type;
+    final theme = Theme.of(context);
+    
     return InkWell(
-      onTap: () {
-        setState(() => selectedType = type);
-        context
-            .read<DiagramBloc>()
-            .add(DiagramEvent.selectTypeView(type: type));
-      },
-      child: Text(
-        label,
-        style: GoogleFonts.inter(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: selectedType == type
-              ? AppColors.colorScheme.primary
-              : AppColors.white,
+      onTap: () => context
+          .read<DiagramBloc>()
+          .add(DiagramSelectTypeViewEvent(type: type)),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : AppColors.background,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: isSelected ? [
+            BoxShadow(
+              color: AppColors.primary.withOpacity(0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ] : null,
+        ),
+        child: Text(
+          label,
+          style: isSelected 
+              ? theme.textTheme.labelMedium?.copyWith(color: Colors.white)
+              : theme.textTheme.labelMedium,
         ),
       ),
     );
+  }
+
+  Widget _buildCustomPeriodOption(BuildContext context) {
+    final isSelected = selectedType == 3;
+    final theme = Theme.of(context);
+    
+    // Отображаем диапазон дат вместо слова "Период", если период выбран
+    final text = customPeriod != null 
+        ? '${customPeriod!.dateFrom.formatShortDate} - ${customPeriod!.dateTo.formatShortDate}'
+        : 'Период';
+    
+    return InkWell(
+      onTap: () => _showDateRangePicker(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : AppColors.background,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: isSelected ? [
+            BoxShadow(
+              color: AppColors.primary.withOpacity(0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ] : null,
+        ),
+        child: Text(
+          text,
+          style: isSelected 
+              ? theme.textTheme.labelMedium?.copyWith(color: Colors.white)
+              : theme.textTheme.labelMedium,
+        ),
+      ),
+    );
+  }
+
+  void _showDateRangePicker(BuildContext context) async {
+    final dateRange = await showCustomDateRangePicker(
+      context: context,
+      customPeriod: customPeriod,
+    );
+
+    if (dateRange != null) {
+      context.read<DiagramBloc>().add(
+            DiagramSetCustomPeriodEvent(
+              dateFrom: dateRange.dateFrom,
+              dateTo: dateRange.dateTo,
+            ),
+          );
+    }
   }
 }

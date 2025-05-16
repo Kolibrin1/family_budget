@@ -1,5 +1,6 @@
 import 'package:family_budget/app/di/di.dart';
 import 'package:family_budget/data/api_service.dart';
+import 'package:family_budget/data/models/token_response.dart';
 import 'package:family_budget/helpers/preferences.dart';
 import 'package:injectable/injectable.dart';
 
@@ -23,7 +24,9 @@ class AuthRepository {
           "currency": currency,
         },
       );
-      prefs.setStringByKey('token', res.data['access_token']);
+      final response = TokenResponse.fromJson(res.data);
+      await prefs.saveAccessToken(response.accessToken);
+      await prefs.saveRefreshToken(response.refreshToken);
     } catch (e) {
       throw e;
     }
@@ -48,10 +51,11 @@ class AuthRepository {
           "password": password,
         },
       );
-      prefs.setStringByKey('token', res.data['access_token']);
+      final response = TokenResponse.fromJson(res.data);
+      await prefs.saveAccessToken(response.accessToken);
+      await prefs.saveRefreshToken(response.refreshToken);
     } catch (e) {
       throw e;
     }
-
   }
 }

@@ -1,7 +1,5 @@
-import 'package:family_budget/helpers/constants.dart';
-import 'package:family_budget/helpers/extensions.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/styles/app_colors.dart';
-import 'package:family_budget/styles/app_text_styles.dart';
 import 'package:family_budget/ui/screens/calculator/bloc/calc_bloc.dart';
 import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
@@ -11,21 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class CalculatorBody extends StatefulWidget {
-  const CalculatorBody(
-      {super.key,
-      this.first,
-      this.second,
-      this.count,
-      this.answer,
-      this.searchText,
-      required this.isLoading});
+import 'text_field_calculator_widget.dart';
 
-  final Currency? first;
-  final Currency? second;
-  final double? count;
-  final double? answer;
-  final String? searchText;
+class CalculatorBody extends StatefulWidget {
+  const CalculatorBody({
+    super.key,
+    this.oldState,
+    required this.isLoading,
+  });
+
+  final CalculatorInitState? oldState;
   final bool isLoading;
 
   @override
@@ -33,673 +26,263 @@ class CalculatorBody extends StatefulWidget {
 }
 
 class _CalculatorBodyState extends State<CalculatorBody> {
-  final List<Currency> currencies = Currency.values;
+  static const _currencies = Currency.values;
 
-  final currencyController = TextEditingController();
+  late final TextEditingController _searchController;
+  late final TextEditingController _firstCountController;
+  late final TextEditingController _secondCountController;
 
-  final firstCountController = TextEditingController();
-  final secondCountController = TextEditingController();
-
-  List<Currency> curCurrencies = [];
-
-  Currency? first;
-  Currency? second;
-  double? answer;
+  List<Currency> _filteredCurrencies = _currencies;
+  Currency? _first;
+  Currency? _second;
 
   @override
   void initState() {
-    curCurrencies = currencies;
-    first = widget.first;
-    second = widget.second;
-    secondCountController.text =
-        widget.answer != null ? '${widget.answer}' : '';
-    firstCountController.text = widget.count != null ? '${widget.count}' : '';
-    currencyController.text = widget.searchText ?? '';
     super.initState();
+    _searchController = TextEditingController(text: widget.oldState?.searchText);
+    _firstCountController =
+        TextEditingController(text: widget.oldState?.count?.toString());
+    _secondCountController =
+        TextEditingController(text: widget.oldState?.answer?.toString());
+    _first = widget.oldState?.first;
+    _second = widget.oldState?.second;
+    _filterCurrencies(widget.oldState?.searchText ?? '');
+  }
+
+  @override
+  void didUpdateWidget(covariant CalculatorBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.oldState?.answer != widget.oldState?.answer) {
+      _secondCountController.text = widget.oldState?.answer?.toString() ?? '';
+    }
+  }
+
+  void _filterCurrencies(String value) {
+    final query = value.toUpperCase();
+    _filteredCurrencies = _currencies
+        .where((currency) =>
+    currency.value.contains(query) ||
+        currency.name.toUpperCase().contains(query))
+        .toList();
+  }
+
+  void _selectCurrency(Currency currency) {
+    setState(() {
+      if (_first == null && _second != currency) {
+        _first = currency;
+      } else if (_second == null && _first != currency) {
+        _second = currency;
+      } else {
+        if (_second == currency) {
+          _second = null;
+        } else if (_first == currency) {
+          _first = null;
+        }
+      }
+    });
+  }
+
+  void _calculate() {
+    final count = double.tryParse(_firstCountController.text);
+    if (_first != null && _second != null && count != null) {
+      context.read<CalculatorBloc>().add(CalculateEvent(
+        first: _first!,
+        second: _second!,
+        count: count,
+        searchText: _searchController.text,
+      ));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    secondCountController.text =
-        widget.answer != null ? '${widget.answer}' : '';
+    final theme = Theme.of(context);
     return AppScaffold(
       willPop: false,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        child: Center(
-          child: Column(
-            children: [
-              AppTextField(
-                padding: 4,
-                prefix: Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: SvgPicture.asset(
-                    'assets/icons/search.svg',
-                    color: AppColors.button,
-                  ),
-                ),
-                hintText: 'Поиск',
-                hintStyle: AppTextStyles.textStyle16w400.copyWith(
-                  color: AppColors.colorScheme.primary.withOpacity(0.9),
-                ),
-                textController: currencyController,
-                colorBorder: AppColors.colorScheme.primary,
-                onChange: (value) {
-                  curCurrencies = currencies
-                      .where(
-                        (element) =>
-                            element.value.contains(
-                              value.toUpperCase(),
-                            ) ||
-                            element.name.toUpperCase().contains(
-                                  value.toUpperCase(),
-                                ),
-                      )
-                      .toList();
-                  setState(() {});
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 100,
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width,
-                ),
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 10,
-                ),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primary.withOpacity(0.8),
-                      blurRadius: 20,
-                      offset: const Offset(0, 6),
-                    ),
-                  ],
-                  color: AppColors.onSecondary.withOpacity(0.94),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        child: Text(
-                          first == null ? '???' : first!.value,
-                          style: AppTextStyles.textStyle18w500
-                              .copyWith(color: AppColors.secondary),
-                        ),
-                        onTap: () {
-                          if (first != null) {
-                            first = null;
-                            setState(() {});
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        child: TextField(
-                          textAlign: TextAlign.center,
-                          controller: firstCountController,
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: AppColors.complementaryBlue,
-                              ),
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: AppColors.complementaryBlue,
-                              ),
-                            ),
-                            disabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: AppColors.complementaryBlue,
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                color: AppColors.complementaryBlue,
-                              ),
-                            ),
-                          ),
-                          onChanged: (v) {
-                            secondCountController.clear();
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        ' = ',
-                        style: AppTextStyles.textStyle18w500
-                            .copyWith(color: AppColors.secondary),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Flexible(
-                        child: TextField(
-                          readOnly: true,
-                          textAlign: TextAlign.center,
-                          controller: secondCountController,
-                          decoration: const InputDecoration(
-                              border: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              disabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                  width: 2,
-                                  color: AppColors.primary,
-                                ),
-                              )),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        child: Text(
-                          second == null ? '???' : second!.value,
-                          style: AppTextStyles.textStyle18w500
-                              .copyWith(color: AppColors.secondary),
-                        ),
-                        onTap: () {
-                          if (second != null) {
-                            setState(() {
-                              second = null;
-                            });
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 40,
-                child: AppButton(
-                  padding: 0,
-                  gradientColors: const [
-                    AppColors.complementaryBlue,
-                    AppColors.primary,
-                    AppColors.primary,
-                    AppColors.complementaryBlue
-                  ],
-                  title: widget.isLoading ? '' : 'Посчитать',
-                  isDisabled: widget.isLoading,
-                  onPressed: () {
-                    if (first != null &&
-                        second != null &&
-                        firstCountController.text.isNotEmpty &&
-                        double.tryParse(firstCountController.text) != null) {
-                      context.read<CalculatorBloc>().add(
-                            CalculatorEvent.calculate(
-                              first: first!,
-                              second: second!,
-                              count: double.parse(firstCountController.text),
-                            ),
-                          );
-                    }
-                  },
-                  child: widget.isLoading ? LoadingGif() : null,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              if (curCurrencies.isNotEmpty)
-                Expanded(
-                  child: SizedBox(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          ...List.generate(
-                            curCurrencies.length,
-                            (index) => SizedBox(
-                              child: InkWell(
-                                onTap: () {
-                                  if (first == null) {
-                                    first = curCurrencies[index];
-                                  } else if (second == null && first != curCurrencies[index]) {
-                                    second = curCurrencies[index];
-                                  } else {
-                                    if (second == curCurrencies[index]) {
-                                      second = null;
-                                    } else if (first == curCurrencies[index]) {
-                                      first = null;
-                                    } else {
-                                      second = curCurrencies[index];
-                                    }
-                                  }
-                                  setState(() {});
-                                },
-                                child: Container(
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.06),
-                                        blurRadius: 20,
-                                        offset: const Offset(0, 6),
-                                      ),
-                                    ],
-                                    color:
-                                        AppColors.onSecondary.withOpacity(0.94),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            if (first == curCurrencies[index])
-                                              Container(
-                                                height: 30,
-                                                width: 10,
-                                                decoration: const BoxDecoration(
-                                                  color: AppColors
-                                                      .complementaryBlue,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                  ),
-                                                ),
-                                              )
-                                            else
-                                              const SizedBox(
-                                                width: 10,
-                                              ),
-                                            const SizedBox(
-                                              width: 4,
-                                            ),
-                                            Text(curCurrencies[index].value),
-                                            const SizedBox(
-                                              width: 10,
-                                            ),
-                                            Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width -
-                                                  120,
-                                              child: Text(
-                                                curCurrencies[index].name,
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 1,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        if (second == curCurrencies[index])
-                                          Container(
-                                            height: 30,
-                                            width: 10,
-                                            decoration: const BoxDecoration(
-                                              color: AppColors.primary,
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10),
-                                              ),
-                                            ),
-                                          )
-                                        else
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // CurrencyCard(),
-                          ),
-                        ].separateBy(
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            _buildSearchField(theme),
+            const SizedBox(height: 20),
+            _buildConversionRow(context, theme),
+            const SizedBox(height: 20),
+            _buildCalculateButton(),
+            if (_filteredCurrencies.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              _buildCurrencyList(),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchField(ThemeData theme) {
+    return AppTextField(
+      padding: 4,
+      prefix: Padding(
+        padding: const EdgeInsets.only(top: 4),
+        child: SvgPicture.asset('assets/icons/search.svg',
+            color: AppColors.button),
+      ),
+      hintText: 'Поиск',
+      hintStyle: theme.textTheme.titleSmall?.copyWith(
+        color: AppColors.colorScheme.primary.withOpacity(0.9),
+      ),
+      textController: _searchController,
+      colorBorder: AppColors.colorScheme.primary,
+      onChange: (value) => setState(() => _filterCurrencies(value)),
+    );
+  }
+
+  Widget _buildConversionRow(BuildContext context, ThemeData theme) {
+    return Container(
+      height: 100,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.8),
+            blurRadius: 20,
+            offset: const Offset(0, 6),
+          ),
+        ],
+        color: AppColors.onSecondary.withOpacity(0.94),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildCurrencySelector(theme, _first, () => setState(() => _first = null)),
+          TextFieldCalculatorWidget(
+            borderColor: AppColors.complementaryBlue,
+            controller: _firstCountController,
+            onChanged: _secondCountController.clear,
+          ),
+          Text(' = ', style: theme.textTheme.displaySmall?.copyWith(
+            color: AppColors.secondary,
+          ),),
+          TextFieldCalculatorWidget(
+            borderColor: AppColors.primary,
+            controller: _secondCountController,
+            readOnly: true,
+          ),
+          _buildCurrencySelector(theme, _second, () => setState(() => _second = null)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCurrencySelector(ThemeData theme, Currency? currency, VoidCallback onTap) {
+    return SizedBox(
+      width: 48,
+      child: InkWell(
+        onTap: currency != null ? onTap : null,
+        child: Center(
+          child: Text(
+            currency?.value ?? '???',
+            style: theme.textTheme.displaySmall?.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.secondary,
+            ),
           ),
         ),
       ),
     );
   }
-}
 
-// class CalculatorBody extends StatefulWidget {
-//   const CalculatorBody({
-//     super.key,
-//     this.first,
-//     this.second,
-//     this.count,
-//     this.answer,
-//     this.searchText,
-//     required this.isLoading,
-//   });
-//
-//   final Currency? first;
-//   final Currency? second;
-//   final double? count;
-//   final double? answer;
-//   final String? searchText;
-//   final bool isLoading;
-//
-//   @override
-//   State<CalculatorBody> createState() => _CalculatorBodyState();
-// }
-//
-// class _CalculatorBodyState extends State<CalculatorBody> {
-//   final List<Currency> currencies = Currency.values;
-//   final currencyController = TextEditingController();
-//   final firstCountController = TextEditingController();
-//   final secondCountController = TextEditingController();
-//
-//   List<Currency> curCurrencies = [];
-//   Currency? first;
-//   Currency? second;
-//
-//   @override
-//   void initState() {
-//     curCurrencies = currencies;
-//     first = widget.first;
-//     second = widget.second;
-//     secondCountController.text = widget.answer?.toString() ?? '';
-//     firstCountController.text = widget.count?.toString() ?? '';
-//     currencyController.text = widget.searchText ?? '';
-//     super.initState();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return AppScaffold(
-//       willPop: false,
-//       child: Padding(
-//         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-//         child: Column(
-//           children: [
-//             // Поле поиска
-//             AppTextField(
-//               padding: 4,
-//               prefix: Padding(
-//                 padding: const EdgeInsets.only(top: 4.0),
-//                 child: SvgPicture.asset(
-//                   'assets/icons/search.svg',
-//                   color: AppColors.button,
-//                 ),
-//               ),
-//               hintText: 'Поиск',
-//               hintStyle: AppTextStyles.textStyle16w400.copyWith(
-//                 color: AppColors.colorScheme.primary.withOpacity(0.9),
-//               ),
-//               textController: currencyController,
-//               colorBorder: AppColors.colorScheme.primary,
-//               onChange: (value) {
-//                 curCurrencies = currencies
-//                     .where((element) =>
-//                         element.value.contains(value.toUpperCase()) ||
-//                         element.name
-//                             .toUpperCase()
-//                             .contains(value.toUpperCase()))
-//                     .toList();
-//                 setState(() {});
-//               },
-//             ),
-//             const SizedBox(height: 20),
-//
-//             // Поле ввода валют
-//             Container(
-//               height: 100,
-//               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-//               decoration: BoxDecoration(
-//                 boxShadow: [
-//                   BoxShadow(
-//                     color: AppColors.primary.withOpacity(0.8),
-//                     blurRadius: 20,
-//                     offset: const Offset(0, 6),
-//                   ),
-//                 ],
-//                 color: AppColors.onSecondary.withOpacity(0.94),
-//                 borderRadius: BorderRadius.circular(10),
-//               ),
-//               child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: [
-//                   InkWell(
-//                     child: Text(
-//                       first == null ? '???' : first!.value,
-//                       style: AppTextStyles.textStyle18w500
-//                           .copyWith(color: AppColors.secondary),
-//                     ),
-//                     onTap: () {
-//                       setState(() => first = null);
-//                     },
-//                   ),
-//                   Flexible(
-//                     child: TextField(
-//                       textAlign: TextAlign.center,
-//                       controller: firstCountController,
-//                       decoration: const InputDecoration(
-//                         border: UnderlineInputBorder(
-//                           borderSide: BorderSide(
-//                               width: 2, color: AppColors.complementaryBlue),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   const Text(' = ',
-//                       style:
-//                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-//                   Flexible(
-//                     child: TextField(
-//                       readOnly: true,
-//                       textAlign: TextAlign.center,
-//                       controller: secondCountController,
-//                       decoration: const InputDecoration(
-//                         border: UnderlineInputBorder(
-//                           borderSide:
-//                               BorderSide(width: 2, color: AppColors.primary),
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                   InkWell(
-//                     child: Text(
-//                       second == null ? '???' : second!.value,
-//                       style: AppTextStyles.textStyle18w500
-//                           .copyWith(color: AppColors.secondary),
-//                     ),
-//                     onTap: () {
-//                       setState(() => second = null);
-//                     },
-//                   ),
-//                 ],
-//               ),
-//             ),
-//             const SizedBox(height: 20),
-//
-//             // Кнопка "Посчитать"
-//             AppButton(
-//               gradientColors: const [
-//                 AppColors.complementaryBlue,
-//                 AppColors.primary,
-//                 AppColors.primary,
-//                 AppColors.complementaryBlue
-//               ],
-//               title: widget.isLoading ? '' : 'Посчитать',
-//               onPressed: widget.isLoading
-//                   ? () {}
-//                   : () {
-//                       if (first != null &&
-//                           second != null &&
-//                           firstCountController.text.isNotEmpty &&
-//                           double.tryParse(firstCountController.text) != null) {
-//                         context.read<CalculatorBloc>().add(
-//                               CalculatorEvent.calculate(
-//                                 first: first!,
-//                                 second: second!,
-//                                 count: double.parse(firstCountController.text),
-//                               ),
-//                             );
-//                       }
-//                     },
-//               child: widget.isLoading ? LoadingGif() : null,
-//             ),
-//             const SizedBox(height: 20),
-//
-//             // Список доступных валют
-//             if (curCurrencies.isNotEmpty)
-//               Expanded(
-//                 child: ListView.builder(
-//                   itemCount: curCurrencies.length,
-//                   itemBuilder: (context, index) {
-//                     final currency = curCurrencies[index];
-//                     return InkWell(
-//                       onTap: () {
-//                         setState(() {
-//                           if (first == null) {
-//                             first = currency;
-//                           } else if (second == null) {
-//                             second = currency;
-//                           } else {
-//                             if (first == currency) {
-//                               first = null;
-//                             } else if (second == currency) {
-//                               second = null;
-//                             } else {
-//                               second = currency;
-//                             }
-//                           }
-//                         });
-//                       },
-//                       child: Container(
-//                         height: 30,
-//                         decoration: BoxDecoration(
-//                           boxShadow: [
-//                             BoxShadow(
-//                               color: Colors.black.withOpacity(0.06),
-//                               blurRadius: 20,
-//                               offset: const Offset(0, 6),
-//                             ),
-//                           ],
-//                           color: AppColors.onSecondary.withOpacity(0.94),
-//                           borderRadius: BorderRadius.circular(10),
-//                         ),
-//                         child: Center(
-//                           child: Row(
-//                             crossAxisAlignment: CrossAxisAlignment.center,
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                             children: [
-//                               Row(
-//                                 crossAxisAlignment: CrossAxisAlignment.center,
-//                                 children: [
-//                                   if (first == curCurrencies[index])
-//                                     Container(
-//                                       height: 30,
-//                                       width: 10,
-//                                       decoration: const BoxDecoration(
-//                                         color: AppColors.complementaryBlue,
-//                                         borderRadius: BorderRadius.only(
-//                                           topLeft: Radius.circular(10),
-//                                           bottomLeft: Radius.circular(10),
-//                                         ),
-//                                       ),
-//                                     )
-//                                   else
-//                                     const SizedBox(
-//                                       width: 10,
-//                                     ),
-//                                   const SizedBox(
-//                                     width: 4,
-//                                   ),
-//                                   Text(curCurrencies[index].value),
-//                                   const SizedBox(
-//                                     width: 10,
-//                                   ),
-//                                   Container(
-//                                     width:
-//                                         MediaQuery.of(context).size.width - 120,
-//                                     child: Text(
-//                                       curCurrencies[index].name,
-//                                       overflow: TextOverflow.ellipsis,
-//                                       maxLines: 1,
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                               if (second == curCurrencies[index])
-//                                 Container(
-//                                   height: 30,
-//                                   width: 10,
-//                                   decoration: const BoxDecoration(
-//                                     color: AppColors.primary,
-//                                     borderRadius: BorderRadius.only(
-//                                       topRight: Radius.circular(10),
-//                                       bottomRight: Radius.circular(10),
-//                                     ),
-//                                   ),
-//                                 )
-//                               else
-//                                 const SizedBox(
-//                                   width: 10,
-//                                 ),
-//                             ],
-//                           ),
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                 ),
-//               ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  Widget _buildCalculateButton() {
+    return SizedBox(
+      height: 40,
+      child: AppButton(
+        padding: 0,
+        gradientColors: const [
+          AppColors.complementaryBlue,
+          AppColors.primary,
+          AppColors.primary,
+          AppColors.complementaryBlue,
+        ],
+        title: widget.isLoading ? '' : 'Посчитать',
+        isDisabled: widget.isLoading,
+        onPressed: _calculate,
+        child: widget.isLoading ? LoadingGif() : null,
+      ),
+    );
+  }
+
+  Widget _buildCurrencyList() {
+    return Expanded(
+      child: ListView.separated(
+        padding: EdgeInsets.zero,
+        itemCount: _filteredCurrencies.length,
+        separatorBuilder: (_, __) => const SizedBox(height: 10),
+        itemBuilder: (_, index) =>
+            _buildCurrencyItem(_filteredCurrencies[index]),
+      ),
+    );
+  }
+
+  Widget _buildCurrencyItem(Currency currency) {
+    return Container(
+      height: 30,
+      decoration: BoxDecoration(
+        color: AppColors.onSecondary.withOpacity(0.94),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: InkWell(
+        onTap: () => _selectCurrency(currency),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 10,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: _first == currency
+                        ? AppColors.complementaryBlue
+                        : Colors.transparent,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Text(currency.value, style: const TextStyle(color: AppColors.background)),
+                const SizedBox(width: 10),
+                SizedBox(
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width - 120,
+                  child: Text(
+                    currency.name,
+                    style: const TextStyle(color: AppColors.background),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              width: 10,
+              height: 30,
+              decoration: BoxDecoration(
+                color: _second == currency
+                    ? AppColors.primary
+                    : Colors.transparent,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

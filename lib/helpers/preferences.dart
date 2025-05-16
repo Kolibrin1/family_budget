@@ -8,56 +8,28 @@ class Preferences {
 
   final SharedPreferences _prefs;
 
-  Future<void> saveUserLogin(String login) async {
-    await _prefs.setString(Keys.userLogin, login);
+  Future<void> saveAccessToken(String token) async {
+    await _prefs.setString(Keys.accessToken, token);
   }
 
-  Future<void> saveUserPass(String pass) async {
-    await _prefs.setString(Keys.userPassword, pass);
+  Future<void> saveRefreshToken(String token) async {
+    await _prefs.setString(Keys.refreshToken, token);
   }
 
-  // Future<void> saveFirstInit(bool isFirst) async {
-  //   await _prefs.setBool(Keys.firstInit, isFirst);
-  // }
-  //
-  // Future<void> saveAfterRegister(bool afterReg) async {
-  //   await _prefs.setBool(Keys.afterReg, afterReg);
-  // }
-  //
-  // bool? loadFirstInit() {
-  //   return _prefs.getBool(Keys.firstInit);
-  // }
-  //
-  // bool? loadSplashInit() {
-  //   return _prefs.getBool(Keys.splashInit);
-  // }
-  //
-  // bool? loadAfterRegister() {
-  //   return _prefs.getBool(Keys.afterReg);
-  // }
-  //
   bool checkToken() {
-    if (_prefs.containsKey("token")) {
-      final token = _prefs.getString("token");
+    if (_prefs.containsKey(Keys.accessToken)) {
+      final token = _prefs.getString(Keys.accessToken);
       return token != null ? true : false;
     }
     return false;
   }
 
-  String? loadUserLogin() {
-    if (_prefs.containsKey(Keys.userLogin)) {
-      final login = _prefs.getString(Keys.userLogin);
-      return login;
-    }
-    return null;
+  Future<void> deleteAccessToken() async {
+    _prefs.remove(Keys.accessToken);
   }
 
-  String? loadUserPass() {
-    if (_prefs.containsKey(Keys.userPassword)) {
-      final pass = _prefs.getString(Keys.userPassword);
-      return pass;
-    }
-    return null;
+  Future<void> deleteRefreshToken() async {
+    _prefs.remove(Keys.refreshToken);
   }
 
   Future<void> clear() async {

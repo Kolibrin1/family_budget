@@ -2,14 +2,14 @@ import 'package:auto_route/annotations.dart';
 import 'package:family_budget/app/di/di.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
+import 'package:family_budget/ui/screens/profile/bloc/profile_bloc.dart';
+import 'package:family_budget/ui/screens/profile/widgets/add_expense_body.dart';
+import 'package:family_budget/ui/screens/profile/widgets/add_income_body.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/profile_bloc.dart';
-import 'widgets/add_expense_body.dart';
-import 'widgets/add_income_body.dart';
 import 'widgets/profile_body.dart';
 
 @RoutePage()
@@ -18,59 +18,37 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BlocProvider<ProfileBloc>(
-      create: (context) => getIt<ProfileBloc>()
-        ..add(
-          ProfileEvent.initial(),
-        ),
+      create: (_) => getIt<ProfileBloc>()..add(const ProfileInitialEvent()),
       child: BlocConsumer<ProfileBloc, ProfileState>(
+        listenWhen: (prev, cur) => cur is ProfileInfoState,
         listener: (context, state) {
-          state.mapOrNull(
-            info: (info) {
-              showMessage(
-                message: info.message,
-                type: info.pageState,
-              );
-            },
-          );
+          final info = state as ProfileInfoState;
+          showMessage(message: info.message, type: info.pageState);
         },
         builder: (context, state) {
-          return state.maybeWhen(
-            loading: () =>  AppScaffold(
-              appBar: AppBar(
-                title: const Text(
-                  'Профиль',
-                  style: TextStyle(fontSize: 20),
-                ),
-                centerTitle: true,
-                backgroundColor: AppColors.background,
-              ),
-              statusBarPadding: false,
-              willPop: false,
-              child: LoadingGif(),
-            ),
-            initial: (user, incomesList) => ProfileBody(
-              user: user,
-              incomes: incomesList,
-            ),
-            addIncome: (income) => AddIncomeBody(),
-            addExpense: (expense) => AddExpenseBody(),
-            orElse: () => AppScaffold(
-              appBar: AppBar(
-                title: const Text(
-                  'Профиль',
-                  style: TextStyle(fontSize: 20),
-                ),
-                centerTitle: true,
-                backgroundColor: AppColors.background,
-              ),
-              statusBarPadding: false,
-              willPop: false,
-              child: LoadingGif(),
-            ),
-          );
+          return switch (state) {
+            ProfileInitialState s => ProfileBody(user: s.user, incomes: s.incomesList),
+            ProfileAddIncomeState s => AddIncomeBody(income: s.income),
+            ProfileAddExpenseState s => AddExpenseBody(expense: s.expense),
+            _ => _buildLoadingScaffold(theme),
+          };
         },
       ),
+    );
+  }
+
+  Widget _buildLoadingScaffold(ThemeData theme) {
+    return AppScaffold(
+      appBar: AppBar(
+        title: Text('Профиль', style: theme.textTheme.headlineLarge),
+        centerTitle: true,
+        backgroundColor: AppColors.background,
+      ),
+      statusBarPadding: false,
+      willPop: false,
+      child: LoadingGif(),
     );
   }
 }

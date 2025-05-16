@@ -1,217 +1,102 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
-import 'package:family_budget/data/models/category_model.dart';
+import 'package:family_budget/app/di/di.dart';
+import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
+import 'package:family_budget/data/domain/common_state.dart';
 import 'package:family_budget/data/models/expense_model.dart';
 import 'package:family_budget/data/models/income_model.dart';
 import 'package:family_budget/data/models/user_model.dart';
-import 'package:family_budget/data/repositories/category_repository.dart';
 import 'package:family_budget/data/repositories/expense_repository.dart';
 import 'package:family_budget/data/repositories/income_repository.dart';
 import 'package:family_budget/data/repositories/user_repository.dart';
+import 'package:family_budget/helpers/enums.dart';
+import 'package:family_budget/helpers/mixins/error_handler_mixin.dart';
 import 'package:family_budget/helpers/preferences.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:family_budget/helpers/mixins/state_saver_mixin.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../helpers/constants.dart';
 
 part 'profile_event.dart';
-
 part 'profile_state.dart';
 
-part 'profile_bloc.freezed.dart';
-
 @injectable
-class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc(this.prefs, this.userRepository, this.expenseRepository,
-      this.incomeRepository)
-      : super(
-          const ProfileState.loading(),
-        ) {
-    on<_InitialEvent>(_onInitialEvent);
-    on<_InitExpenseEvent>(_onInitExpenseEvent);
-    on<_InitIncomeEvent>(_onInitIncomeEvent);
-    on<_AddExpense>(_onAddExpenseEvent);
-    on<_AddIncome>(_onAddIncomeEvent);
-    on<_EditIncome>(_onEditIncomeEvent);
-    on<_DeleteIncome>(_onDeleteIncomeEvent);
+class ProfileBloc extends Bloc<ProfileEvent, ProfileState> with ErrorHandlerMixin<ProfileEvent, ProfileState>, StateSaverMixin<ProfileEvent, ProfileState> {
+  ProfileBloc(
+      this.prefs,
+      this.userRepository,
+      this.expenseRepository,
+      this.incomeRepository,
+      ) : super(ProfileLoadingState()) {
+    on<ProfileInitialEvent>(_onInitialEvent);
+    on<ProfileInitExpenseEvent>(_onInitExpenseEvent);
+    on<ProfileInitIncomeEvent>(_onInitIncomeEvent);
+    on<ProfileAddExpenseEvent>(_onAddExpenseEvent);
+    on<ProfileAddIncomeEvent>(_onAddIncomeEvent);
+    on<ProfileEditIncomeEvent>(_onEditIncomeEvent);
+    on<ProfileDeleteIncomeEvent>(_onDeleteIncomeEvent);
   }
 
-  ProfileState oldState = const ProfileState.loading();
   final UserRepository userRepository;
   final ExpenseRepository expenseRepository;
   final IncomeRepository incomeRepository;
   final Preferences prefs;
-  UserModel? curUser;
-  List<IncomeModel> incomesList = [];
 
-  void _onInitialEvent(
-    _InitialEvent event,
-    Emitter<ProfileState> emit,
-  ) async {
-    emit(const _LoadingState());
-    await Future.delayed(Duration(milliseconds: 500));
+  UserModel? _currentUser;
+  List<IncomeModel> _incomesList = [];
+
+  Future<void> _emitInitialState(Emitter<ProfileState> emit) async {
+    emit(ProfileInitialState(user: _currentUser!, incomesList: _incomesList));
+  }
+
+  Future<void> _onInitialEvent(ProfileInitialEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
+    await Future.delayed(const Duration(milliseconds: 500));
     try {
-      curUser = await userRepository.getCurrentUser();
-      incomesList = await incomeRepository.getAll();
-      emit(
-        ProfileState.initial(
-          user: curUser!,
-          incomesList: incomesList,
-        ),
-      );
-      oldState = ProfileState.initial(user: curUser!, incomesList: incomesList);
+      _currentUser = await userRepository.getCurrentUser();
+      _incomesList = await incomeRepository.getAll();
+      await getIt<CategoriesCubit>().loadCategories();
+      await _emitInitialState(emit);
     } catch (ex) {
-      ex as DioException;
-      if (ex.response != null) {
-        emit(
-          _InfoState(
-            message: ex.response!.data.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      } else {
-        emit(
-          _InfoState(
-            message: ex.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      }
+      emitError(emit, "Что-то пошло не так");
     }
   }
 
-  void _onInitExpenseEvent(
-    _InitExpenseEvent event,
-    Emitter<ProfileState> emit,
-  ) async {
-    emit(const _LoadingState());
-    try {
-      emit(
-        ProfileState.addExpense(
-          expense: event.expense,
-        ),
-      );
-      oldState = ProfileState.addExpense(
-        expense: event.expense,
-      );
-    } catch (ex) {
-      ex as DioException;
-      if (ex.response != null) {
-        emit(
-          _InfoState(
-            message: ex.response!.data.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      } else {
-        emit(
-          _InfoState(
-            message: ex.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      }
-    }
+  Future<void> _onInitExpenseEvent(ProfileInitExpenseEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileAddExpenseState(expense: event.expense));
   }
 
-  void _onInitIncomeEvent(
-    _InitIncomeEvent event,
-    Emitter<ProfileState> emit,
-  ) async {
-    emit(const _LoadingState());
-    try {
-      emit(
-        ProfileState.addIncome(
-          income: event.income,
-        ),
-      );
-      oldState = ProfileState.addIncome(
-        income: event.income,
-      );
-    } catch (ex) {
-      ex as DioException;
-      if (ex.response != null) {
-        emit(
-          _InfoState(
-            message: ex.response!.data.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      } else {
-        emit(
-          _InfoState(
-            message: ex.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      }
-    }
+  Future<void> _onInitIncomeEvent(ProfileInitIncomeEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileAddIncomeState(income: event.income));
   }
 
-  void _onAddExpenseEvent(
-    _AddExpense event,
-    Emitter<ProfileState> emit,
-  ) async {
-    emit(const _LoadingState());
+  Future<void> _onAddExpenseEvent(ProfileAddExpenseEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
     try {
-      await expenseRepository.createExpense(
-        event.totalCount,
-        event.categoryId,
-        event.date,
-      );
-      curUser =
-          curUser!.copyWith(balance: curUser!.balance! - event.totalCount);
-      emit(
-        ProfileState.initial(
-          user: curUser!,
-          incomesList: incomesList,
-        ),
-      );
-      oldState = ProfileState.initial(user: curUser!, incomesList: incomesList);
+      await expenseRepository.createExpense(event.totalCount, event.categoryId, event.date);
+      _currentUser = _currentUser!.copyWith(balance: _currentUser!.balance! - event.totalCount);
+      await _emitInitialState(emit);
     } catch (ex) {
-      emit(ProfileState.info(
-        message: ex.toString(),
-        pageState: PageState.error,
-      ));
-    }
-  }
-
-  void _onAddIncomeEvent(
-    _AddIncome event,
-    Emitter<ProfileState> emit,
-  ) async {
-    emit(
-      const _LoadingState(),
-    );
-    try {
-      await incomeRepository.createIncome(
-        event.totalCount,
-        event.categoryId,
-        event.date,
-      );
-      curUser =
-          curUser!.copyWith(balance: curUser!.balance! + event.totalCount);
-      incomesList = await incomeRepository.getAll();
-      emit(
-        ProfileState.initial(
-          user: curUser!,
-          incomesList: incomesList,
-        ),
-      );
-      oldState = ProfileState.initial(user: curUser!, incomesList: incomesList);
-    } catch (ex) {
+      emitError(emit, 'Ошибка создания расхода');
       emit(oldState);
       rethrow;
     }
   }
 
-  void _onEditIncomeEvent(
-    _EditIncome event,
-    Emitter<ProfileState> emit,
-  ) async {
-    emit(
-      const _LoadingState(),
-    );
+  Future<void> _onAddIncomeEvent(ProfileAddIncomeEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
+    try {
+      await incomeRepository.createIncome(event.totalCount, event.categoryId, event.date);
+      _currentUser = _currentUser!.copyWith(balance: _currentUser!.balance! + event.totalCount);
+      _incomesList = await incomeRepository.getAll();
+      await _emitInitialState(emit);
+    } catch (ex) {
+      emitError(emit, 'Ошибка создания дохода');
+      emit(oldState);
+      rethrow;
+    }
+  }
+
+  Future<void> _onEditIncomeEvent(ProfileEditIncomeEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
     try {
       await incomeRepository.updateIncome(
         event.incomeId,
@@ -219,45 +104,32 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         event.totalCount,
         event.date,
       );
-      curUser = await userRepository.getCurrentUser();
-      incomesList = await incomeRepository.getAll();
-      emit(
-        ProfileState.initial(
-          user: curUser!,
-          incomesList: incomesList,
-        ),
-      );
-      oldState = ProfileState.initial(user: curUser!, incomesList: incomesList);
+      _currentUser = await userRepository.getCurrentUser();
+      _incomesList = await incomeRepository.getAll();
+      await _emitInitialState(emit);
     } catch (ex) {
+      emitError(emit, 'Ошибка обновления дохода');
       emit(oldState);
       rethrow;
     }
   }
 
-  void _onDeleteIncomeEvent(
-      _DeleteIncome event,
-      Emitter<ProfileState> emit,
-      ) async {
-    emit(
-      const _LoadingState(),
-    );
+  Future<void> _onDeleteIncomeEvent(ProfileDeleteIncomeEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
     try {
-      await incomeRepository.delete(
-        event.incomeId,
-      );
-      curUser = await userRepository.getCurrentUser();
-      // incomesList = await incomeRepository.getAll();
-      incomesList.removeWhere((e) => e.id == event.incomeId);
-      emit(
-        ProfileState.initial(
-          user: curUser!,
-          incomesList: incomesList,
-        ),
-      );
-      oldState = ProfileState.initial(user: curUser!, incomesList: incomesList);
+      await incomeRepository.delete(event.incomeId);
+      _currentUser = await userRepository.getCurrentUser();
+      _incomesList.removeWhere((e) => e.id == event.incomeId);
+      await _emitInitialState(emit);
     } catch (ex) {
+      emitError(emit, 'Ошибка удаления дохода');
       emit(oldState);
       rethrow;
     }
+  }
+
+  @override
+  ProfileState createErrorState({required String message, required PageState pageState}) {
+    return ProfileInfoState(message: message, pageState: pageState);
   }
 }

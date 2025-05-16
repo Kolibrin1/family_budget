@@ -39,7 +39,10 @@ class AppBottomNavigationBar extends StatelessWidget {
             const CalculatorRoute(),
             const ProfileRoute(),
           ];
-          context.router.replaceAll([routesPerNavBarButton[i]]);
+          context.router.replaceAll([routesPerNavBarButton[i].copyWith(queryParams: {
+            'fromTab': context.read<NavigationCubit>().state.toString(),
+            'toTab': i.toString(),
+          })]);
           context.read<NavigationCubit>().updateIndex(i);
         },
         backgroundColor: Colors.transparent,

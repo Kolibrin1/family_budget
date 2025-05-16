@@ -4,10 +4,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'constants.dart';
+import 'enums.dart';
 
 
 String getMaskToPhone(String phone) {
@@ -102,7 +103,6 @@ Color getMessageColor(PageState type) {
       return Colors.green;
     case PageState.info:
       return Colors.blue;
-    case PageState.load:
     default:
       return Colors.red;
   }
@@ -167,4 +167,19 @@ Color getIconColor(Color backgroundColor) {
 
 getRequestFormatDate(DateTime date) {
   return DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(date.toUtc());
+}
+
+// Устаревший метод, сохранен для обратной совместимости
+TextStyle getTextStyle({
+  required double fontSize, 
+  required FontWeight fontWeight, 
+  required Color color,
+  FontStyle? fontStyle,
+}) {
+  return GoogleFonts.inter(
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    color: color,
+    fontStyle: fontStyle,
+  );
 }

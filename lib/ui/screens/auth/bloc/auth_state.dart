@@ -1,23 +1,41 @@
 part of 'auth_bloc.dart';
 
-@freezed
-class AuthState with _$AuthState {
-  const factory AuthState.auth({
-    String? login,
-    String? pass,
-    bool? isError,
-  }) = _PhoneState;
+sealed class AuthState{
+  const AuthState();
+}
 
+class AuthInitState extends AuthState {
+  final String? login;
+  final String? pass;
+  final bool? isError;
 
-  const factory AuthState.detail({
-    required String login,
-    required String pass,
-  }) = _DetailState;
+  AuthInitState({
+    this.login,
+    this.pass,
+    this.isError,
+  });
+}
 
-  const factory AuthState.loading() = _LoadingState;
+class AuthDetailState extends AuthState {
+  final String login;
+  final String pass;
 
-  const factory AuthState.info({
-    required String message,
-    required PageState pageState,
-  }) = _InfoState;
+  AuthDetailState({
+    required this.login,
+    required this.pass,
+  });
+}
+
+class AuthLoadingState extends AuthState implements LoadingState {}
+
+class AuthInfoState extends AuthState implements InfoState {
+  @override
+  final String message;
+  @override
+  final PageState pageState;
+
+  AuthInfoState({
+    required this.message,
+    required this.pageState,
+  });
 }

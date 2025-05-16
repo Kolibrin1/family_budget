@@ -1,11 +1,9 @@
 import 'package:auto_route/annotations.dart';
-import 'package:family_budget/helpers/constants.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:hugeicons/hugeicons.dart';
 
 import 'widgets/auth_body.dart';
 
@@ -41,12 +39,13 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppScaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
+        title:  Text(
           'Авторизация',
-          style: TextStyle(fontSize: 20),
+          style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
         backgroundColor: AppColors.background,
@@ -60,20 +59,19 @@ class _AuthScreenState extends State<AuthScreen> {
           children: [
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              spacing: 16,
+              // spacing: 16,
               children: [
-                // Image.asset(
-                //   'assets/images/init.png',
-                //   height: MediaQuery.sizeOf(context).width / 1.85,
-                // ),
-                SvgPicture.asset(
-                  'assets/icons/init_icon.svg',
+                Image.asset(
+                  'assets/images/init.png',
                   height: MediaQuery.sizeOf(context).width / 1.85,
                 ),
-                const Text(
+                const SizedBox(
+                  height: 16,
+                ),
+                Text(
                   "Добро пожаловать в ваш личный помощник финансов! Контролируйте свой бюджет и ваши расходы!",
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.onPrimary, fontSize: 19),
+                  style: theme.textTheme.titleLarge,
                 )
               ],
             ),

@@ -1,25 +1,51 @@
 part of 'diagram_bloc.dart';
 
-@freezed
-class DiagramEvent with _$DiagramEvent {
-  const factory DiagramEvent.initial() = _InitialEvent;
+abstract class DiagramEvent {
+  const DiagramEvent();
+}
 
-  const factory DiagramEvent.initEditExpense({
-    ExpenseModel? expense,
-  }) = _InitEditExpenseEvent;
+class DiagramInitialEvent extends DiagramEvent {
+  const DiagramInitialEvent();
+}
 
-  const factory DiagramEvent.editExpense({
-    required int expenseId,
-    required int categoryId,
-    required double totalCount,
-    required DateTime date,
-  }) = _EditExpense;
+class DiagramInitEditExpenseEvent extends DiagramEvent {
+  final ExpenseModel expense;
 
-  const factory DiagramEvent.deleteExpense({
-    required int expenseId,
-  }) = _DeleteExpense;
+  DiagramInitEditExpenseEvent({required this.expense});
+}
 
-  const factory DiagramEvent.selectTypeView({
-    required int type,
-  }) = _SelectTypeView;
+class DiagramEditExpenseEvent extends DiagramEvent {
+  final int expenseId;
+  final int categoryId;
+  final double totalCount;
+  final DateTime date;
+
+  DiagramEditExpenseEvent({
+    required this.expenseId,
+    required this.categoryId,
+    required this.totalCount,
+    required this.date,
+  });
+}
+
+class DiagramDeleteExpenseEvent extends DiagramEvent {
+  final int expenseId;
+
+  DiagramDeleteExpenseEvent({required this.expenseId});
+}
+
+class DiagramSelectTypeViewEvent extends DiagramEvent {
+  final int type;
+
+  DiagramSelectTypeViewEvent({required this.type});
+}
+
+class DiagramSetCustomPeriodEvent extends DiagramEvent {
+  final DateTime dateFrom;
+  final DateTime dateTo;
+
+  DiagramSetCustomPeriodEvent({
+    required this.dateFrom,
+    required this.dateTo,
+  });
 }

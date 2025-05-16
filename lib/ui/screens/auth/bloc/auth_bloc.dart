@@ -1,136 +1,108 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
 import 'package:family_budget/app/di/di.dart';
 import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
+import 'package:family_budget/data/domain/common_state.dart';
 import 'package:family_budget/data/models/user_model.dart';
 import 'package:family_budget/data/repositories/auth_repository.dart';
 import 'package:family_budget/data/repositories/user_repository.dart';
+import 'package:family_budget/helpers/enums.dart';
+import 'package:family_budget/helpers/mixins/error_handler_mixin.dart';
 import 'package:family_budget/helpers/preferences.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:family_budget/helpers/mixins/state_saver_mixin.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../../../helpers/constants.dart';
 
 part 'auth_event.dart';
 
 part 'auth_state.dart';
 
-part 'auth_bloc.freezed.dart';
-
 @injectable
-class AuthBloc extends Bloc<AuthEvent, AuthState> {
+class AuthBloc extends Bloc<AuthEvent, AuthState>
+    with
+        ErrorHandlerMixin<AuthEvent, AuthState>,
+        StateSaverMixin<AuthEvent, AuthState> {
   AuthBloc(this.prefs, this.userRepository, this.authRepository)
       : super(
-          const AuthState.loading(),
+          AuthLoadingState(),
         ) {
-    on<_InitialEvent>(_onInitialEvent);
-    on<_DetailEvent>(_onDetailEvent);
-    on<_AuthEvent>(_onAuthEvent);
+    oldState = AuthLoadingState();
+
+    on<AuthInitEvent>(_onInitialEvent);
+    on<AuthDetailEvent>(_onDetailEvent);
+    on<OnAuthEvent>(_onAuthEvent);
   }
 
-  AuthState oldState = AuthState.loading();
   final UserRepository userRepository;
   final AuthRepository authRepository;
   final Preferences prefs;
   UserModel? curUser;
 
   void _onInitialEvent(
-    _InitialEvent event,
+      AuthInitEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(const _LoadingState());
-    try {
-      emit(
-        AuthState.auth(login: event.login ?? '', pass: event.pass ?? ''),
-      );
-      oldState = const AuthState.auth();
-    } catch (ex) {
-      ex as DioException;
-      if (ex.response != null) {
-        emit(
-          _InfoState(
-            message: ex.response!.data.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      } else {
-        emit(
-          _InfoState(
-            message: ex.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      }
-    }
+    emit(AuthLoadingState());
+    emit(AuthInitState(login: event.login ?? '', pass: event.pass ?? ''));
   }
 
   void _onDetailEvent(
-    _DetailEvent event,
+      AuthDetailEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(const _LoadingState());
+    emit(AuthLoadingState());
 
     if (event.authType == AuthType.register) {
       try {
         final isExist = await authRepository.checkLogin(event.login);
-        if(isExist) {
-          emit(AuthState.auth(
+        if (isExist) {
+          emit(AuthInitState(
             login: event.login,
             pass: event.pass,
             isError: true,
           ));
-          oldState = AuthState.auth(
-            login: event.login,
-            pass: event.pass,
-            isError: true,
-          );
         } else {
-          emit(AuthState.detail(login: event.login, pass: event.pass));
+          emit(AuthDetailState(login: event.login, pass: event.pass));
         }
       } catch (ex) {
-        emit(AuthState.auth(
+        emitError(emit, 'Данный логин занят');
+        emit(AuthInitState(
           login: event.login,
           pass: event.pass,
         ));
-        oldState = AuthState.auth(
-          login: event.login,
-          pass: event.pass,
-        );
       }
     } else {
       try {
         await authRepository.login(event.login, event.pass);
-        prefs.saveUserLogin(event.login);
-        prefs.saveUserPass(event.pass);
         await getIt<CategoriesCubit>().loadCategories();
         event.onAuthCompleted();
       } catch (ex) {
-        emit(const AuthState.info(
-          message: 'Неправильный логин или пароль',
-          pageState: PageState.error,
+        emitError(emit, 'Неправильный логин или пароль');
+        emit(AuthInitState(
+          login: event.login,
+          pass: event.pass,
         ));
       }
     }
   }
 
   void _onAuthEvent(
-    _AuthEvent event,
+      OnAuthEvent event,
     Emitter<AuthState> emit,
   ) async {
-    emit(
-      const _LoadingState(),
-    );
+    emit(AuthLoadingState());
     try {
       await authRepository.register(
           event.login, event.pass, event.balance, event.currency);
-      prefs.saveUserLogin(event.login);
-      prefs.saveUserPass(event.pass);
       await getIt<CategoriesCubit>().loadCategories();
       event.onAuthCompleted();
     } catch (ex) {
       emit(oldState);
       rethrow;
     }
+  }
+
+  @override
+  AuthState createErrorState(
+      {required String message, required PageState pageState}) {
+    return AuthInfoState(message: message, pageState: pageState);
   }
 }

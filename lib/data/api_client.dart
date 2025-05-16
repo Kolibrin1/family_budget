@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:family_budget/app/app_router/app_router.dart';
-import 'package:family_budget/helpers/constants.dart';
+import 'package:family_budget/data/models/token_response.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/functions.dart';
+import 'package:family_budget/helpers/keys.dart';
 import 'package:family_budget/helpers/preferences.dart';
 import 'package:family_budget/widgets/restart_widget.dart';
 import 'package:flutter/material.dart';
@@ -56,6 +58,60 @@ class ApiClient {
 
   final StreamController<ErrorInterceptorHandler?> dioErrorHandlerStream =
       StreamController<ErrorInterceptorHandler?>.broadcast();
+
+  Future<bool> refreshRequest(
+      DioError error,
+      ErrorInterceptorHandler handler,
+      ) async {
+    try {
+      final refreshToken = prefs.getStringByKey(Keys.refreshToken);
+      if (refreshToken == null) {
+        throw DioError(
+          requestOptions: error.requestOptions,
+          error: "Refresh-токен не найден",
+        );
+      }
+
+      final response = await client.post(
+        updatePath,
+      );
+      final resp = TokenResponse.fromJson(response.data);
+
+      await prefs.saveAccessToken(resp.accessToken);
+      await prefs.saveRefreshToken(resp.refreshToken);
+
+      final accessToken = prefs.getStringByKey(Keys.accessToken);
+      if (accessToken == null) {
+        throw DioError(
+          requestOptions: error.requestOptions,
+          error: "Access-токен не найден после обновления",
+        );
+      }
+
+      error.requestOptions.headers["Authorization"] = 'Bearer $accessToken';
+      final opts = Options(
+        method: error.requestOptions.method,
+        headers: error.requestOptions.headers,
+      );
+
+      final retryResponse = await client.request(
+        error.requestOptions.path,
+        options: opts,
+        cancelToken: error.requestOptions.cancelToken,
+        onReceiveProgress: error.requestOptions.onReceiveProgress,
+        data: error.requestOptions.data,
+        queryParameters: error.requestOptions.queryParameters,
+      );
+
+      handler.resolve(retryResponse);
+      return retryResponse.statusCode! < 300;
+    } catch (e) {
+      throw DioError(
+        requestOptions: error.requestOptions,
+        error: e.toString(),
+      );
+    }
+  }
 }
 
 class AppInterceptors extends Interceptor {
@@ -80,8 +136,18 @@ class AppInterceptors extends Interceptor {
         .contains('convert?to=')) {
       options.baseUrl = 'https://api.apilayer.com';
       options.headers['apikey'] = '42rYJoyvTsdnmHwTj45WyiNQG1MbfN2V';
-    } else if(prefs.checkToken()) {
-      options.headers['Authorization'] = 'Bearer ${prefs.getStringByKey('token')}';
+    } else if (prefs.checkToken()) {
+      if (options.path.contains(ApiClient.updatePath)) {
+        final refreshToken = prefs.getStringByKey(Keys.refreshToken);
+        if (refreshToken != null) {
+          options.headers['Authorization'] = 'Bearer $refreshToken';
+        }
+      } else {
+        final accessToken = prefs.getStringByKey(Keys.accessToken);
+        if (accessToken != null) {
+          options.headers['Authorization'] = 'Bearer $accessToken';
+        }
+      }
     }
     return handler.next(options);
   }
@@ -104,24 +170,45 @@ class AppInterceptors extends Interceptor {
     if (err.type == DioErrorType.receiveTimeout) {
       throw DeadlineExceededException(err.requestOptions);
     }
+    // if (err.type == DioErrorType.badResponse) {
+    //   if (err.response?.statusCode == 301) {
+    //     throw BadRequestException(err.requestOptions);
+    //   } else if (err.response?.statusCode == 401) {
+    //     RestartWidget.restartApp(globalContext);
+    //   } else if (err.response?.statusCode == 403) {
+    //     RestartWidget.restartApp(globalContext);
+    //   } else if (err.response?.statusCode == 404) {
+    //     showMessage(
+    //       message: 'Информация не найдена',
+    //       type: PageState.error,
+    //     );
+    //   }
+    // }
+
     if (err.type == DioErrorType.badResponse) {
       if (err.response?.statusCode == 301) {
         throw BadRequestException(err.requestOptions);
-      } else if (err.response?.statusCode == 401) {
-        RestartWidget.restartApp(globalContext);
-      } else if (err.response?.statusCode == 403) {
-        RestartWidget.restartApp(globalContext);
+      } else if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
+        if (err.requestOptions.path.contains('refresh')) {
+          await prefs.deleteAccessToken().then((value) async {
+            await prefs.deleteRefreshToken();
+          }).then((value) {
+            RestartWidget.restartApp(globalContext);
+          });
+        } else {
+          client.refreshRequest(err, handler);
+        }
       } else if (err.response?.statusCode == 404) {
-        showMessage(
-          message: 'Информация не найдена',
-          type: PageState.error,
-        );
+        if (err.requestOptions.path.contains('refresh')) {
+          await prefs.deleteAccessToken().then((value) async {
+            await prefs.deleteRefreshToken();
+          }).then((value) {
+            RestartWidget.restartApp(globalContext);
+          });
+        }
       }
     }
 
-    if (err.type == DioErrorType.connectionTimeout) {
-      throw DeadlineExceededException(err.requestOptions);
-    }
     if (err.type == DioErrorType.connectionTimeout) {
       throw DeadlineExceededException(err.requestOptions);
     }

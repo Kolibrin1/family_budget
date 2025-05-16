@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:family_budget/data/models/category_model.dart';
 import 'package:family_budget/data/repositories/category_repository.dart';
-import 'package:family_budget/helpers/constants.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:injectable/injectable.dart';
 
@@ -16,7 +16,6 @@ class CategoriesCubit extends Cubit<CategoriesState> {
    loadCategories();
   }
 
-  /// Получение всех категорий пользователя (автоматический вызов при запуске приложения)
   Future<void> loadCategories() async {
     try {
       emit(CategoriesLoading());
@@ -27,7 +26,6 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     }
   }
 
-  /// Добавление новой категории
   Future<void> addCategory(String name, String color, String icon) async {
     try {
       final newCategory = await _categoryRepository.createCategory(name, color, icon);
@@ -40,7 +38,6 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     }
   }
 
-  /// Удаление категории
   Future<void> deleteCategory(int categoryId) async {
     try {
       await _categoryRepository.delete(categoryId);

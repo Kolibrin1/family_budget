@@ -1,5 +1,5 @@
 import 'package:family_budget/app/di/di.dart';
-import 'package:family_budget/helpers/constants.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart';
 import 'package:family_budget/ui/screens/auth/widgets/auth_login_screen.dart';
@@ -22,40 +22,37 @@ class AuthBodyScreen extends StatelessWidget {
     return BlocProvider<AuthBloc>(
       create: (context) => getIt<AuthBloc>()
         ..add(
-          AuthEvent.initial(authType: authType),
+          AuthInitEvent(authType: authType),
         ),
       child: BlocConsumer<AuthBloc, AuthState>(
+        buildWhen: (previous, current) => current is! AuthInfoState,
         listener: (context, state) {
-          state.mapOrNull(
-            info: (info) {
-              showMessage(
-                message: info.message,
-                type: info.pageState,
-              );
-            },
-          );
+          if(state is AuthInfoState) {
+            showMessage(
+              message: state.message,
+              type: state.pageState,
+            );
+          }
         },
         builder: (context, state) {
-          return state.maybeWhen(
-            loading: () => AppScaffold(
+          return switch (state) {
+            AuthLoadingState _ => AppScaffold(
               child: LoadingGif(),
             ),
-            auth: (login,pass,isError) => AuthLoginScreen(
+            AuthInitState s => AuthLoginScreen(
               title: authType == AuthType.login ? 'Вход' : 'Регистрация',
-              login: login,
-              pass: pass,
-              isError: isError,
+              login: s.login,
+              pass: s.pass,
+              isError: s.isError,
               onAuthCompleted: onAuthCompleted,
             ),
-            detail: (login ,pass) => AuthDetailScreen(
-              login: login,
-              pass: pass,
+            AuthDetailState s => AuthDetailScreen(
+              login: s.login,
+              pass: s.pass,
               onAuthCompleted: onAuthCompleted,
             ),
-            orElse: () => AppScaffold(
-              child: LoadingGif(),
-            ),
-          );
+            _ => const SizedBox.shrink(),
+          };
         },
       ),
     );

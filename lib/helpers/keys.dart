@@ -1,4 +1,4 @@
 class Keys {
-  static const userLogin = 'userLogin';
-  static const userPassword = 'userPassword';
+  static const accessToken = 'accessToken';
+  static const refreshToken = 'refreshToken';
 }

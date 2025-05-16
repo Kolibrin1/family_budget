@@ -1,26 +1,49 @@
 part of 'auth_bloc.dart';
 
-@freezed
-class AuthEvent with _$AuthEvent {
-  const factory AuthEvent.initial({
-    required AuthType authType,
-    String? login,
-    String? pass,
-  }) = _InitialEvent;
+sealed class AuthEvent {}
 
-  const factory AuthEvent.detail({
-    required String login,
-    required String pass,
-    required AuthType authType,
-    required Function() onAuthCompleted,
-  }) = _DetailEvent;
+class AuthInitEvent extends AuthEvent {
+  AuthInitEvent({
+    required this.authType,
+    this.login,
+    this.pass,
+  });
 
-  const factory AuthEvent.auth({
-    required String login,
-    required String pass,
-    required double balance,
-    required String currency,
-    required AuthType authType,
-    required Function() onAuthCompleted,
-  }) = _AuthEvent;
+  final AuthType authType;
+  final String? login;
+  final String? pass;
+}
+
+class AuthDetailEvent extends AuthEvent {
+  AuthDetailEvent({
+    required this.login,
+    required this.pass,
+    required this.authType,
+    required this.onAuthCompleted,
+  });
+
+  final String login;
+  final String pass;
+  final AuthType authType;
+  final Function() onAuthCompleted;
+}
+
+class OnAuthEvent extends AuthEvent {
+  OnAuthEvent({
+    required this.login,
+    required this.pass,
+    required this.balance,
+    required this.currency,
+    required this.authType,
+    required this.onAuthCompleted,
+    this.birthday,
+  });
+
+  final String login;
+  final String pass;
+  final double balance;
+  final String currency;
+  final AuthType authType;
+  final Function() onAuthCompleted;
+  final DateTime? birthday;
 }

@@ -1,4 +1,4 @@
-import 'package:family_budget/helpers/constants.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart';
@@ -6,7 +6,8 @@ import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AuthDetailScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class AuthDetailScreen extends StatefulWidget {
 class _AuthLoginScreenState extends State<AuthDetailScreen> {
   final List<Currency> currencies = Currency.values;
   Currency? curCurrency;
+  DateTime? _birthdayDate;
 
   @override
   void initState() {
@@ -40,15 +42,44 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
   final _balanceController = TextEditingController();
   final _currencyController = TextEditingController();
 
+  Future<void> _showDatePicker(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _birthdayDate ?? DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: AppColors.primary,
+              onPrimary: Colors.white,
+              surface: AppColors.surface,
+              onSurface: AppColors.white,
+            ),
+          ),
+          child: child!,
+        );
+      }
+    );
+    
+    if (picked != null && picked != _birthdayDate) {
+      setState(() {
+        _birthdayDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AppScaffold(
       statusBarPadding: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
             context.read<AuthBloc>().add(
-                  AuthEvent.initial(
+                  AuthInitEvent(
                     authType: AuthType.register,
                     login: widget.login,
                     pass: widget.pass,
@@ -60,9 +91,9 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
             size: 30,
           ),
         ),
-        title: const Text(
+        title: Text(
           'Регистрация',
-          style: TextStyle(fontSize: 20),
+          style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
         backgroundColor: AppColors.background,
@@ -73,30 +104,75 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 16,
+          // spacing: 16,
           children: [
             Text(
               'Начальный баланс',
-              style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.white),
+              style: theme.textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              height: 16,
             ),
             AppTextField(
               textController: _balanceController,
               colorBorder: AppColors.colorScheme.primary,
             ),
+            const SizedBox(
+              height: 16,
+            ),
             Text(
               'Валюта',
-              style: GoogleFonts.montserrat(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.white),
+              style: theme.textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              height: 16,
             ),
             AppTextField(
               textController: _currencyController,
-              readOnly: true,
               colorBorder: AppColors.colorScheme.primary,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            Text(
+              'Дата рождения',
+              style: theme.textTheme.bodyLarge,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            GestureDetector(
+              onTap: () => _showDatePicker(context),
+              child: Container(
+                width: double.maxFinite,
+                height: 60,
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: AppColors.colorScheme.primary,
+                    width: 0.7,
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _birthdayDate != null
+                        ? Text(
+                      DateFormat('dd.MM.yyyy').format(_birthdayDate!),
+                      style: theme.textTheme.bodyLarge,
+                    )
+                        : const SizedBox.shrink(),
+                    const Icon(
+                      Icons.calendar_today,
+                      color: AppColors.white,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 16,
             ),
             Expanded(
               child: SizedBox(
@@ -161,18 +237,22 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
                 ),
               ),
             ),
+            const SizedBox(
+              height: 16,
+            ),
             AppButton(
               title: 'Продолжить',
               fontWeight: FontWeight.w600,
               fontSize: 16,
               onPressed: () {
                 context.read<AuthBloc>().add(
-                      AuthEvent.auth(
+                      OnAuthEvent(
                         authType: AuthType.register,
                         login: widget.login,
                         pass: widget.pass,
                         balance: double.tryParse(_balanceController.text) ?? 0,
                         currency: _currencyController.text,
+                        birthday: _birthdayDate,
                         onAuthCompleted: widget.onAuthCompleted,
                       ),
                     );

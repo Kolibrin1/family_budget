@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 // import 'package:rxdart/rxdart.dart';
 
 import '../styles/app_colors.dart';
@@ -74,6 +73,7 @@ class AppTextField extends StatefulWidget {
 class _AppTextFieldState extends State<AppTextField> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -86,9 +86,6 @@ class _AppTextFieldState extends State<AppTextField> {
             left: widget.prefix == null ? 12 : 0,
             top: widget.padding ?? 0,
             bottom: (widget.padding ?? 0) + 4,
-
-            // horizontal: widget.prefix == null ? 12 : 0,
-            // vertical: widget.padding ?? 0,
           ),
           decoration: BoxDecoration(
             color: widget.color ?? Colors.black,
@@ -109,10 +106,8 @@ class _AppTextFieldState extends State<AppTextField> {
             cursorColor: AppColors.primary,
             controller: widget.textController,
             focusNode: widget.focusNode,
-            style: TextStyle(
+            style: theme.textTheme.titleMedium?.copyWith(
               color: AppColors.secondary,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
             ),
             readOnly: widget.readOnly,
             maxLines: widget.maxLines,

@@ -60,6 +60,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/info.svg
   String get info => 'assets/icons/info.svg';
 
+  /// File path: assets/icons/init_icon.svg
+  String get initIcon => 'assets/icons/init_icon.svg';
+
   /// File path: assets/icons/profile.svg
   String get profile => 'assets/icons/profile.svg';
 
@@ -76,9 +79,24 @@ class $AssetsIconsGen {
         diagram,
         editIcon,
         info,
+        initIcon,
         profile,
         search
       ];
+}
+
+class $AssetsImagesGen {
+  const $AssetsImagesGen();
+
+  /// File path: assets/images/init.png
+  AssetGenImage get init => const AssetGenImage('assets/images/init.png');
+
+  /// File path: assets/images/init_image.png
+  AssetGenImage get initImage =>
+      const AssetGenImage('assets/images/init_image.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [init, initImage];
 }
 
 class $AssetsIconsCategoriesGen {
@@ -210,6 +228,7 @@ class Assets {
 
   static const $AssetsGifGen gif = $AssetsGifGen();
   static const $AssetsIconsGen icons = $AssetsIconsGen();
+  static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $EnvGen env = $EnvGen();
 }
 

@@ -13,7 +13,6 @@ class AuthGuard extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
     final isAuth = _prefs.checkToken();
-    // final isAuth = _prefs.loadUserLogin() != null;
     if (isAuth) {
       resolver.next();
     } else {

@@ -6,17 +6,18 @@ class FirstLoadCurrenciesScreen extends StatefulWidget {
   const FirstLoadCurrenciesScreen({super.key});
 
   @override
-  State<FirstLoadCurrenciesScreen> createState() => _FirstLoadCurrenciesScreenState();
+  State<FirstLoadCurrenciesScreen> createState() =>
+      _FirstLoadCurrenciesScreenState();
 }
 
 class _FirstLoadCurrenciesScreenState extends State<FirstLoadCurrenciesScreen> {
   CurrencyModel? currency;
 
-  // Future<void> getCurrencies() async {
-  //   currency = await getIt<CurrencyRepository>().getAll();
-  //   print(currency);
-  //   setState(() {});
-  // }
+  Future<void> getCurrencies() async {
+    // currency = await getIt<CurrencyRepository>().getAll();
+    // print(currency);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +30,13 @@ class _FirstLoadCurrenciesScreenState extends State<FirstLoadCurrenciesScreen> {
           const SizedBox(
             height: 20,
           ),
-          // AppButton(
-          //   title: 'Загрузить',
-          //   onPressed: () async {
-          //     // await getCurrencies();
-          //   },
-          // ),
+          AppButton(
+            title: 'Загрузить',
+            onPressed: () async {
+              await getCurrencies();
+            },
+            gradientColors: [],
+          ),
         ],
       ),
     );

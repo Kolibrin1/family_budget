@@ -1,6 +1,11 @@
+import 'package:family_budget/app/di/di.dart';
+import 'package:family_budget/data/models/expense_model.dart';
+import 'package:family_budget/data/models/income_model.dart';
+import 'package:family_budget/data/repositories/user_repository.dart';
+import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'app_button.dart';
 
@@ -9,6 +14,7 @@ void showConfirmDialog({
   required String title,
   required String message,
   required VoidCallback onConfirm,
+  required dynamic item,
   String confirmText = "Удалить",
   String cancelText = "Отмена",
   List<Color> confirmColors = const [
@@ -26,64 +32,87 @@ void showConfirmDialog({
 }) {
   showDialog(
     context: context,
-    builder: (context) => AlertDialog(
+    barrierDismissible: false,
+    builder: (context) => Dialog(
       backgroundColor: AppColors.background,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: Text(
-        title,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.inter(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: AppColors.white,
-        ),
-      ),
-      content: Text(
-        message,
-        textAlign: TextAlign.center,
-        style: GoogleFonts.inter(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          color: AppColors.subText,
-        ),
-      ),
-      actionsAlignment: MainAxisAlignment.center,
-      actions: [
-        Column(
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: 200,
-              child: AppButton(
-                title: confirmText,
-                textColor: AppColors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                radius: 10,
-                height: 39,
-                onPressed: () {
-                  onConfirm();
-                  Navigator.of(context).pop();
-                },
-                gradientColors: confirmColors,
-              ),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.displayMedium,
             ),
-            SizedBox(
-              width: 200,
-              child: AppButton(
-                title: cancelText,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                radius: 10,
-                height: 39,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                gradientColors: cancelColors,
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: AppColors.subText,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            if (item is ExpenseModel || item is IncomeModel)
+              Column(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: hexToColor(item.category?.color ?? ''),
+                    ),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        item.category?.icon ?? '',
+                        height: 30,
+                        width: 30,
+                        color: getIconColor(hexToColor(item.category?.color ?? '')),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${item.category?.name}',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.white),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${item.totalCount} ${getIt.get<UserRepository>().curUser.currency}',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.white),
+                  ),
+                ],
               ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: AppButton(
+                    title: cancelText,
+                    gradientColors: cancelColors,
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: AppButton(
+                    title: confirmText,
+                    gradientColors: confirmColors,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      onConfirm();
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     ),
   );
 }

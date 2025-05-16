@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'app/app_router/app_router.dart';
 import 'app/di/di.dart';
@@ -7,7 +8,6 @@ import 'data/bloc_categories/categories_cubit.dart';
 import 'helpers/preferences.dart';
 import 'styles/app_theme.dart';
 import 'ui/navigator/cubit/navigator_cubit.dart';
-import 'ui/navigator/navbar_listener.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 class App extends StatefulWidget {
@@ -53,6 +53,16 @@ class _AppState extends State<App> {
           debugShowCheckedModeBanner: false,
           theme: AppTheme.theme,
           routerConfig: config,
+          locale: const Locale('ru', 'RU'),
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('ru', 'RU'),
+            Locale('en', 'US'),
+          ],
         ),
       // ),
       //

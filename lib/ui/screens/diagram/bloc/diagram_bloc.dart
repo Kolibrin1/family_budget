@@ -1,160 +1,69 @@
 import 'package:bloc/bloc.dart';
-import 'package:dio/dio.dart';
+import 'package:family_budget/app/di/di.dart';
+import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
+import 'package:family_budget/data/models/analytics_model.dart';
 import 'package:family_budget/data/models/expense_model.dart';
 import 'package:family_budget/data/models/user_model.dart';
 import 'package:family_budget/data/repositories/expense_repository.dart';
 import 'package:family_budget/data/repositories/user_repository.dart';
+import 'package:family_budget/helpers/enums.dart';
+import 'package:family_budget/helpers/mixins/error_handler_mixin.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/helpers/preferences.dart';
+import 'package:family_budget/helpers/mixins/state_saver_mixin.dart';
 import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../../helpers/constants.dart';
 
 part 'diagram_event.dart';
-
 part 'diagram_state.dart';
 
-part 'diagram_bloc.freezed.dart';
 
 @injectable
-class DiagramBloc extends Bloc<DiagramEvent, DiagramState> {
+class DiagramBloc extends Bloc<DiagramEvent, DiagramState> with ErrorHandlerMixin<DiagramEvent, DiagramState>, StateSaverMixin<DiagramEvent, DiagramState> {
   DiagramBloc(this.prefs, this.userRepository, this.expenseRepository)
-      : super(
-          const DiagramState.loading(),
-        ) {
-    on<_InitialEvent>(_onInitialEvent);
-    on<_InitEditExpenseEvent>(_onInitEditExpenseEvent);
-    on<_EditExpense>(_onEditExpenseEvent);
-    on<_DeleteExpense>(_onDeleteExpenseEvent);
-    on<_SelectTypeView>(_onSelectTypeViewEvent);
+      : super(DiagramLoadingState()) {
+    on<DiagramInitialEvent>(_onInitialEvent);
+    on<DiagramInitEditExpenseEvent>(_onInitEditExpenseEvent);
+    on<DiagramEditExpenseEvent>(_onEditExpenseEvent);
+    on<DiagramDeleteExpenseEvent>(_onDeleteExpenseEvent);
+    on<DiagramSelectTypeViewEvent>(_onSelectTypeViewEvent);
+    on<DiagramSetCustomPeriodEvent>(_onSetCustomPeriodEvent);
   }
-
-  DiagramState oldState = const DiagramState.loading();
+  
+  
   final UserRepository userRepository;
   final ExpenseRepository expenseRepository;
   final Preferences prefs;
-  UserModel? curUser;
-  List<ExpenseModel> expensesList = [];
-  List<Color> colors = [];
-  List<String> titles = [];
-  List<double> totalCounts = [];
-  double allCount = 0;
 
+  UserModel? _curUser;
   int type = 1;
+  ({DateTime dateFrom, DateTime dateTo})? customPeriod;
 
-  void _onInitialEvent(
-    _InitialEvent event,
-    Emitter<DiagramState> emit,
-  ) async {
-    emit(const _LoadingState());
-    await Future.delayed(Duration(milliseconds: 500));
+  Future<void> _onInitialEvent(DiagramInitialEvent event, Emitter<DiagramState> emit) async {
+    emit(DiagramLoadingState());
+
     try {
-      curUser ??= await userRepository.getCurrentUser();
-      expensesList = await expenseRepository.getAll(
-        DateTime.now(),
-        DateTime.now(),
-      );
-      colors = [];
-      titles = [];
-      totalCounts = [];
-      allCount = 0;
-      if (expensesList.isNotEmpty) {
-        for (var i = 0; i < expensesList.length; i++) {
-          if (!titles.contains(expensesList[i].category?.name)) {
-            titles.add(expensesList[i].category!.name!);
-            colors.add(hexToColor(expensesList[i].category!.color!));
-            totalCounts.add(expensesList[i].totalCount!);
-          } else {
-            totalCounts[titles.indexOf(expensesList[i].category!.name!)] +=
-                expensesList[i].totalCount!;
-          }
-          allCount += expensesList[i].totalCount!;
-        }
-      }
-
-      emit(
-        DiagramState.initial(
-          currency: curUser!.currency!,
-          expensesList: expensesList,
-          type: 1,
-          colors: colors,
-          allCount: allCount,
-          titles: titles,
-          totalCounts: totalCounts,
-        ),
-      );
-      oldState = DiagramState.initial(
-        currency: curUser!.currency!,
-        expensesList: expensesList,
-        type: 1,
-        colors: colors,
-        allCount: allCount,
-        titles: titles,
-        totalCounts: totalCounts,
-      );
+      _curUser ??= await userRepository.getCurrentUser();
+      await getIt<CategoriesCubit>().loadCategories();
+      await _getExpensesAndEmit(emit);
     } catch (ex) {
-      ex as DioException;
-      if (ex.response != null) {
-        emit(
-          _InfoState(
-            message: ex.response!.data.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      } else {
-        emit(
-          _InfoState(
-            message: ex.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      }
+      emitError(emit, ex);
     }
   }
 
-  void _onInitEditExpenseEvent(
-    _InitEditExpenseEvent event,
-    Emitter<DiagramState> emit,
-  ) async {
-    emit(const _LoadingState());
+  Future<void> _onInitEditExpenseEvent(DiagramInitEditExpenseEvent event, Emitter<DiagramState> emit) async {
+    emit(DiagramLoadingState());
     try {
-      emit(
-        DiagramState.editExpense(
-          expense: event.expense,
-        ),
-      );
-      oldState = DiagramState.editExpense(
-        expense: event.expense,
-      );
+      final newState = DiagramEditExpenseState(expense: event.expense);
+      emit(newState);
     } catch (ex) {
-      ex as DioException;
-      if (ex.response != null) {
-        emit(
-          _InfoState(
-            message: ex.response!.data.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      } else {
-        emit(
-          _InfoState(
-            message: ex.toString(),
-            pageState: PageState.error,
-          ),
-        );
-      }
+      emitError(emit, ex);
     }
   }
 
-  void _onEditExpenseEvent(
-    _EditExpense event,
-    Emitter<DiagramState> emit,
-  ) async {
-    emit(
-      const _LoadingState(),
-    );
+  Future<void> _onEditExpenseEvent(DiagramEditExpenseEvent event, Emitter<DiagramState> emit) async {
+    emit(DiagramLoadingState());
     try {
       await expenseRepository.updateExpense(
         event.expenseId,
@@ -162,201 +71,125 @@ class DiagramBloc extends Bloc<DiagramEvent, DiagramState> {
         event.totalCount,
         event.date,
       );
-      if (type == 1) {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now(),
-          DateTime.now(),
-        );
-      } else if (type == 2) {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now().add(const Duration(days: -7)),
-          DateTime.now(),
-        );
-      } else {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now().add(const Duration(days: -30)),
-          DateTime.now(),
-        );
-      }
-      colors = [];
-      titles = [];
-      totalCounts = [];
-      allCount = 0;
-      if (expensesList.isNotEmpty) {
-        for (var i = 0; i < expensesList.length; i++) {
-          if (!titles.contains(expensesList[i].category?.name)) {
-            titles.add(expensesList[i].category!.name!);
-            colors.add(hexToColor(expensesList[i].category!.color!));
-            totalCounts.add(expensesList[i].totalCount!);
-          } else {
-            totalCounts[titles.indexOf(expensesList[i].category!.name!)] +=
-                expensesList[i].totalCount!;
-          }
-          allCount += expensesList[i].totalCount!;
-        }
-      }
-      emit(
-        DiagramState.initial(
-          currency: curUser!.currency!,
-          expensesList: expensesList,
-          type: type,
-          colors: colors,
-          allCount: allCount,
-          titles: titles,
-          totalCounts: totalCounts,
-        ),
-      );
-      oldState = DiagramState.initial(
-        currency: curUser!.currency!,
-        expensesList: expensesList,
-        type: type,
-        colors: colors,
-        allCount: allCount,
-        titles: titles,
-        totalCounts: totalCounts,
-      );
+      await _getExpensesAndEmit(emit);
     } catch (ex) {
       emit(oldState);
       rethrow;
     }
   }
 
-  void _onDeleteExpenseEvent(
-      _DeleteExpense event,
-      Emitter<DiagramState> emit,
-      ) async {
-    emit(
-      const _LoadingState(),
-    );
+  Future<void> _onDeleteExpenseEvent(DiagramDeleteExpenseEvent event, Emitter<DiagramState> emit) async {
+    emit(DiagramLoadingState());
     try {
-      await expenseRepository.delete(
-        event.expenseId,
-      );
-      if (type == 1) {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now(),
-          DateTime.now(),
-        );
-      } else if (type == 2) {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now().add(const Duration(days: -7)),
-          DateTime.now(),
-        );
-      } else {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now().add(const Duration(days: -30)),
-          DateTime.now(),
-        );
-      }
-      colors = [];
-      titles = [];
-      totalCounts = [];
-      allCount = 0;
-      if (expensesList.isNotEmpty) {
-        for (var i = 0; i < expensesList.length; i++) {
-          if (!titles.contains(expensesList[i].category?.name)) {
-            titles.add(expensesList[i].category!.name!);
-            colors.add(hexToColor(expensesList[i].category!.color!));
-            totalCounts.add(expensesList[i].totalCount!);
-          } else {
-            totalCounts[titles.indexOf(expensesList[i].category!.name!)] +=
-            expensesList[i].totalCount!;
-          }
-          allCount += expensesList[i].totalCount!;
-        }
-      }
-      emit(
-        DiagramState.initial(
-          currency: curUser!.currency!,
-          expensesList: expensesList,
-          type: type,
-          colors: colors,
-          allCount: allCount,
-          titles: titles,
-          totalCounts: totalCounts,
-        ),
-      );
-      oldState = DiagramState.initial(
-        currency: curUser!.currency!,
-        expensesList: expensesList,
-        type: type,
-        colors: colors,
-        allCount: allCount,
-        titles: titles,
-        totalCounts: totalCounts,
-      );
+      await expenseRepository.delete(event.expenseId);
+      await _getExpensesAndEmit(emit);
     } catch (ex) {
       emit(oldState);
       rethrow;
     }
   }
 
-  void _onSelectTypeViewEvent(
-    _SelectTypeView event,
-    Emitter<DiagramState> emit,
-  ) async {
-    emit(const _LoadingState());
+  Future<void> _onSelectTypeViewEvent(DiagramSelectTypeViewEvent event, Emitter<DiagramState> emit) async {
+    emit(DiagramLoadingState());
     try {
-      late List<ExpenseModel> expensesList;
       type = event.type;
-      if (event.type == 1) {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now(),
-          DateTime.now(),
-        );
-      } else if (event.type == 2) {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now().add(const Duration(days: -7)),
-          DateTime.now(),
-        );
-      } else {
-        expensesList = await expenseRepository.getAll(
-          DateTime.now().add(const Duration(days: -30)),
-          DateTime.now(),
-        );
+      // Сбрасываем customPeriod, если выбран День или Неделя
+      if (type == 1 || type == 2) {
+        customPeriod = null;
       }
-      List<Color> colors = [];
-      List<String> titles = [];
-      List<double> totalCounts = [];
-      double allCount = 0;
-      if (expensesList.isNotEmpty) {
-        for (var i = 0; i < expensesList.length; i++) {
-          if (!titles.contains(expensesList[i].category?.name)) {
-            titles.add(expensesList[i].category!.name!);
-            colors.add(hexToColor(expensesList[i].category!.color!));
-            totalCounts.add(expensesList[i].totalCount!);
-          } else {
-            totalCounts[titles.indexOf(expensesList[i].category!.name!)] +=
-                expensesList[i].totalCount!;
-          }
-          allCount += expensesList[i].totalCount!;
-        }
-      }
-      emit(
-        DiagramState.initial(
-          currency: curUser!.currency!,
-          expensesList: expensesList,
-          type: event.type,
-          colors: colors,
-          allCount: allCount,
-          titles: titles,
-          totalCounts: totalCounts,
-        ),
-      );
-      oldState = DiagramState.initial(
-        currency: curUser!.currency!,
-        expensesList: expensesList,
-        type: event.type,
-        colors: colors,
-        allCount: allCount,
-        titles: titles,
-        totalCounts: totalCounts,
-      );
+      await _getExpensesAndEmit(emit);
     } catch (ex) {
-      emit(DiagramState.info(
-        message: ex.toString(),
-        pageState: PageState.error,
-      ));
+      emitError(emit, ex);
     }
+  }
+
+  Future<void> _onSetCustomPeriodEvent(DiagramSetCustomPeriodEvent event, Emitter<DiagramState> emit) async {
+    emit(DiagramLoadingState());
+    try {
+      type = 3; // Устанавливаем тип "Период"
+      customPeriod = (dateFrom: event.dateFrom, dateTo: event.dateTo);
+      await _getExpensesAndEmit(emit);
+    } catch (ex) {
+      emitError(emit, ex);
+    }
+  }
+
+  Future<void> _getExpensesAndEmit(Emitter<DiagramState> emit) async {
+    try {
+      final dateRange = _getDateRange(type);
+      final expenses = await expenseRepository.getAll(
+        dateRange.dateFrom,
+        dateRange.dateTo,
+      );
+      final processedData = await _processExpenses(expenses);
+      _emitInitialState(emit, expenses, type, processedData);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<AnalyticsData> _processExpenses(List<ExpenseModel> expenses) async {
+    final colors = <Color>[];
+    final titles = <String>[];
+    final totalCounts = <double>[];
+    final transactionCounts = <int>[];
+    double allCount = 0;
+
+    for (final expense in expenses) {
+      final categoryName = expense.category?.name ?? '';
+      final categoryColor = hexToColor(expense.category?.color ?? '');
+      final count = expense.totalCount ?? 0;
+
+      if (!titles.contains(categoryName)) {
+        titles.add(categoryName);
+        colors.add(categoryColor);
+        totalCounts.add(count);
+        transactionCounts.add(1); // Первая транзакция в этой категории
+      } else {
+        final index = titles.indexOf(categoryName);
+        totalCounts[index] += count;
+        transactionCounts[index] += 1; // Увеличиваем счетчик транзакций
+      }
+      allCount += count;
+    }
+
+    return AnalyticsData(
+      colors: colors,
+      titles: titles,
+      totalCounts: totalCounts,
+      allCount: allCount,
+      transactionCounts: transactionCounts,
+    );
+  }
+
+  void _emitInitialState(
+      Emitter<DiagramState> emit,
+      List<ExpenseModel> expenses,
+      int type,
+      AnalyticsData analytics,
+      ) {
+    final newState = DiagramInitialState(
+      currency: _curUser!.currency!,
+      expensesList: expenses,
+      type: type,
+      analytics: analytics,
+    );
+    emit(newState);
+  }
+
+  @override
+  DiagramState createErrorState({required String message, required PageState pageState}) {
+    return DiagramInfoState(message: message, pageState: pageState);
+  }
+  
+  /// Получает диапазон дат в зависимости от выбранного типа
+  ({DateTime dateFrom, DateTime dateTo}) _getDateRange(int type) {
+    final now = DateTime.now();
+    return switch (type) {
+      1 => (dateFrom: now, dateTo: now),
+      2 => (dateFrom: now.subtract(const Duration(days: 7)), dateTo: now),
+      3 => customPeriod ?? (dateFrom: now.subtract(const Duration(days: 30)), dateTo: now),
+      _ => (dateFrom: now, dateTo: now),
+    };
   }
 }

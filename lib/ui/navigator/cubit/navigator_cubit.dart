@@ -5,7 +5,14 @@ import 'package:injectable/injectable.dart';
 class NavigationCubit extends Cubit<int> {
   NavigationCubit() : super(0);
 
-  void updateIndex(int index) => emit(index);
+  int _previousIndex = 0;
+
+  int get previousIndex => _previousIndex;
+
+  void updateIndex(int index) {
+    _previousIndex = state;
+    emit(index);
+  }
 
   void getDiagram() => emit(0);
 

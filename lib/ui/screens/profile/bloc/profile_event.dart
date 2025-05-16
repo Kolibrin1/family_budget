@@ -1,37 +1,71 @@
 part of 'profile_bloc.dart';
 
-@freezed
-class ProfileEvent with _$ProfileEvent {
-  const factory ProfileEvent.initial() = _InitialEvent;
+sealed class ProfileEvent {
+  const ProfileEvent();
+}
 
-  const factory ProfileEvent.initExpense({
-    ExpenseModel? expense,
-  }) = _InitExpenseEvent;
+class ProfileInitialEvent extends ProfileEvent {
+  const ProfileInitialEvent();
+}
 
-  const factory ProfileEvent.initIncome({
-    IncomeModel? income,
-  }) = _InitIncomeEvent;
+class ProfileInitExpenseEvent extends ProfileEvent {
+  final ExpenseModel? expense;
 
-  const factory ProfileEvent.addExpense({
-    required double totalCount,
-    required int categoryId,
-    required DateTime date,
-  }) = _AddExpense;
+  const ProfileInitExpenseEvent({
+    this.expense,
+  });
+}
 
-  const factory ProfileEvent.addIncome({
-    required double totalCount,
-    required int categoryId,
-    required DateTime date,
-  }) = _AddIncome;
+class ProfileInitIncomeEvent extends ProfileEvent {
+  final IncomeModel? income;
 
-  const factory ProfileEvent.editIncome({
-    required int incomeId,
-    required int categoryId,
-    required double totalCount,
-    required DateTime date,
-  }) = _EditIncome;
+  const ProfileInitIncomeEvent({
+    this.income,
+  });
+}
 
-  const factory ProfileEvent.deleteIncome({
-    required int incomeId,
-  }) = _DeleteIncome;
+class ProfileAddExpenseEvent extends ProfileEvent {
+  final double totalCount;
+  final int categoryId;
+  final DateTime date;
+
+  const ProfileAddExpenseEvent({
+    required this.totalCount,
+    required this.categoryId,
+    required this.date,
+  });
+}
+
+class ProfileAddIncomeEvent extends ProfileEvent {
+  final double totalCount;
+  final int categoryId;
+  final DateTime date;
+
+  const ProfileAddIncomeEvent({
+    required this.totalCount,
+    required this.categoryId,
+    required this.date,
+  });
+}
+
+class ProfileEditIncomeEvent extends ProfileEvent {
+  final int incomeId;
+  final int categoryId;
+  final double totalCount;
+  final DateTime date;
+
+  const ProfileEditIncomeEvent({
+    required this.incomeId,
+    required this.categoryId,
+    required this.totalCount,
+    required this.date,
+  });
+}
+
+class ProfileDeleteIncomeEvent extends ProfileEvent {
+  final int incomeId;
+
+  const ProfileDeleteIncomeEvent({
+    required this.incomeId,
+  });
 }

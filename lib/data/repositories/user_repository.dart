@@ -17,7 +17,6 @@ class UserRepository {
       return curUser;
     } catch (e) {
       rethrow;
-      // throw e;
     }
   }
 
@@ -47,28 +46,4 @@ class UserRepository {
       throw e;
     }
   }
-
-// Future<UserModel> update(
-//   String? login,
-//   String? password,
-//   String? currency,
-//   double? expense,
-//   double? income,
-// ) async {
-//   final res = await _service.patchMethod(
-//     path: "/user/${curUser.id}",
-//     body: {
-//       "login": login ?? curUser.login,
-//       "password": password ?? curUser.password,
-//       "balance": expense != null
-//           ? (curUser.balance! - expense)
-//           : income != null
-//               ? (curUser.balance! + income)
-//               : curUser.balance,
-//       "currency": currency ?? curUser.currency,
-//     },
-//   );
-//   curUser = UserModel.fromJson(res.data);
-//   return curUser;
-// }
 }

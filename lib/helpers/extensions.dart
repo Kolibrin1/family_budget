@@ -23,6 +23,11 @@ extension StringExtension on DateTime {
     return dateFormat;
   }
 
+  String get formatShortDate {
+    String dateFormat = DateFormat("dd.MM", 'ru').format(this);
+    return dateFormat;
+  }
+
   String get formatDateNameDay {
     String dateFormat = DateFormat("EEEE, dd MMMM", 'ru').format(this);
     return dateFormat;

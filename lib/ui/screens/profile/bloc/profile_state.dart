@@ -1,24 +1,45 @@
 part of 'profile_bloc.dart';
 
-@freezed
-class ProfileState with _$ProfileState {
-  const factory ProfileState.initial({
-    required UserModel user,
-    required List<IncomeModel> incomesList,
-  }) = _PhoneState;
+sealed class ProfileState {
+  const ProfileState();
+}
 
-  const factory ProfileState.addIncome({
-    IncomeModel? income,
-}) = _AddIncomeState;
+class ProfileInitialState extends ProfileState {
+  final UserModel user;
+  final List<IncomeModel> incomesList;
 
-  const factory ProfileState.addExpense({
-    ExpenseModel? expense,
-}) = _AddExpenseState;
+  const ProfileInitialState({
+    required this.user,
+    required this.incomesList,
+  });
+}
 
-  const factory ProfileState.loading() = _LoadingState;
+class ProfileAddIncomeState extends ProfileState {
+  final IncomeModel? income;
 
-  const factory ProfileState.info({
-    required String message,
-    required PageState pageState,
-  }) = _InfoState;
+  const ProfileAddIncomeState({
+    this.income,
+  });
+}
+
+class ProfileAddExpenseState extends ProfileState {
+  final ExpenseModel? expense;
+
+  const ProfileAddExpenseState({
+    this.expense,
+  });
+}
+
+class ProfileLoadingState extends ProfileState implements LoadingState {}
+
+class ProfileInfoState extends ProfileState implements InfoState {
+  @override
+  final String message;
+  @override
+  final PageState pageState;
+
+  const ProfileInfoState({
+    required this.message,
+    required this.pageState,
+  });
 }

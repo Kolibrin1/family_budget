@@ -25,5 +25,3 @@ void main() async {
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-

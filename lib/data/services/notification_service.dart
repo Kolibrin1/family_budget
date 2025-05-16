@@ -143,6 +143,37 @@ class NotificationService {
 
     return scheduledDate;
   }
+
+  /// Отправляет уведомление с напоминанием подсчитать расходы через 10 секунд
+  Future<void> sendDelayedReminderNotification() async {
+    final tz.TZDateTime scheduledDate = 
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10));
+    
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      99,
+      'Budget Control',
+      'Не забудьте подсчитать свои расходы за день',
+      scheduledDate,
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'reminder_channel',
+          'Напоминания о расходах',
+          channelDescription: 'Напоминания о необходимости подсчёта расходов',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(
+          sound: 'default',
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+  }
 }
 
 

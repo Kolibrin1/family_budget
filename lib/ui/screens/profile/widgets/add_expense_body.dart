@@ -1,14 +1,12 @@
 import 'package:family_budget/data/bloc_categories/categories_cubit.dart';
 import 'package:family_budget/data/models/category_model.dart';
 import 'package:family_budget/data/models/expense_model.dart';
-import 'package:family_budget/helpers/constants.dart';
+import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
-import 'package:family_budget/styles/app_text_styles.dart';
 import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart';
 import 'package:family_budget/ui/screens/profile/bloc/profile_bloc.dart';
-import 'package:family_budget/ui/screens/profile/widgets/add_category_bottom_sheet.dart';
 import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:family_budget/widgets/confirm_dialog.dart';
@@ -16,7 +14,8 @@ import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'add_category_bottom_sheet.dart';
 
 class AddExpenseBody extends StatefulWidget {
   const AddExpenseBody({super.key, this.expense});
@@ -29,36 +28,29 @@ class AddExpenseBody extends StatefulWidget {
 
 class _AddExpenseBodyState extends State<AddExpenseBody> {
   final _totalCountController = TextEditingController();
-  DateTime? curDate;
-
-  CategoryModel? selectedCategory;
-  List<CategoryModel> categories = [];
+  DateTime? _selectedDate;
+  CategoryModel? _selectedCategory;
 
   @override
   void initState() {
+    super.initState();
     if (widget.expense != null) {
       _totalCountController.text = widget.expense!.totalCount.toString();
-      curDate = widget.expense!.date;
-      selectedCategory = widget.expense!.category;
+      _selectedDate = widget.expense!.date;
+      _selectedCategory = widget.expense!.category;
     }
-    super.initState();
   }
 
-  bool validate() {
-    if (_totalCountController.text.isNotEmpty &&
-        curDate != null &&
-        selectedCategory != null) {
+  bool _validate() {
+    if (_totalCountController.text.isNotEmpty && _selectedDate != null && _selectedCategory != null) {
       return true;
-    } else {
-      showMessage(
-          message: 'Выберите категорию, укажите сумму и дату!',
-          type: PageState.info);
-      return false;
     }
+    showMessage(message: 'Выберите категорию, укажите сумму и дату!', type: PageState.info);
+    return false;
   }
 
-  Future<DateTime> selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
+  Future<DateTime> _selectDate(BuildContext context) async {
+    final pickedDate = await showDatePicker(
       context: context,
       firstDate: DateTime(2010),
       initialDate: DateTime.now(),
@@ -68,48 +60,42 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
     return pickedDate ?? DateTime.now();
   }
 
-  Color getIconColor(Color backgroundColor) {
-    return backgroundColor.computeLuminance() > 0.5
-        ? Colors.black
-        : Colors.white;
-  }
-
-  void onNewCategoryPressed(BuildContext ctx) {
+  void _onNewCategory(BuildContext context) {
     showAddCategoryBottomSheet(
-        context: context,
-        onCategoryAdded: (name, color, icon) {
-          ctx.read<CategoriesCubit>().addCategory(name, color, icon);
-        });
+      context: context,
+      onCategoryAdded: (name, color, icon) => context.read<CategoriesCubit>().addCategory(name, color, icon),
+    );
   }
 
-  void onDeleteCategoryPressed(BuildContext ctx, CategoryModel category) {
+  void _onDeleteCategory(BuildContext context, CategoryModel category) {
     showConfirmDialog(
-      context: ctx,
-      title: "Удаление категории",
-      message: "Вы точно хотите удалить категорию \"${category.name}\"?",
-      onConfirm: () {
-        ctx.read<CategoriesCubit>().deleteCategory(category.id!);
-      },
+      context: context,
+      title: 'Удаление категории',
+      message: 'Вы точно хотите удалить категорию "${category.name}"?',
+      item: category,
+      onConfirm: () => context.read<CategoriesCubit>().deleteCategory(category.id!),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
           widget.expense != null ? 'Изменить расход' : 'Добавить расход',
-          style: TextStyle(fontSize: 20),
+          style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
         backgroundColor: AppColors.background,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.white),
           onPressed: () => widget.expense != null
-              ? context.read<DiagramBloc>().add(DiagramEvent.selectTypeView(
-                  type: context.read<DiagramBloc>().type))
-              : context.read<ProfileBloc>().add(ProfileEvent.initial()),
+              ? context.read<DiagramBloc>().add(DiagramSelectTypeViewEvent(
+                    type: context.read<DiagramBloc>().type,
+                  ))
+              : context.read<ProfileBloc>().add(const ProfileInitialEvent()),
         ),
       ),
       body: Padding(
@@ -117,200 +103,166 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Поле ввода суммы
             AppTextField(
               textController: _totalCountController,
               colorBorder: AppColors.colorScheme.primary,
               hintText: 'Укажите сумму',
-              hintStyle: AppTextStyles.textStyle16w400.copyWith(
-                color: AppColors.colorScheme.primary.withOpacity(0.9),
-              ),
+              hintStyle: theme.textTheme.titleSmall?.copyWith(color: AppColors.secondary),
             ),
             const SizedBox(height: 20),
-
-            // Выбор даты
-            InkWell(
-              onTap: () async {
-                curDate = await selectDate(context);
-                setState(() {});
-              },
-              child: curDate == null
-                  ? Text(
-                      'Выбрать дату',
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.colorScheme.primary,
-                      ),
-                    )
-                  : Text(
-                      curDate!.formatNumberDate,
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.colorScheme.primary,
-                      ),
-                    ),
-            ),
-
+            _buildDateSelector(theme),
             const SizedBox(height: 20),
             Text(
               'Выберите категорию',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.white,
-              ),
+              style: theme.textTheme.displaySmall,
             ),
             const SizedBox(height: 10),
-            BlocBuilder<CategoriesCubit, CategoriesState>(
-              builder: (context, state) {
-                if (state is CategoriesLoading) {
-                  return LoadingGif();
-                } else if (state is CategoriesLoaded) {
-                  categories = state.categories;
-                  return Flexible(
-                    child: GridView.builder(
-                      shrinkWrap: true,
-                      // physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 4, // 4 элемента в ряд
-                        crossAxisSpacing: 4,
-                        mainAxisSpacing: 8,
-                        mainAxisExtent: 100,
-                      ),
-                      itemCount: categories.length + 1,
-                      itemBuilder: (context, index) {
-                        if (index == 0) {
-                          // Первый элемент - кнопка "Новый"
-                          return GestureDetector(
-                            onTap: () => onNewCategoryPressed(context),
-                            child: Column(
-                              children: [
-                                Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.transparent,
-                                    border: Border.all(
-                                        color: AppColors.primary, width: 2),
-                                  ),
-                                  child: const Center(
-                                    child: Icon(Icons.add,
-                                        color: AppColors.primary, size: 32),
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  "Новый",
-                                  style: GoogleFonts.inter(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: AppColors.white,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        final category = categories[index - 1];
-                        final isSelected = selectedCategory?.id == category.id;
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() => selectedCategory = category);
-                          },
-                          onLongPress: () =>
-                              onDeleteCategoryPressed(context, category),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: 60,
-                                height: 60,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: hexToColor(category.color ?? ''),
-                                ),
-                                child: Center(
-                                  child: SvgPicture.asset(
-                                    category.icon ?? '',
-                                    width: 32,
-                                    height: 32,
-                                    color: getIconColor(
-                                        hexToColor(category.color ?? '')),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                category.name ?? '',
-                                style: GoogleFonts.inter(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: isSelected
-                                      ? AppColors.primary
-                                      : AppColors.white,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  context.read<CategoriesCubit>().loadCategories();
-                  return LoadingGif();
-                }
-              },
-            ),
+            Expanded(child: _buildCategoriesGrid(context)),
             const SizedBox(height: 10),
-            AppButton(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              radius: 10,
-              title: widget.expense != null ? 'Изменить' : 'Добавить',
-              textColor: AppColors.white,
-              onPressed: () {
-                if (validate()) {
-                  if (widget.expense != null) {
-                    context.read<DiagramBloc>().add(
-                          DiagramEvent.editExpense(
-                            expenseId: widget.expense!.id!,
-                            totalCount:
-                                double.tryParse(_totalCountController.text) ??
-                                    0,
-                            categoryId: selectedCategory!.id!,
-                            date: curDate!,
-                          ),
-                        );
-                  } else {
-                    context.read<ProfileBloc>().add(
-                          ProfileEvent.addExpense(
-                            totalCount:
-                                double.tryParse(_totalCountController.text) ??
-                                    0,
-                            categoryId: selectedCategory!.id!,
-                            date: curDate!,
-                          ),
-                        );
-                  }
-                }
-              },
-              gradientColors: const [
-                AppColors.complementaryBlue,
-                AppColors.primary,
-                AppColors.primary,
-                AppColors.complementaryBlue
-              ],
-            ),
+            _buildActionButton(context),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildDateSelector(ThemeData theme) {
+    return InkWell(
+      onTap: () async {
+        _selectedDate = await _selectDate(context);
+        setState(() {});
+      },
+      child: Text(
+        _selectedDate?.formatNumberDate ?? 'Выбрать дату',
+        style: theme.textTheme.displaySmall?.copyWith(color: AppColors.colorScheme.primary),
+      ),
+    );
+  }
+
+  Widget _buildCategoriesGrid(BuildContext context) {
+    return BlocBuilder<CategoriesCubit, CategoriesState>(
+      builder: (context, state) {
+        if (state is CategoriesLoading) return LoadingGif();
+        if (state is CategoriesLoaded) {
+          return GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              crossAxisSpacing: 4,
+              mainAxisSpacing: 8,
+              mainAxisExtent: 100,
+            ),
+            itemCount: state.categories.length + 1,
+            itemBuilder: (_, index) => index == 0
+                ? _buildNewCategoryButton(context)
+                : _buildCategoryItem(context, state.categories[index - 1]),
+          );
+        }
+        context.read<CategoriesCubit>().loadCategories();
+        return LoadingGif();
+      },
+    );
+  }
+
+  Widget _buildNewCategoryButton(BuildContext context) {
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: () => _onNewCategory(context),
+      child: Column(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.transparent,
+              border: Border.all(color: AppColors.primary, width: 2),
+            ),
+            child: const Icon(Icons.add, color: AppColors.primary, size: 32),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Новый',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: AppColors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryItem(BuildContext context, CategoryModel category) {
+    final theme = Theme.of(context);
+    final isSelected = _selectedCategory?.id == category.id;
+    final color = hexToColor(category.color ?? '');
+    return GestureDetector(
+      onTap: () => setState(() => _selectedCategory = category),
+      onLongPress: () => _onDeleteCategory(context, category),
+      child: Column(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(shape: BoxShape.circle, color: color, border: Border.all(color: isSelected ? AppColors.primary : Colors.transparent, width: 2)),
+            child: Center(
+              child: SvgPicture.asset(
+                category.icon ?? '',
+                width: 32,
+                height: 32,
+                color: getIconColor(color),
+              ),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            category.name ?? '',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: isSelected ? AppColors.primary : AppColors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionButton(BuildContext context) {
+    return AppButton(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      radius: 10,
+      title: widget.expense != null ? 'Изменить' : 'Добавить',
+      textColor: AppColors.white,
+      onPressed: () {
+        if (_validate()) {
+          final totalCount = double.tryParse(_totalCountController.text) ?? 0;
+          if (widget.expense != null) {
+            context.read<DiagramBloc>().add(
+                  DiagramEditExpenseEvent(
+                    expenseId: widget.expense!.id!,
+                    totalCount: totalCount,
+                    categoryId: _selectedCategory!.id!,
+                    date: _selectedDate!,
+                  ),
+                );
+          } else {
+            context.read<ProfileBloc>().add(
+                  ProfileAddExpenseEvent(
+                    totalCount: totalCount,
+                    categoryId: _selectedCategory!.id!,
+                    date: _selectedDate!,
+                  ),
+                );
+          }
+        }
+      },
+      gradientColors: const [
+        AppColors.complementaryBlue,
+        AppColors.primary,
+        AppColors.primary,
+        AppColors.complementaryBlue,
+      ],
     );
   }
 }

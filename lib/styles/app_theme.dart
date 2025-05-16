@@ -1,6 +1,7 @@
-import 'package:family_budget/styles/app_text_styles.dart';
+import 'package:family_budget/helpers/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
 
@@ -20,14 +21,138 @@ abstract class AppTheme {
     ),
   ];
 
+  // Создаем переиспользуемые стили текста для приложения
+  static TextStyle _createTextStyle({
+    required double fontSize,
+    required FontWeight fontWeight,
+    required Color color,
+    FontStyle? fontStyle,
+    String fontFamily = 'Inter',
+  }) {
+    if (fontFamily == 'Inter') {
+      return GoogleFonts.inter(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        fontStyle: fontStyle,
+      );
+    } else if (fontFamily == 'Montserrat') {
+      return GoogleFonts.montserrat(
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+        color: color,
+        fontStyle: fontStyle,
+      );
+    }
+
+    // По умолчанию используем Inter
+    return GoogleFonts.inter(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      fontStyle: fontStyle,
+    );
+  }
+
+  static final TextTheme _textTheme = TextTheme(
+    displayLarge: _createTextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w700,
+      color: AppColors.white,
+    ),
+    displayMedium: _createTextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      color: AppColors.white,
+    ),
+    displaySmall: _createTextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: AppColors.white,
+    ),
+
+    headlineLarge: TextStyle(
+      fontSize: 20,
+      color: AppColors.white,
+    ),
+
+    titleLarge: _createTextStyle(
+      fontSize: 19,
+      fontWeight: FontWeight.normal,
+      color: AppColors.onPrimary,
+    ),
+    titleMedium: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: AppColors.white,
+    ),
+    titleSmall: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: AppColors.white,
+    ),
+
+    bodyLarge: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: AppColors.white,
+      fontFamily: 'Montserrat',
+    ),
+    bodyMedium: _createTextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: AppColors.white,
+    ),
+    bodySmall: _createTextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w400,
+      color: AppColors.white,
+    ),
+
+    labelLarge: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w800,
+      color: AppColors.white,
+    ),
+    labelMedium: _createTextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: AppColors.white.withOpacity(0.7),
+    ),
+    labelSmall: _createTextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      color: AppColors.subText,
+    ),
+  );
+
+  static final primaryTextTheme = _textTheme.copyWith(
+    displayLarge: _textTheme.displayLarge?.copyWith(color: AppColors.primary),
+    displayMedium: _textTheme.displayMedium?.copyWith(color: AppColors.primary),
+    displaySmall: _textTheme.displaySmall?.copyWith(color: AppColors.primary),
+    headlineLarge: _textTheme.headlineLarge?.copyWith(color: AppColors.primary),
+    titleLarge: _textTheme.titleLarge?.copyWith(color: AppColors.primary),
+    titleMedium: _textTheme.titleMedium?.copyWith(color: AppColors.primary),
+    titleSmall: _textTheme.titleSmall?.copyWith(color: AppColors.primary),
+    bodyLarge: _textTheme.bodyLarge?.copyWith(color: AppColors.primary),
+    bodyMedium: _textTheme.bodyMedium?.copyWith(color: AppColors.primary),
+    bodySmall: _textTheme.bodySmall?.copyWith(color: AppColors.primary),
+    labelLarge: _textTheme.labelLarge?.copyWith(color: AppColors.primary),
+    labelMedium: _textTheme.labelMedium?.copyWith(color: AppColors.primary),
+    labelSmall: _textTheme.labelSmall?.copyWith(color: AppColors.primary),
+  );
+
   static final theme = ThemeData(
     brightness: Brightness.light,
     colorScheme: AppColors.colorScheme,
     scaffoldBackgroundColor: AppColors.colorScheme.background,
     useMaterial3: false,
 
-    dividerColor: AppColors.colorScheme.primary,
+    // Используем наши текстовые темы
+    textTheme: _textTheme,
+    primaryTextTheme: primaryTextTheme,
 
+    dividerColor: AppColors.colorScheme.primary,
 
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
@@ -41,7 +166,7 @@ abstract class AppTheme {
         color: AppColors.text,
       ),
       centerTitle: true,
-      titleTextStyle: AppTextStyles.textStyle16w600,
+      titleTextStyle: _textTheme.headlineMedium,
       backgroundColor: AppColors.colorScheme.background,
       systemOverlayStyle: const SystemUiOverlayStyle(
         systemNavigationBarColor: Colors.transparent,
@@ -55,14 +180,48 @@ abstract class AppTheme {
       showUnselectedLabels: true,
       backgroundColor: AppColors.colorScheme.onBackground,
       type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: AppTextStyles.textStyle14w500.copyWith(
-        color: AppColors.colorScheme.outline,
-      ),
-      unselectedLabelStyle: AppTextStyles.textStyle14w500.copyWith(
-        color: AppColors.colorScheme.secondary,
-      ),
+      selectedLabelStyle:
+          _createTextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.colorScheme.outline),
+      unselectedLabelStyle:
+          _createTextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: AppColors.colorScheme.secondary),
       selectedItemColor: AppColors.colorScheme.secondary,
       unselectedItemColor: AppColors.colorScheme.outline,
+    ),
+
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: AppColors.background,
+      // Фон DatePicker
+      headerBackgroundColor: AppColors.colorScheme.primary,
+      // Цвет заголовка
+      headerForegroundColor: AppColors.white,
+      // Цвет текста и иконок в заголовке
+      dayStyle: _textTheme.bodySmall?.copyWith(color: AppColors.text),
+      todayBackgroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return AppColors.colorScheme.primary;
+        }
+        return AppColors.onSecondary;
+      }),
+      todayForegroundColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return AppColors.white; // Цвет текста при выборе
+        }
+        return AppColors.white;
+      }),
+      dayForegroundColor: MaterialStateProperty.all(AppColors.text),
+      yearForegroundColor: MaterialStateProperty.all(AppColors.text),
+      yearBackgroundColor: MaterialStateProperty.all(AppColors.background),
+      cancelButtonStyle: TextButton.styleFrom(
+        foregroundColor: AppColors.colorScheme.primary,
+        textStyle: _textTheme.headlineSmall?.copyWith(color: AppColors.colorScheme.primary),
+      ),
+      confirmButtonStyle: TextButton.styleFrom(
+        foregroundColor: AppColors.colorScheme.primary,
+        textStyle: _textTheme.headlineSmall?.copyWith(color: AppColors.colorScheme.primary),
+      ),
+      surfaceTintColor: Colors.transparent,
+      // Убираем наложение оттенка
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
     ),
   );
 }

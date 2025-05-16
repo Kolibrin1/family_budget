@@ -1,13 +1,29 @@
 part of 'calc_bloc.dart';
 
-@freezed
-class CalculatorEvent with _$CalculatorEvent {
-  const factory CalculatorEvent.initial() = _InitialEvent;
+sealed class CalculatorEvent {}
 
-  const factory CalculatorEvent.calculate({
-    required Currency first,
-    required Currency second,
-    required double count,
-    String? searchText,
-  }) = _CalculateEvent;
+class CalculatorInitEvent extends CalculatorEvent {
+  CalculatorInitEvent();
+}
+
+class CalculatorSearchCurrencyEvent extends CalculatorEvent {
+  CalculatorSearchCurrencyEvent({
+    required this.value,
+  });
+
+  final String value;
+}
+
+class CalculateEvent extends CalculatorEvent {
+  CalculateEvent({
+    required this.first,
+    required this.second,
+    required this.count,
+    this.searchText,
+  });
+
+  final Currency first;
+  final Currency second;
+  final double count;
+  final String? searchText;
 }

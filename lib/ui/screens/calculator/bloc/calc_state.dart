@@ -1,19 +1,31 @@
 part of 'calc_bloc.dart';
 
-@freezed
-class CalculatorState with _$CalculatorState {
-  const factory CalculatorState.initial({
-    Currency? first,
-    Currency? second,
-    double? count,
-    double? answer,
-    String? searchText,
-  }) = _InitialState;
+sealed class CalculatorState {}
 
-  const factory CalculatorState.loading() = _LoadingState;
+class CalculatorLoadingState extends CalculatorState {}
 
-  const factory CalculatorState.info({
-    required String message,
-    required PageState pageState,
-  }) = _InfoState;
+class CalculatorInitState extends CalculatorState {
+  CalculatorInitState({
+    this.first,
+    this.second,
+    this.count,
+    this.answer,
+    this.searchText,
+  });
+
+  final Currency? first;
+  final Currency? second;
+  final double? count;
+  final double? answer;
+  final String? searchText;
+}
+
+class CalculatorInfoState extends CalculatorState {
+  CalculatorInfoState({
+    required this.message,
+    required this.pageState,
+  });
+
+  final String message;
+  final PageState pageState;
 }
