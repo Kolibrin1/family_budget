@@ -131,8 +131,10 @@ class DiagramBloc extends Bloc<DiagramEvent, DiagramState> with ErrorHandlerMixi
   Future<AnalyticsData> _processExpenses(List<ExpenseModel> expenses) async {
     final colors = <Color>[];
     final titles = <String>[];
+    final icons = <String>[];
     final totalCounts = <double>[];
     final transactionCounts = <int>[];
+    final categoryIds = <int>[];
     double allCount = 0;
 
     for (final expense in expenses) {
@@ -144,7 +146,10 @@ class DiagramBloc extends Bloc<DiagramEvent, DiagramState> with ErrorHandlerMixi
         titles.add(categoryName);
         colors.add(categoryColor);
         totalCounts.add(count);
-        transactionCounts.add(1); // Первая транзакция в этой категории
+        transactionCounts.add(1);
+        categoryIds.add(expense.category?.id ?? 0);
+        icons.add(expense.category?.icon ?? '');
+        // Первая транзакция в этой категории
       } else {
         final index = titles.indexOf(categoryName);
         totalCounts[index] += count;
@@ -159,6 +164,8 @@ class DiagramBloc extends Bloc<DiagramEvent, DiagramState> with ErrorHandlerMixi
       totalCounts: totalCounts,
       allCount: allCount,
       transactionCounts: transactionCounts,
+      categoryIds: categoryIds,
+      icons: icons,
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/diagram/bloc/diagram_bloc.dart';
+import 'package:family_budget/ui/screens/diagram/widgets/category_analytics_bottom_sheet.dart';
 import 'package:family_budget/widgets/confirm_dialog.dart';
 import 'package:family_budget/widgets/custom_slider_action.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,23 @@ class DiagramBody extends StatelessWidget {
                   mainAxisSpacing: 6,
                   crossAxisSpacing: 4,
                   children: List.generate(analyticsData.colors.length, (i) {
-                    return Chip(
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (context) => CategoryAnalyticsBottomSheet(
+                            categoryName: analyticsData.titles[i],
+                            categoryColor: analyticsData.colors[i],
+                            categoryId: analyticsData.categoryIds[i],
+                            currency: currency,
+                            icon: analyticsData.icons[i],
+                          ),
+                        );
+                      },
+                      child: Chip(
                         backgroundColor: analyticsData.colors[i].withOpacity(0.2),
                         side: BorderSide(color: analyticsData.colors[i], width: 1),
                         avatar: CircleAvatar(
@@ -127,39 +144,12 @@ class DiagramBody extends StatelessWidget {
                             fontSize: 13,
                           ),
                         ),
+                      ),
                     );
                   }),
                 ),
               ),
             ),
-            // SizedBox(
-            //   height: 50,
-            //   child: ListView.builder(
-            //     scrollDirection: Axis.horizontal,
-            //     itemCount: analyticsData.colors.length,
-            //     itemBuilder: (context, i) {
-            //       return Container(
-            //         margin: const EdgeInsets.symmetric(horizontal: 4),
-            //         child: Chip(
-            //           backgroundColor: analyticsData.colors[i].withOpacity(0.2),
-            //           side: BorderSide(color: analyticsData.colors[i], width: 1),
-            //           avatar: CircleAvatar(
-            //             backgroundColor: analyticsData.colors[i],
-            //             radius: 8,
-            //           ),
-            //           label: Text(
-            //             analyticsData.titles[i],
-            //             style: TextStyle(
-            //               color: AppColors.background,
-            //               fontWeight: FontWeight.w700,
-            //               fontSize: 13,
-            //             ),
-            //           ),
-            //         ),
-            //       );
-            //     },
-            //   ),
-            // ),
             const SizedBox(height: 4),
           ],
           if (expenses.isNotEmpty) ...[

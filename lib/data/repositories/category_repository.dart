@@ -1,6 +1,7 @@
 import 'package:family_budget/app/di/di.dart';
 import 'package:family_budget/data/api_service.dart';
 import 'package:family_budget/data/models/category_model.dart';
+import 'package:family_budget/data/models/expense_model.dart';
 import 'package:family_budget/helpers/preferences.dart';
 import 'package:injectable/injectable.dart';
 
@@ -48,5 +49,30 @@ class CategoryRepository {
       throw e;
     }
 
+  }
+
+  Future<List<double>> getCategoryStatistics(int categoryId, String timeSegment) async {
+    try {
+      final res = await _service.getMethod(
+        path: "/categories/$categoryId/statistics",
+        params: {
+          "time_segment": timeSegment,
+        },
+      );
+      return List<double>.from(res.data);
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  Future<List<ExpenseModel>> getRecentCategoryExpenses(int categoryId) async {
+    try {
+      final res = await _service.getMethod(
+        path: "/categories/$categoryId/recent",
+      );
+      return (res.data as List).map((e) => ExpenseModel.fromJson(e)).toList();
+    } catch (e) {
+      throw e;
+    }
   }
 }
