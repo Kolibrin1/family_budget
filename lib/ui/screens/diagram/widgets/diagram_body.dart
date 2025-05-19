@@ -9,6 +9,7 @@ import 'package:family_budget/widgets/custom_slider_action.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart' hide SlidableAction;
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fl_chart/fl_chart.dart';
 
@@ -26,6 +27,7 @@ class DiagramBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final countColors = analyticsData.colors.length;
     final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -34,22 +36,132 @@ class DiagramBody extends StatelessWidget {
         children: [
           SizedBox(
             height: 220,
-            child: PieChart(
-              PieChartData(
-                centerSpaceRadius: 20,
-                borderData: FlBorderData(show: false),
-                sections: List.generate(
-                  analyticsData.colors.length,
-                  (i) => PieChartSectionData(
-                    value: analyticsData.totalCounts[i],
-                    titleStyle: TextStyle(color: getIconColor(analyticsData.colors[i])),
-                    color: analyticsData.colors[i],
-                    radius: 80,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                PieChart(
+                  PieChartData(
+                    sectionsSpace: 2,
+                    centerSpaceRadius: 20,
+                    startDegreeOffset: 270,
+                    sections: List.generate(
+                      analyticsData.colors.length,
+                      (i) {
+                        final fontSize = 14.0;
+                        final radius = 80.0;
+                        return PieChartSectionData(
+                          color: analyticsData.colors[i],
+                          value: analyticsData.totalCounts[i],
+                          title: '${analyticsData.totalCounts[i].toStringAsFixed(0)} $currency',
+                          radius: radius,
+                          titleStyle: TextStyle(
+                            fontSize: fontSize,
+                            fontWeight: FontWeight.bold,
+                            color: getIconColor(analyticsData.colors[i]),
+                            shadows: [
+                              Shadow(
+                                blurRadius: 2,
+                                color: analyticsData.colors[i].withOpacity(0.5),
+                                offset: const Offset(1, 1),
+                              ),
+                            ],
+                          ),
+                          badgeWidget: analyticsData.totalCounts[i] / analyticsData.allCount > 0.08
+                              ? Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: analyticsData.colors[i].withOpacity(0.9),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    analyticsData.titles[i],
+                                    style: TextStyle(
+                                      color: getIconColor(analyticsData.colors[i]),
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              : null,
+                          badgePositionPercentageOffset: 1.2,
+                        );
+                      },
+                    ),
                   ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 4),
+          if (analyticsData.colors.isNotEmpty) ...[
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                height: countColors <= 8
+                    ? 40
+                    : countColors <= 14
+                        ? 80
+                        : 120,
+                child: StaggeredGrid.count(
+                  crossAxisCount: countColors <= 8
+                      ? 1
+                      : countColors <= 14
+                          ? 2
+                          : 3,
+                  axisDirection: AxisDirection.right,
+                  mainAxisSpacing: 6,
+                  crossAxisSpacing: 4,
+                  children: List.generate(analyticsData.colors.length, (i) {
+                    return Chip(
+                        backgroundColor: analyticsData.colors[i].withOpacity(0.2),
+                        side: BorderSide(color: analyticsData.colors[i], width: 1),
+                        avatar: CircleAvatar(
+                          backgroundColor: analyticsData.colors[i],
+                          radius: 8,
+                        ),
+                        label: Text(
+                          analyticsData.titles[i],
+                          style: TextStyle(
+                            color: AppColors.background,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 13,
+                          ),
+                        ),
+                    );
+                  }),
                 ),
               ),
             ),
-          ),
+            // SizedBox(
+            //   height: 50,
+            //   child: ListView.builder(
+            //     scrollDirection: Axis.horizontal,
+            //     itemCount: analyticsData.colors.length,
+            //     itemBuilder: (context, i) {
+            //       return Container(
+            //         margin: const EdgeInsets.symmetric(horizontal: 4),
+            //         child: Chip(
+            //           backgroundColor: analyticsData.colors[i].withOpacity(0.2),
+            //           side: BorderSide(color: analyticsData.colors[i], width: 1),
+            //           avatar: CircleAvatar(
+            //             backgroundColor: analyticsData.colors[i],
+            //             radius: 8,
+            //           ),
+            //           label: Text(
+            //             analyticsData.titles[i],
+            //             style: TextStyle(
+            //               color: AppColors.background,
+            //               fontWeight: FontWeight.w700,
+            //               fontSize: 13,
+            //             ),
+            //           ),
+            //         ),
+            //       );
+            //     },
+            //   ),
+            // ),
+            const SizedBox(height: 4),
+          ],
           if (expenses.isNotEmpty) ...[
             Text(
               'Список расходов',

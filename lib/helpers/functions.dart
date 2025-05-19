@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import 'constants.dart';
@@ -25,7 +24,6 @@ String getMaskToPhone(String phone) {
   }
   return result;
 }
-
 
 String getWeekDayAbbr(int day) {
   switch (day) {
@@ -62,21 +60,6 @@ String getWelcome() {
     result = 'Здравствуйте';
   }
   return result;
-}
-
-void showSnackBar({
-  required BuildContext context,
-  required String title,
-  required PageState type,
-}) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: Text(
-        title,
-      ),
-      backgroundColor: getMessageColor(type),
-    ),
-  );
 }
 
 void showMessage({
@@ -167,19 +150,4 @@ Color getIconColor(Color backgroundColor) {
 
 getRequestFormatDate(DateTime date) {
   return DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(date.toUtc());
-}
-
-// Устаревший метод, сохранен для обратной совместимости
-TextStyle getTextStyle({
-  required double fontSize, 
-  required FontWeight fontWeight, 
-  required Color color,
-  FontStyle? fontStyle,
-}) {
-  return GoogleFonts.inter(
-    fontSize: fontSize,
-    fontWeight: fontWeight,
-    color: color,
-    fontStyle: fontStyle,
-  );
 }
