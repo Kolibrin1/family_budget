@@ -7,7 +7,6 @@ import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AuthDetailScreen extends StatefulWidget {
@@ -29,7 +28,6 @@ class AuthDetailScreen extends StatefulWidget {
 class _AuthLoginScreenState extends State<AuthDetailScreen> {
   final List<Currency> currencies = Currency.values;
   Currency? curCurrency;
-  DateTime? _birthdayDate;
 
   @override
   void initState() {
@@ -41,34 +39,6 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
 
   final _balanceController = TextEditingController();
   final _currencyController = TextEditingController();
-
-  Future<void> _showDatePicker(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: _birthdayDate ?? DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.dark(
-              primary: AppColors.primary,
-              onPrimary: Colors.white,
-              surface: AppColors.surface,
-              onSurface: AppColors.white,
-            ),
-          ),
-          child: child!,
-        );
-      }
-    );
-    
-    if (picked != null && picked != _birthdayDate) {
-      setState(() {
-        _birthdayDate = picked;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -134,43 +104,6 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
             const SizedBox(
               height: 16,
             ),
-            Text(
-              'Дата рождения',
-              style: theme.textTheme.bodyLarge,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            GestureDetector(
-              onTap: () => _showDatePicker(context),
-              child: Container(
-                width: double.maxFinite,
-                height: 60,
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AppColors.colorScheme.primary,
-                    width: 0.7,
-                  ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _birthdayDate != null
-                        ? Text(
-                      DateFormat('dd.MM.yyyy').format(_birthdayDate!),
-                      style: theme.textTheme.bodyLarge,
-                    )
-                        : const SizedBox.shrink(),
-                    const Icon(
-                      Icons.calendar_today,
-                      color: AppColors.white,
-                    ),
-                  ],
-                ),
-              ),
-            ),
             const SizedBox(
               height: 16,
             ),
@@ -194,28 +127,22 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
                                 vertical: 10,
                               ),
                               decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.06),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 6),
-                                  ),
-                                ],
-                                color: Colors.white,
+                                color: AppColors.onSecondary.withOpacity(0.94),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Center(
                                 child: Row(
                                   children: [
-                                    Text(currencies[index].value),
+                                    Text(currencies[index].value, style: const TextStyle(color: AppColors.background)),
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width: MediaQuery.of(context).size.width -
                                           110,
                                       child: Text(
                                         currencies[index].name,
+                                        style: const TextStyle(color: AppColors.background),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,
                                       ),
@@ -252,7 +179,6 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
                         pass: widget.pass,
                         balance: double.tryParse(_balanceController.text) ?? 0,
                         currency: _currencyController.text,
-                        birthday: _birthdayDate,
                         onAuthCompleted: widget.onAuthCompleted,
                       ),
                     );

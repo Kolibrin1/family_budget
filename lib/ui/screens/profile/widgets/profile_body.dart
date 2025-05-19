@@ -54,41 +54,91 @@ class ProfileBody extends StatelessWidget {
       ),
       statusBarPadding: false,
       willPop: false,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 12),
-            Text(user.login ?? '', style: theme.textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 12),
-            _buildBalanceRow(theme),
-            const SizedBox(height: 25),
-            _buildActionRow(context, 'Добавить расходы', ProfileInitExpenseEvent()),
-            const SizedBox(height: 30),
-            _buildActionRow(context, 'Добавить доходы', ProfileInitIncomeEvent()),
-            const SizedBox(height: 50),
-            Text('Доходы', style: theme.textTheme.titleMedium),
-            const SizedBox(height: 20),
-            Expanded(child: _buildIncomesList(context)),
-          ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 12),
+              _buildBalanceRow(theme),
+              const SizedBox(height: 25),
+              _buildActionRow(context, 'Добавить расходы', ProfileInitExpenseEvent()),
+              const SizedBox(height: 20),
+              _buildActionRow(context, 'Добавить доходы', ProfileInitIncomeEvent()),
+              const SizedBox(height: 18),
+              Text('Доходы', style: theme.textTheme.titleMedium),
+              const SizedBox(height: 20),
+              _buildIncomesList(context),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildBalanceRow(ThemeData theme) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SvgPicture.asset('assets/icons/balance_icon.svg', height: 36, width: 3),
-        const SizedBox(width: 10),
-        Text('Баланс: ', style: theme.textTheme.titleMedium),
-        const SizedBox(width: 10),
-        Text('${user.balance}', style: theme.textTheme.titleMedium),
-        const SizedBox(width: 10),
-        Text(user.currency!, style: theme.textTheme.titleMedium),
-      ],
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: gradientColors,
+          stops: const [0.0, 0.15, 0.38, 1.0],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.primary.withOpacity(0.3),
+            blurRadius: 15,
+            offset: const Offset(0, 8),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Баланс',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: Colors.white.withOpacity(0.8),
+                ),
+              ),
+              Text(
+                user.login ?? '',
+                style: theme.textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                '${user.balance}',
+                style: theme.textTheme.headlineLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                user.currency!,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

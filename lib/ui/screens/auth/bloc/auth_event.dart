@@ -36,7 +36,6 @@ class OnAuthEvent extends AuthEvent {
     required this.currency,
     required this.authType,
     required this.onAuthCompleted,
-    this.birthday,
   });
 
   final String login;
@@ -45,5 +44,4 @@ class OnAuthEvent extends AuthEvent {
   final String currency;
   final AuthType authType;
   final Function() onAuthCompleted;
-  final DateTime? birthday;
 }

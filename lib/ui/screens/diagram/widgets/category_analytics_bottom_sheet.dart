@@ -4,6 +4,7 @@ import 'package:family_budget/data/repositories/category_repository.dart';
 import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
+import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -54,7 +55,6 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
         widget.categoryId,
       );
       
-      // Генерируем даты в зависимости от выбранного сегмента
       _dates = _generateDates();
       
       setState(() {
@@ -62,8 +62,8 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
         _recentExpenses = recentExpenses;
       });
     } catch (e) {
-      // TODO: Обработка ошибок
     } finally {
+      await Future.delayed(Duration(milliseconds: 200));
       setState(() => _isLoading = false);
     }
   }
@@ -192,7 +192,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
                     const SizedBox(height: 16),
                     SizedBox(
                       height: 200,
-                      child: _isLoading ? const Center(child: CircularProgressIndicator()) : _buildStatisticsChart(),
+                      child: _isLoading ?  Center(child: SizedBox(height: 100, width: 100, child: LoadingGif())) : _buildStatisticsChart(),
                     ),
                     const SizedBox(height: 4),
                     Text(
@@ -203,7 +203,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
                     ),
                     const SizedBox(height: 16),
                     Expanded(
-                      child: _isLoading ? const Center(child: CircularProgressIndicator()) : _buildRecentExpensesList(),
+                      child: _isLoading ? Center(child: SizedBox(height: 100, width: 100, child: LoadingGif())) : _buildRecentExpensesList(),
                     ),
                   ],
                 ),
