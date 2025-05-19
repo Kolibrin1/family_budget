@@ -7,6 +7,7 @@ import 'package:family_budget/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
 
 class CategoryAnalyticsBottomSheet extends StatefulWidget {
   final String categoryName;
@@ -34,6 +35,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
   List<double> _statistics = [];
   List<ExpenseModel> _recentExpenses = [];
   bool _isLoading = true;
+  List<DateTime> _dates = [];
 
   @override
   void initState() {
@@ -51,6 +53,10 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
       final recentExpenses = await _categoryRepository.getRecentCategoryExpenses(
         widget.categoryId,
       );
+      
+      // Генерируем даты в зависимости от выбранного сегмента
+      _dates = _generateDates();
+      
       setState(() {
         _statistics = statistics;
         _recentExpenses = recentExpenses;
@@ -59,6 +65,44 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
       // TODO: Обработка ошибок
     } finally {
       setState(() => _isLoading = false);
+    }
+  }
+
+  List<DateTime> _generateDates() {
+    final now = DateTime.now();
+    switch (_selectedTimeSegment) {
+      case 'days':
+        return List.generate(7, (index) => 
+          now.subtract(Duration(days: 6 - index)));
+      case 'weeks':
+        // Находим понедельник текущей недели
+        final monday = now.subtract(Duration(days: now.weekday - 1));
+        return List.generate(7, (index) => 
+          monday.subtract(Duration(days: (6 - index) * 7)));
+      case 'months':
+        return List.generate(12, (index) {
+          final month = now.month + (index) + 1;
+          final year = now.year + (month <= 0 ? -1 : 0);
+          final adjustedMonth = month <= 0 ? month + 12 : month;
+          return DateTime(year, adjustedMonth, 1);
+        });
+      default:
+        return [];
+    }
+  }
+
+  String _formatDate(DateTime date) {
+    switch (_selectedTimeSegment) {
+      case 'days':
+        return DateFormat('dd.MM').format(date);
+      case 'weeks':
+        final endOfWeek = date.add(Duration(days: 6));
+        return '${DateFormat('dd.MM').format(date)}\n${DateFormat('dd.MM').format(endOfWeek)}';
+      case 'months':
+        final months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+        return months[date.month - 1];
+      default:
+        return '';
     }
   }
 
@@ -150,7 +194,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
                       height: 200,
                       child: _isLoading ? const Center(child: CircularProgressIndicator()) : _buildStatisticsChart(),
                     ),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 4),
                     Text(
                       'Последние транзакции',
                       style: theme.textTheme.titleLarge?.copyWith(
@@ -214,12 +258,6 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
   }
 
   Widget _buildStatisticsChart() {
-    // Временные даты для демонстрации
-    final List<String> dates = List.generate(
-      _statistics.length,
-      (index) => '${index + 1}.01',
-    );
-
     return LineChart(
       LineChartData(
         lineTouchData: LineTouchData(enabled: true),
@@ -241,21 +279,21 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
               showTitles: true,
               interval: 1,
               getTitlesWidget: (value, meta) {
-                if (value < 0 || value >= dates.length) {
+                if (value < 0 || value >= _dates.length) {
                   return const Text('');
                 }
                 return Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    dates[value.toInt()],
+                    _formatDate(_dates[value.toInt()]),
                     style: const TextStyle(
                       color: AppColors.onSecondary,
-                      fontSize: 12,
+                      fontSize: 11,
                     ),
                   ),
                 );
               },
-              reservedSize: 30,
+              reservedSize: 40,
             ),
           ),
           leftTitles: AxisTitles(
@@ -365,16 +403,16 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
+                '${expense.totalCount} ${widget.currency}',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: widget.categoryColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
                 expense.date?.formatColumnDate ?? '',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.onSecondary,
-                    ),
-              ),
-              Text(
-                '${expense.totalCount} ${widget.currency}',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: widget.categoryColor,
-                      fontWeight: FontWeight.bold,
                     ),
               ),
             ],
