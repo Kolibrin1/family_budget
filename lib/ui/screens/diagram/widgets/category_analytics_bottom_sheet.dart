@@ -214,29 +214,44 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
   }
 
   Widget _buildStatisticsChart() {
-    return BarChart(
-      BarChartData(
-        alignment: BarChartAlignment.spaceAround,
-        maxY: _statistics.isEmpty ? 0 : _statistics.reduce((a, b) => a > b ? a : b) * 1.2,
+    // Временные даты для демонстрации
+    final List<String> dates = List.generate(
+      _statistics.length,
+      (index) => '${index + 1}.01',
+    );
+
+    return LineChart(
+      LineChartData(
+        lineTouchData: LineTouchData(enabled: true),
+        gridData: FlGridData(
+          show: true,
+          horizontalInterval: 100,
+          drawVerticalLine: false,
+          getDrawingHorizontalLine: (value) {
+            return FlLine(
+              color: AppColors.onSecondary.withOpacity(0.1),
+              strokeWidth: 1,
+            );
+          },
+        ),
         titlesData: FlTitlesData(
           show: true,
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
+              interval: 1,
               getTitlesWidget: (value, meta) {
-                if (value < 0 || value >= _statistics.length) {
+                if (value < 0 || value >= dates.length) {
                   return const Text('');
                 }
                 return Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
-                    '${_statistics[value.toInt()].toStringAsFixed(0)} ${widget.currency}',
+                    dates[value.toInt()],
                     style: const TextStyle(
                       color: AppColors.onSecondary,
-                      fontSize: 10,
+                      fontSize: 12,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 );
               },
@@ -244,56 +259,74 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
             ),
           ),
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
+            axisNameWidget: Text(widget.currency),
           ),
           topTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
+              interval: 1,
               getTitlesWidget: (value, meta) {
                 if (value < 0 || value >= _statistics.length) {
                   return const Text('');
                 }
-                return Text(
-                  '${_statistics[value.toInt()].toStringAsFixed(0)} ${widget.currency}',
-                  style: const TextStyle(
-                    color: AppColors.onSecondary,
-                    fontSize: 10,
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: Text(
+                    _statistics[value.toInt()].toStringAsFixed(0),
+                    style: TextStyle(
+                      color: widget.categoryColor,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 );
               },
-              reservedSize: 10,
+              reservedSize: 20,
             ),
           ),
           rightTitles: AxisTitles(
             sideTitles: SideTitles(showTitles: false),
           ),
         ),
-        borderData: FlBorderData(show: false),
-        gridData: FlGridData(show: false),
-        barGroups: List.generate(
-          _statistics.length,
-          (i) => BarChartGroupData(
-            x: i,
-            barRods: [
-              BarChartRodData(
-                toY: _statistics[i] + 1,
-                color: widget.categoryColor,
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  colors: [widget.categoryColor.withOpacity(0.05), widget.categoryColor.withOpacity(0.3), widget.categoryColor],
-                ),
-                width: 22,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(6),
-                  topRight: Radius.circular(6),
-                ),
-              ),
-            ],
+        borderData: FlBorderData(
+          show: true,
+          border: Border(
+            left: BorderSide(color: AppColors.onSecondary.withOpacity(0.2)),
+            bottom: BorderSide(color: AppColors.onSecondary.withOpacity(0.2)),
           ),
         ),
+        minX: 0,
+        maxX: _statistics.length - 1.0,
+        minY: 0,
+        maxY: _statistics.isEmpty ? 0 : _statistics.reduce((a, b) => a > b ? a : b) * 1.4,
+        lineBarsData: [
+          LineChartBarData(
+            preventCurveOverShooting: true,
+            spots: List.generate(
+              _statistics.length,
+              (index) => FlSpot(index.toDouble(), _statistics[index]),
+            ),
+            isCurved: true,
+            color: widget.categoryColor,
+            barWidth: 3,
+            isStrokeCapRound: false,
+            dotData: FlDotData(
+              show: true,
+              getDotPainter: (spot, percent, barData, index) {
+                return FlDotCirclePainter(
+                  radius: 4,
+                  color: widget.categoryColor,
+                  strokeWidth: 1.5,
+                  strokeColor: Colors.white,
+                );
+              },
+            ),
+            belowBarData: BarAreaData(
+              show: true,
+              color: widget.categoryColor.withOpacity(0.1),
+            ),
+          ),
+        ],
       ),
     );
   }
