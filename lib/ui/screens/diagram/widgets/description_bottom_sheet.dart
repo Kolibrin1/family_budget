@@ -1,8 +1,8 @@
 import 'package:family_budget/data/models/analytics_model.dart';
-import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 Future<void> showDescriptionBottomSheet(
   BuildContext context,
@@ -70,7 +70,7 @@ class _Body extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        'Детальная аналитика расходов',
+                        t.diagram.analytics,
                         style: theme.textTheme.displayMedium,
                         textAlign: TextAlign.center,
                       ),
@@ -95,7 +95,7 @@ class _Body extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Общие расходы:',
+                            t.diagram.allExpenses,
                             style: theme.textTheme.displaySmall?.copyWith(
                               color: AppColors.onSecondary,
                             ),
@@ -121,7 +121,7 @@ class _Body extends StatelessWidget {
                     const SizedBox(height: 24),
 
                     Text(
-                      'Расходы по категориям:',
+                      t.diagram.categoryExpenses,
                       style: theme.textTheme.displaySmall?.copyWith(
                         color: AppColors.onSecondary,
                       ),
@@ -141,7 +141,7 @@ class _Body extends StatelessWidget {
                               ),
                               const SizedBox(height: 16),
                               Text(
-                                'Нет данных о расходах',
+                                t.diagram.noDataExpenses,
                                 style: theme.textTheme.bodyLarge?.copyWith(color: AppColors.onSecondary),
                                 textAlign: TextAlign.center,
                               ),
@@ -149,7 +149,6 @@ class _Body extends StatelessWidget {
                           ),
                         ),
                       )
-                    // Список категорий с процентами и визуализацией
                     else
                       Flexible(
                         child: SingleChildScrollView(
@@ -337,7 +336,7 @@ class _Body extends StatelessWidget {
   }
 
   String _formatTransactionCount(int count) {
-    if (count == 0) return '0 транзакций';
+    if (count == 0) return '0 ${t.diagram.transactions}';
 
     if (count % 10 == 1 && count % 100 != 11) {
       return '$count транзакция';

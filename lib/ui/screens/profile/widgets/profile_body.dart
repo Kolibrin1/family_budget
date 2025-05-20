@@ -1,6 +1,7 @@
+import 'package:family_budget/app/app_router/app_router.dart';
 import 'package:family_budget/data/models/income_model.dart';
 import 'package:family_budget/data/models/user_model.dart';
-import 'package:family_budget/data/services/notification_service.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart' hide SlidableAction;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:auto_route/auto_route.dart';
+import 'package:hugeicons/hugeicons.dart';
 
 class ProfileBody extends StatelessWidget {
   const ProfileBody({super.key, required this.user, required this.incomes});
@@ -31,23 +34,29 @@ class ProfileBody extends StatelessWidget {
     final theme = Theme.of(context);
     return AppScaffold(
       appBar: AppBar(
-        title: Text('Профиль', style: theme.textTheme.headlineLarge),
+        title: Text(t.profile.profile, style: theme.textTheme.headlineLarge),
         actions: [
-          ElevatedButton(
-            onPressed: () async {
-              final notificationService = NotificationService();
-              await notificationService.initNotifications();
-              await notificationService.sendDelayedReminderNotification();
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Уведомление будет отправлено через 10 секунд'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+          IconButton(
+            onPressed: () {
+              context.router.push(const SettingsRoute());
             },
-            child: SvgPicture.asset('assets/icons/info.svg'),
+            icon: HugeIcon(icon: HugeIcons.strokeRoundedSettings01, color: AppColors.onSecondary),
           ),
+          // ElevatedButton(
+          //   onPressed: () async {
+          //     final notificationService = NotificationService();
+          //     await notificationService.initNotifications();
+          //     await notificationService.sendDelayedReminderNotification();
+          //
+          //     ScaffoldMessenger.of(context).showSnackBar(
+          //       const SnackBar(
+          //         content: Text('Уведомление будет отправлено через 10 секунд'),
+          //         duration: Duration(seconds: 2),
+          //       ),
+          //     );
+          //   },
+          //   child: SvgPicture.asset('assets/icons/info.svg'),
+          // ),
         ],
         centerTitle: true,
         backgroundColor: AppColors.background,
@@ -63,11 +72,11 @@ class ProfileBody extends StatelessWidget {
               const SizedBox(height: 12),
               _buildBalanceRow(theme),
               const SizedBox(height: 25),
-              _buildActionRow(context, 'Добавить расходы', ProfileInitExpenseEvent()),
+              _buildActionRow(context, t.profile.addExpensesBtn, ProfileInitExpenseEvent()),
               const SizedBox(height: 20),
-              _buildActionRow(context, 'Добавить доходы', ProfileInitIncomeEvent()),
+              _buildActionRow(context, t.profile.addIncomesBtn, ProfileInitIncomeEvent()),
               const SizedBox(height: 18),
-              Text('Доходы', style: theme.textTheme.titleMedium),
+              Text(t.profile.incomes, style: theme.textTheme.titleMedium),
               const SizedBox(height: 20),
               _buildIncomesList(context),
             ],
@@ -104,7 +113,7 @@ class ProfileBody extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Баланс',
+                t.profile.balance,
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: Colors.white.withOpacity(0.8),
                 ),
@@ -176,7 +185,7 @@ class ProfileBody extends StatelessWidget {
                   .separateBy(const SizedBox(height: 10)),
             ),
           )
-        : Text('Доходов пока не было', style: theme.textTheme.titleMedium);
+        : Text(t.profile.noIncomes, style: theme.textTheme.titleMedium);
   }
 
   Widget _buildIncomeRow(BuildContext context, IncomeModel income) {
@@ -222,14 +231,14 @@ class ProfileBody extends StatelessWidget {
                       width: 26,
                       color: getIconColor(color),
                     ),
-                    label: 'Изменить',
+                    label: t.profile.changeBtn,
                     padding: EdgeInsets.zero,
                   ),
                   SlidableAction(
                     onPressed: (ctx) => showConfirmDialog(
                       context: ctx,
-                      title: 'Удаление дохода',
-                      message: 'Вы точно хотите удалить доход от "${income.date?.formatNumberDate}"?',
+                      title: t.profile.deletingIncome,
+                      message: '${t.profile.youSureDeleteExpense}"${income.date?.formatNumberDate}"?',
                       item: income,
                       onConfirm: () => ctx.read<ProfileBloc>().add(
                             ProfileDeleteIncomeEvent(incomeId: income.id!),
@@ -243,7 +252,7 @@ class ProfileBody extends StatelessWidget {
                       width: 26,
                       color: getIconColor(color),
                     ),
-                    label: 'Удалить',
+                    label: t.profile.deleteBtn,
                     padding: EdgeInsets.zero,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(10),

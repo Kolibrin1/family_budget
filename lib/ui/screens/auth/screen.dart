@@ -4,6 +4,7 @@ import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/widgets/app_button.dart';
 import 'package:family_budget/widgets/app_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 import 'widgets/auth_body.dart';
 
@@ -44,7 +45,7 @@ class _AuthScreenState extends State<AuthScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title:  Text(
-          'Авторизация',
+          t.auth.authTitle,
           style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
@@ -69,7 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   height: 16,
                 ),
                 Text(
-                  "Добро пожаловать в ваш личный помощник финансов! Контролируйте свой бюджет и ваши расходы!",
+                  t.auth.welcome,
                   textAlign: TextAlign.center,
                   style: theme.textTheme.titleLarge,
                 )
@@ -79,7 +80,7 @@ class _AuthScreenState extends State<AuthScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: AppButton(
-                title: 'Войти',
+                title: t.auth.signInBtn,
                 gradientColors: const [
                   AppColors.complementaryBlue,
                   AppColors.primary,
@@ -97,7 +98,7 @@ class _AuthScreenState extends State<AuthScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 20.0),
               child: AppButton(
-                title: 'Зарегистрироваться',
+                title: t.auth.registerBtn,
                 gradientColors: const [
                   AppColors.complementaryBlue,
                   AppColors.primary,

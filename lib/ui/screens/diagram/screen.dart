@@ -10,6 +10,7 @@ import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 import 'bloc/diagram_bloc.dart';
 import 'widgets/description_bottom_sheet.dart';
@@ -45,7 +46,7 @@ class DiagramScreen extends StatelessWidget {
 
     return AppScaffold(
       appBar: AppBar(
-        title: Text('Анализ расходов', style: theme.textTheme.headlineLarge),
+        title: Text(t.diagram.diagram, style: theme.textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: AppColors.background,
         actions: [
@@ -129,13 +130,14 @@ class _FilterSelection extends StatelessWidget {
   final int selectedType;
   final ({DateTime dateFrom, DateTime dateTo})? customPeriod;
 
-  static const _options = [
-    ('День', 1, Icons.today),
-    ('Неделя', 2, Icons.date_range),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    // Теперь переводы будут обновляться при смене языка
+    final _options = [
+      (t.diagram.dayBtn, 1, Icons.today),
+      (t.diagram.weekBtn, 2, Icons.date_range),
+    ];
+    
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -183,7 +185,7 @@ class _FilterSelection extends StatelessWidget {
     // Отображаем диапазон дат вместо слова "Период", если период выбран
     final text = customPeriod != null 
         ? '${customPeriod!.dateFrom.formatShortDate} - ${customPeriod!.dateTo.formatShortDate}'
-        : 'Период';
+        : t.diagram.periodBtn;
     
     return InkWell(
       onTap: () => _showDateRangePicker(context),

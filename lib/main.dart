@@ -6,12 +6,15 @@ import 'package:injectable/injectable.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'app.dart';
 
 void main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  
   await initializeDateFormatting();
-  WidgetsFlutterBinding.ensureInitialized();
   // Настройка часовых поясов
   tz.initializeTimeZones();
   tz.setLocalLocation(tz.getLocation('Europe/Moscow'));

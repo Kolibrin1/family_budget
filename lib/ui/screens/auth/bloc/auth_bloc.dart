@@ -5,6 +5,7 @@ import 'package:family_budget/data/domain/common_state.dart';
 import 'package:family_budget/data/models/user_model.dart';
 import 'package:family_budget/data/repositories/auth_repository.dart';
 import 'package:family_budget/data/repositories/user_repository.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/mixins/error_handler_mixin.dart';
 import 'package:family_budget/helpers/preferences.dart';
@@ -63,7 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
           emit(AuthDetailState(login: event.login, pass: event.pass));
         }
       } catch (ex) {
-        emitError(emit, 'Данный логин занят');
+        emitError(emit, t.auth.loginBusy);
         emit(AuthInitState(
           login: event.login,
           pass: event.pass,
@@ -75,7 +76,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
         await getIt<CategoriesCubit>().loadCategories();
         event.onAuthCompleted();
       } catch (ex) {
-        emitError(emit, 'Неправильный логин или пароль');
+        emitError(emit, t.auth.loginOrPassNotValidErr);
         emit(AuthInitState(
           login: event.login,
           pass: event.pass,

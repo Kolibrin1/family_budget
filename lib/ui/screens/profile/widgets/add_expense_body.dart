@@ -14,6 +14,7 @@ import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 import 'add_category_bottom_sheet.dart';
 
@@ -45,7 +46,7 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
     if (_totalCountController.text.isNotEmpty && _selectedDate != null && _selectedCategory != null) {
       return true;
     }
-    showMessage(message: 'Выберите категорию, укажите сумму и дату!', type: PageState.info);
+    showMessage(message: t.profile.enterParameters, type: PageState.info);
     return false;
   }
 
@@ -70,8 +71,8 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
   void _onDeleteCategory(BuildContext context, CategoryModel category) {
     showConfirmDialog(
       context: context,
-      title: 'Удаление категории',
-      message: 'Вы точно хотите удалить категорию "${category.name}"?',
+      title: t.profile.deletingCategory,
+      message: '${t.profile.youSureDeleteCategory} "${category.name}"?',
       item: category,
       onConfirm: () => context.read<CategoriesCubit>().deleteCategory(category.id!),
     );
@@ -84,7 +85,7 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
-          widget.expense != null ? 'Изменить расход' : 'Добавить расход',
+          widget.expense != null ? t.profile.changeExpenseTitle : t.profile.addExpenseTitle,
           style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
@@ -106,14 +107,14 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
             AppTextField(
               textController: _totalCountController,
               colorBorder: AppColors.colorScheme.primary,
-              hintText: 'Укажите сумму',
+              hintText: t.profile.enterAmount,
               hintStyle: theme.textTheme.titleSmall?.copyWith(color: AppColors.secondary),
             ),
             const SizedBox(height: 20),
             _buildDateSelector(theme),
             const SizedBox(height: 20),
             Text(
-              'Выберите категорию',
+              t.profile.enterCategory,
               style: theme.textTheme.displaySmall,
             ),
             const SizedBox(height: 10),
@@ -133,7 +134,7 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
         setState(() {});
       },
       child: Text(
-        _selectedDate?.formatNumberDate ?? 'Выбрать дату',
+        _selectedDate?.formatNumberDate ?? t.profile.enterDate,
         style: theme.textTheme.displaySmall?.copyWith(color: AppColors.colorScheme.primary),
       ),
     );
@@ -182,7 +183,7 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
           ),
           const SizedBox(height: 5),
           Text(
-            'Новый',
+            t.profile.newBtn,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: AppColors.white,
             ),
@@ -232,7 +233,7 @@ class _AddExpenseBodyState extends State<AddExpenseBody> {
       fontSize: 16,
       fontWeight: FontWeight.w600,
       radius: 10,
-      title: widget.expense != null ? 'Изменить' : 'Добавить',
+      title: widget.expense != null ? t.profile.changeBtn : t.profile.addBtn,
       textColor: AppColors.white,
       onPressed: () {
         if (_validate()) {

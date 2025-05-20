@@ -8,6 +8,7 @@ import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:provider/provider.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 class AuthLoginScreen extends StatefulWidget {
   const AuthLoginScreen({
@@ -40,18 +41,18 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
   bool validate() {
     if (_loginController.text.isEmpty ||
         _passController.text.isEmpty ||
-        (widget.title == 'Регистрация' &&
+        (widget.title == t.auth.registerTitle &&
             _confirmPassController.text.isEmpty)) {
       showMessage(
-        message: 'Заполните все поля!',
+        message: t.auth.changeAllFieldsErr,
         type: PageState.info,
       );
       return false;
     }
-    if (widget.title == 'Регистрация' &&
+    if (widget.title == t.auth.registerTitle &&
         _passController.text != _confirmPassController.text) {
       showMessage(
-        message: 'Пароли не совпадают!',
+        message: t.auth.passwordsEqualsErr,
         type: PageState.error,
       );
       return false;
@@ -98,7 +99,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
           // spacing: 16,
           children: [
             Text(
-              'Логин',
+              t.auth.login,
               style: theme.textTheme.bodyLarge,
             ),
             const SizedBox(
@@ -112,7 +113,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16.0),
                 child: Text(
-                  'Данный логин занят',
+                  t.auth.loginBusy,
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: AppColors.error,
                   ),
@@ -122,7 +123,7 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
               height: 16,
             ),
             Text(
-              'Пароль',
+              t.auth.password,
               style: theme.textTheme.bodyLarge,
             ),
             const SizedBox(
@@ -155,12 +156,12 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
               ),
               obscureText: isObscure,
             ),
-            if (widget.title == 'Регистрация') ...[
+            if (widget.title == t.auth.registerTitle) ...[
               const SizedBox(
                 height: 16,
               ),
               Text(
-                'Подтвердите пароль',
+                t.auth.verifyPassword,
                 style: theme.textTheme.bodyLarge,
               ),
               const SizedBox(
@@ -196,14 +197,14 @@ class _AuthLoginScreenState extends State<AuthLoginScreen> {
             ],
             const Expanded(child: SizedBox()),
             AppButton(
-              title: 'Продолжить',
+              title: t.auth.continueBtn,
               fontWeight: FontWeight.w600,
               fontSize: 16,
               onPressed: () {
                 if (validate()) {
                   context.read<AuthBloc>().add(
                         AuthDetailEvent(
-                          authType: widget.title == 'Вход'
+                          authType: widget.title == t.auth.signInTitle
                               ? AuthType.login
                               : AuthType.register,
                           login: _loginController.text,

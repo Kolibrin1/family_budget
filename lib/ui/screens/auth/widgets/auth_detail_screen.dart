@@ -8,6 +8,7 @@ import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 class AuthDetailScreen extends StatefulWidget {
   const AuthDetailScreen({
@@ -62,7 +63,7 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
           ),
         ),
         title: Text(
-          'Регистрация',
+          t.auth.registerTitle,
           style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
@@ -77,7 +78,7 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
           // spacing: 16,
           children: [
             Text(
-              'Начальный баланс',
+              t.auth.startBalance,
               style: theme.textTheme.bodyLarge,
             ),
             const SizedBox(
@@ -91,7 +92,7 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
               height: 16,
             ),
             Text(
-              'Валюта',
+              t.auth.currency,
               style: theme.textTheme.bodyLarge,
             ),
             const SizedBox(
@@ -168,7 +169,7 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
               height: 16,
             ),
             AppButton(
-              title: 'Продолжить',
+              title: t.auth.continueBtn,
               fontWeight: FontWeight.w600,
               fontSize: 16,
               onPressed: () {

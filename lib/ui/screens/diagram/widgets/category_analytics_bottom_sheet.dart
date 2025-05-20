@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 class CategoryAnalyticsBottomSheet extends StatefulWidget {
   final String categoryName;
@@ -92,6 +93,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
   }
 
   String _formatDate(DateTime date) {
+    final tt = t.diagram;
     switch (_selectedTimeSegment) {
       case 'days':
         return DateFormat('dd.MM').format(date);
@@ -99,7 +101,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
         final endOfWeek = date.add(Duration(days: 6));
         return '${DateFormat('dd.MM').format(date)}\n${DateFormat('dd.MM').format(endOfWeek)}';
       case 'months':
-        final months = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+        final months = [tt.januaryShort, tt.februaryShort, tt.marchShort, tt.aprilShort, tt.mayShort, tt.juneShort, tt.julyShort, tt.augustShort, tt.septemberShort, tt.octoberShort, tt.novemberShort, tt.decemberShort];
         return months[date.month - 1];
       default:
         return '';
@@ -182,7 +184,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'Статистика расходов',
+                      t.diagram.statistics,
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: AppColors.onSecondary,
                       ),
@@ -196,7 +198,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Последние транзакции',
+                      t.diagram.lastTransactions,
                       style: theme.textTheme.titleLarge?.copyWith(
                         color: AppColors.onSecondary,
                       ),
@@ -219,9 +221,9 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        _buildTimeSegmentRadio('days', 'Дни'),
-        _buildTimeSegmentRadio('weeks', 'Недели'),
-        _buildTimeSegmentRadio('months', 'Месяцы'),
+        _buildTimeSegmentRadio('days', t.diagram.daysBtn),
+        _buildTimeSegmentRadio('weeks', t.diagram.weeksBtn),
+        _buildTimeSegmentRadio('months', t.diagram.monthsBtn),
       ],
     );
   }
@@ -373,7 +375,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
     if (_recentExpenses.isEmpty) {
       return Center(
         child: Text(
-          'Нет транзакций',
+          t.diagram.noTransactions,
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 color: AppColors.onSecondary,
               ),

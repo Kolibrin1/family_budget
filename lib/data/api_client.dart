@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:family_budget/app/app_router/app_router.dart';
 import 'package:family_budget/data/models/token_response.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/helpers/keys.dart';
@@ -68,7 +69,7 @@ class ApiClient {
       if (refreshToken == null) {
         throw DioError(
           requestOptions: error.requestOptions,
-          error: "Refresh-токен не найден",
+          error: t.api.refreshNotFound,
         );
       }
 
@@ -84,7 +85,7 @@ class ApiClient {
       if (accessToken == null) {
         throw DioError(
           requestOptions: error.requestOptions,
-          error: "Access-токен не найден после обновления",
+          error: t.api.accessNotFound,
         );
       }
 
@@ -170,20 +171,6 @@ class AppInterceptors extends Interceptor {
     if (err.type == DioErrorType.receiveTimeout) {
       throw DeadlineExceededException(err.requestOptions);
     }
-    // if (err.type == DioErrorType.badResponse) {
-    //   if (err.response?.statusCode == 301) {
-    //     throw BadRequestException(err.requestOptions);
-    //   } else if (err.response?.statusCode == 401) {
-    //     RestartWidget.restartApp(globalContext);
-    //   } else if (err.response?.statusCode == 403) {
-    //     RestartWidget.restartApp(globalContext);
-    //   } else if (err.response?.statusCode == 404) {
-    //     showMessage(
-    //       message: 'Информация не найдена',
-    //       type: PageState.error,
-    //     );
-    //   }
-    // }
 
     if (err.type == DioErrorType.badResponse) {
       if (err.response?.statusCode == 301) {
@@ -214,7 +201,7 @@ class AppInterceptors extends Interceptor {
     }
     if (err.type == DioErrorType.connectionError) {
       showMessage(
-        message: 'Произошла неизвестная ошибка, повторите попытку позже.',
+        message: t.api.unknownErr,
         type: PageState.error,
       );
       throw InternalServerErrorException(err.requestOptions);
@@ -252,7 +239,7 @@ class BadRequestException extends DioError {
 
   @override
   String toString() {
-    return 'Неверный запрос';
+    return t.api.invalidRequest;
   }
 }
 
@@ -261,7 +248,7 @@ class InternalServerErrorException extends DioError {
 
   @override
   String toString() {
-    return 'Произошла неизвестная ошибка, повторите попытку позже.';
+    return t.api.unknownErr;
   }
 }
 
@@ -270,7 +257,7 @@ class ConflictException extends DioError {
 
   @override
   String toString() {
-    return 'Произошел конфликт';
+    return t.api.conflict;
   }
 }
 
@@ -288,7 +275,7 @@ class NoInternetConnectionException extends DioError {
 
   @override
   String toString() {
-    return 'Интернет-соединение не обнаружено, попробуйте еще раз.';
+    return t.api.internetConnectionErr;
   }
 }
 
@@ -297,6 +284,6 @@ class DeadlineExceededException extends DioError {
 
   @override
   String toString() {
-    return 'Время ожидания соединения истекло, попробуйте еще раз.';
+    return t.api.timeoutErr;
   }
 }

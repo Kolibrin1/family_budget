@@ -8,6 +8,7 @@ import 'package:family_budget/data/models/user_model.dart';
 import 'package:family_budget/data/repositories/expense_repository.dart';
 import 'package:family_budget/data/repositories/income_repository.dart';
 import 'package:family_budget/data/repositories/user_repository.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/mixins/error_handler_mixin.dart';
 import 'package:family_budget/helpers/preferences.dart';
@@ -56,7 +57,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> with ErrorHandlerMixi
       await getIt<CategoriesCubit>().loadCategories();
       await _emitInitialState(emit);
     } catch (ex) {
-      emitError(emit, "Что-то пошло не так");
+      emitError(emit, t.profile.whatsWrong);
     }
   }
 
@@ -75,7 +76,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> with ErrorHandlerMixi
       _currentUser = _currentUser!.copyWith(balance: _currentUser!.balance! - event.totalCount);
       await _emitInitialState(emit);
     } catch (ex) {
-      emitError(emit, 'Ошибка создания расхода');
+      emitError(emit, t.profile.addExpenseErr);
       emit(oldState);
       rethrow;
     }
@@ -89,7 +90,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> with ErrorHandlerMixi
       _incomesList = await incomeRepository.getAll();
       await _emitInitialState(emit);
     } catch (ex) {
-      emitError(emit, 'Ошибка создания дохода');
+      emitError(emit, t.profile.addIncomeErr);
       emit(oldState);
       rethrow;
     }
@@ -108,7 +109,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> with ErrorHandlerMixi
       _incomesList = await incomeRepository.getAll();
       await _emitInitialState(emit);
     } catch (ex) {
-      emitError(emit, 'Ошибка обновления дохода');
+      emitError(emit, t.profile.updateErr);
       emit(oldState);
       rethrow;
     }
@@ -122,7 +123,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> with ErrorHandlerMixi
       _incomesList.removeWhere((e) => e.id == event.incomeId);
       await _emitInitialState(emit);
     } catch (ex) {
-      emitError(emit, 'Ошибка удаления дохода');
+      emitError(emit, t.profile.deleteErr);
       emit(oldState);
       rethrow;
     }

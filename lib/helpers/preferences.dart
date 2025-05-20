@@ -1,3 +1,4 @@
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'keys.dart';
@@ -22,6 +23,18 @@ class Preferences {
       return token != null ? true : false;
     }
     return false;
+  }
+
+  Future<void> saveLocale(String locale) async {
+    LocaleSettings.setLocaleRaw(locale);
+    await _prefs.setString(Keys.locale, locale);
+  }
+
+  void getLocale() async {
+    final locale = getStringByKey(Keys.locale);
+    if(locale != null) {
+      LocaleSettings.setLocaleRaw(locale);
+    }
   }
 
   Future<void> deleteAccessToken() async {
@@ -70,5 +83,10 @@ class Preferences {
 
   Future<bool> deleteByKey(String key) async {
     return await _prefs.remove(key);
+  }
+
+  // Метод для сохранения выбранной локали
+  Future<void> setLocale(String locale) async {
+    await _prefs.setString(Keys.locale, locale);
   }
 }

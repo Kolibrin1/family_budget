@@ -2,6 +2,7 @@ import 'package:family_budget/app/di/di.dart';
 import 'package:family_budget/data/models/expense_model.dart';
 import 'package:family_budget/data/models/income_model.dart';
 import 'package:family_budget/data/repositories/user_repository.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,8 @@ void showConfirmDialog({
   required String message,
   required VoidCallback onConfirm,
   required dynamic item,
-  String confirmText = "Удалить",
-  String cancelText = "Отмена",
+  String? confirmText,
+  String? cancelText,
   List<Color> confirmColors = const [
     AppColors.complementaryBlue,
     AppColors.primary,
@@ -92,7 +93,7 @@ void showConfirmDialog({
               children: [
                 Expanded(
                   child: AppButton(
-                    title: cancelText,
+                    title: cancelText ?? t.general.cancelBtn,
                     gradientColors: cancelColors,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
@@ -100,7 +101,7 @@ void showConfirmDialog({
                 const SizedBox(width: 10),
                 Expanded(
                   child: AppButton(
-                    title: confirmText,
+                    title: confirmText ?? t.profile.deleteBtn,
                     gradientColors: confirmColors,
                     onPressed: () {
                       Navigator.of(context).pop();

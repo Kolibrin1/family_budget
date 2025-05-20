@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:family_budget/data/models/category_model.dart';
 import 'package:family_budget/data/repositories/category_repository.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:injectable/injectable.dart';
@@ -22,7 +23,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
       final categories = await _categoryRepository.getAll();
       emit(CategoriesLoaded(categories));
     } catch (e) {
-      emit(CategoriesError("Ошибка загрузки категорий: $e"));
+      emit(CategoriesError("${t.categories.loadErr} $e"));
     }
   }
 
@@ -34,7 +35,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
         emit(CategoriesLoaded(List.from(currentState.categories)..add(newCategory)));
       }
     } catch (e) {
-      showMessage(message: "Ошибка добавления категории: $e", type: PageState.error);
+      showMessage(message: "${t.categories.addErr} $e", type: PageState.error);
     }
   }
 
@@ -48,7 +49,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
         ));
       }
     } catch (e) {
-      showMessage(message: "Ошибка удаления категории: $e", type: PageState.error);
+      showMessage(message: "${t.categories.deleteErr} $e", type: PageState.error);
     }
   }
 }

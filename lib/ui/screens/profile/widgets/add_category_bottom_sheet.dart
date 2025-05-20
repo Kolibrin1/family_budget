@@ -6,6 +6,7 @@ import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart' hide colorToHex;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 void showAddCategoryBottomSheet({
   required BuildContext context,
@@ -44,7 +45,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
         backgroundColor: AppColors.background,
         title: Center(
           child: Text(
-            'Выберите цвет',
+            t.profile.enterColor,
             style: Theme.of(context).textTheme.displaySmall,
           ),
         ),
@@ -59,7 +60,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
                 showLabel: false,
               ),
               AppButton(
-                title: 'Сохранить',
+                title: t.profile.saveBtn,
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
                 height: 39,
@@ -76,7 +77,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
 
   bool _validate() {
     if (_nameController.text.isEmpty) {
-      showMessage(message: 'Заполните название!', type: PageState.info);
+      showMessage(message: t.profile.enterTitle, type: PageState.info);
       return false;
     }
     return true;
@@ -106,7 +107,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
               textController: _nameController,
               colorBorder: AppColors.colorScheme.primary,
               textLength: 30,
-              hintText: 'Введите название',
+              hintText: t.profile.enterTitleHint,
               hintStyle: theme.textTheme.bodyLarge?.copyWith(
                 color: AppColors.colorScheme.primary.withOpacity(0.9),
                 fontWeight: FontWeight.w400,
@@ -127,7 +128,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const SizedBox(width: 30, height: 30),
-        Text('Новая категория', style: theme.textTheme.displaySmall),
+        Text(t.profile.newCategory, style: theme.textTheme.displaySmall),
         GestureDetector(
           onTap: () => Navigator.pop(context),
           child: Container(
@@ -167,12 +168,6 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
       ),
     );
   }
-
-  // TextStyle _hintStyle() => getTextStyle(
-  //   fontSize: 16,
-  //   fontWeight: FontWeight.w400,
-  //   color: AppColors.colorScheme.primary.withOpacity(0.9),
-  // );
 
   Widget _buildIconsGrid() {
     return GridView.builder(
@@ -219,7 +214,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
 
   Widget _buildAddButton() {
     return AppButton(
-      title: 'Добавить',
+      title: t.profile.saveBtn,
       fontWeight: FontWeight.w600,
       fontSize: 16,
       height: 39,

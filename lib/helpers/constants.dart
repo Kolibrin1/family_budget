@@ -21,17 +21,3 @@ RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
 DateFormat inputDateFormat = DateFormat('dd-MM-yyyy hh:mm:ss a');
 
-List<String> monthList = [
-  'Январь',
-  'Февраль',
-  'Март',
-  'Апрель',
-  'Май',
-  'Июнь',
-  'Июль',
-  'Август',
-  'Сентябрь',
-  'Октябрь',
-  'Ноябрь',
-  'Декабрь',
-];

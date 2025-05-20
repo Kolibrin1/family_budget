@@ -1,4 +1,5 @@
 import 'package:family_budget/app/di/di.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/enums.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/ui/screens/auth/bloc/auth_bloc.dart';
@@ -40,7 +41,7 @@ class AuthBodyScreen extends StatelessWidget {
               child: LoadingGif(),
             ),
             AuthInitState s => AuthLoginScreen(
-              title: authType == AuthType.login ? 'Вход' : 'Регистрация',
+              title: authType == AuthType.login ? t.auth.signInTitle : t.auth.registerTitle,
               login: s.login,
               pass: s.pass,
               isError: s.isError,

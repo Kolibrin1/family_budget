@@ -13,6 +13,7 @@ import 'package:flutter_slidable/flutter_slidable.dart' hide SlidableAction;
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 class DiagramBody extends StatelessWidget {
   const DiagramBody({
@@ -36,15 +37,15 @@ class DiagramBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 220,
+            height: 240,
             child: Stack(
-              alignment: Alignment.center,
+              alignment: Alignment.topCenter,
               children: [
                 PieChart(
                   PieChartData(
                     sectionsSpace: 2,
                     centerSpaceRadius: 20,
-                    startDegreeOffset: 270,
+                    startDegreeOffset: 90,
                     sections: List.generate(
                       analyticsData.colors.length,
                       (i) {
@@ -93,7 +94,7 @@ class DiagramBody extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 8),
           if (analyticsData.colors.isNotEmpty) ...[
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -154,7 +155,7 @@ class DiagramBody extends StatelessWidget {
           ],
           if (expenses.isNotEmpty) ...[
             Text(
-              'Список расходов',
+              t.diagram.listExpenses,
               style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 10),
@@ -170,7 +171,7 @@ class DiagramBody extends StatelessWidget {
                     ),
                   )
                 : Text(
-                    'Расходов пока не было',
+                    t.diagram.noExpenses,
                     style: theme.textTheme.titleMedium,
                   ),
           ),
@@ -222,14 +223,14 @@ class DiagramBody extends StatelessWidget {
                       width: 26,
                       color: getIconColor(color),
                     ),
-                    label: 'Изменить',
+                    label: t.diagram.changeBtn,
                     padding: EdgeInsets.zero,
                   ),
                   SlidableAction(
                     onPressed: (ctx) => showConfirmDialog(
                       context: ctx,
-                      title: 'Удаление расхода',
-                      message: 'Вы точно хотите удалить расход от "${expense.date?.formatNumberDate}"?',
+                      title: t.diagram.deletingExpense,
+                      message: '${t.diagram.youSureDeleteExpense}"${expense.date?.formatNumberDate}"?',
                       item: expense,
                       onConfirm: () => ctx.read<DiagramBloc>().add(
                             DiagramDeleteExpenseEvent(expenseId: expense.id!),
@@ -243,7 +244,7 @@ class DiagramBody extends StatelessWidget {
                       width: 26,
                       color: getIconColor(color),
                     ),
-                    label: 'Удалить',
+                    label: t.diagram.deleteBtn,
                     padding: EdgeInsets.zero,
                     borderRadius: const BorderRadius.only(
                       topRight: Radius.circular(10),

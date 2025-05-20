@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:family_budget/app/di/di.dart';
+import 'package:family_budget/gen/strings.g.dart';
 import 'package:family_budget/helpers/functions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/profile/bloc/profile_bloc.dart';
@@ -42,7 +43,7 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildLoadingScaffold(ThemeData theme) {
     return AppScaffold(
       appBar: AppBar(
-        title: Text('Профиль', style: theme.textTheme.headlineLarge),
+        title: Text(t.profile.profile, style: theme.textTheme.headlineLarge),
         centerTitle: true,
         backgroundColor: AppColors.background,
       ),

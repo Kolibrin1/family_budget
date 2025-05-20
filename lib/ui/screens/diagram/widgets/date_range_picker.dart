@@ -1,11 +1,13 @@
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 Future<({DateTime dateFrom, DateTime dateTo})?>
     showCustomDateRangePicker({
   required BuildContext context,
   ({DateTime dateFrom, DateTime dateTo})? customPeriod,
 }) async {
+  // final t = Translations.of(context);
   final now = DateTime.now();
   final initialDateRange = customPeriod != null
       ? DateTimeRange(
@@ -23,7 +25,6 @@ Future<({DateTime dateFrom, DateTime dateTo})?>
     firstDate: DateTime(2020),
     lastDate: DateTime.now().add(const Duration(days: 1)),
     initialDateRange: initialDateRange,
-    locale: const Locale('ru', 'RU'),
     builder: (context, child) {
       return Theme(
         data: Theme.of(context).copyWith(
@@ -92,11 +93,11 @@ Future<({DateTime dateFrom, DateTime dateTo})?>
         child: child!,
       );
     },
-    confirmText: 'ВЫБРАТЬ',
-    cancelText: 'ОТМЕНА',
-    saveText: 'СОХРАНИТЬ',
-    fieldStartHintText: 'Начальная дата',
-    fieldEndHintText: 'Конечная дата',
+    confirmText: t.diagram.confirmText,
+    cancelText: t.diagram.cancelText,
+    saveText: t.diagram.saveText,
+    fieldStartHintText: t.diagram.fieldStartHintText,
+    fieldEndHintText: t.diagram.fieldEndHintText,
   );
 
   if (dateRange != null) {
@@ -115,16 +116,17 @@ Future<DateTimeRange?> showMaterialDateRangePicker({
   DateTimeRange? initialDateRange,
   Widget Function(BuildContext, Widget?)? builder,
 }) {
+  // final t = Translations.of(context);
   return showDateRangePicker(
     context: context,
     firstDate: firstDate,
     lastDate: lastDate,
     initialDateRange: initialDateRange,
     builder: builder,
-    confirmText: 'ВЫБРАТЬ',
-    cancelText: 'ОТМЕНА',
-    saveText: 'СОХРАНИТЬ',
-    fieldStartHintText: 'Начальная дата',
-    fieldEndHintText: 'Конечная дата',
+    confirmText: t.diagram.confirmText,
+    cancelText: t.diagram.cancelText,
+    saveText: t.diagram.saveText,
+    fieldStartHintText: t.diagram.fieldStartHintText,
+    fieldEndHintText: t.diagram.fieldEndHintText,
   );
 } 

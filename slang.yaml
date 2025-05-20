@@ -1,0 +1,10 @@
+input_directory: assets/i18n
+output_directory: lib/gen
+output_file_name: strings.g.dart
+base_locale: ru
+locales:
+  - ru
+  - en
+obfuscation:
+  enabled: false
+  secret: ed66830c-5db7-405d-a8e4-3b97e4444987

@@ -13,6 +13,7 @@ import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 import 'add_category_bottom_sheet.dart';
 
@@ -44,7 +45,7 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
     if (_totalCountController.text.isNotEmpty && _selectedDate != null && _selectedCategory != null) {
       return true;
     }
-    showMessage(message: 'Выберите категорию, укажите сумму и дату!', type: PageState.info);
+    showMessage(message: t.profile.enterParameters, type: PageState.info);
     return false;
   }
 
@@ -69,8 +70,8 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
   void _onDeleteCategory(BuildContext context, CategoryModel category) {
     showConfirmDialog(
       context: context,
-      title: 'Удаление категории',
-      message: 'Вы точно хотите удалить категорию "${category.name}"?',
+      title: t.profile.deletingCategory,
+      message: '${t.profile.youSureDeleteCategory} "${category.name}"?',
       item: category,
       onConfirm: () => context.read<CategoriesCubit>().deleteCategory(category.id!),
     );
@@ -83,7 +84,7 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
-          widget.income != null ? 'Изменить доход' : 'Добавить доход',
+          widget.income != null ? t.profile.changeIncomeTitle : t.profile.addIncomeTitle,
           style: theme.textTheme.headlineLarge,
         ),
         centerTitle: true,
@@ -101,13 +102,13 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
             AppTextField(
               textController: _totalCountController,
               colorBorder: AppColors.colorScheme.primary,
-              hintText: 'Укажите сумму',
+              hintText: t.profile.enterAmount,
               hintStyle: theme.textTheme.titleSmall?.copyWith(color: AppColors.secondary),
             ),
             const SizedBox(height: 20),
             _buildDateSelector(theme),
             const SizedBox(height: 20),
-            Text('Выберите категорию', style: theme.textTheme.displaySmall,),
+            Text(t.profile.enterCategory, style: theme.textTheme.displaySmall,),
             const SizedBox(height: 10),
             Expanded(child: _buildCategoriesGrid(context)),
             const SizedBox(height: 10),
@@ -125,7 +126,7 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
         setState(() {});
       },
       child: Text(
-        _selectedDate?.formatNumberDate ?? 'Выбрать дату',
+        _selectedDate?.formatNumberDate ?? t.profile.enterDate,
         style: theme.textTheme.displaySmall?.copyWith(color: AppColors.colorScheme.primary),
       ),
     );
@@ -179,7 +180,7 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
           ),
           const SizedBox(height: 5),
           Text(
-            "Новый",
+            t.profile.newBtn,
             style: theme.textTheme.bodyMedium?.copyWith(
               color: AppColors.white,
             ),
@@ -236,7 +237,7 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
       fontSize: 16,
       fontWeight: FontWeight.w600,
       radius: 10,
-      title: widget.income != null ? 'Изменить' : 'Добавить',
+      title: widget.income != null ? t.profile.changeBtn : t.profile.addBtn,
       textColor: AppColors.white,
       onPressed: () {
         if (_validate()) {

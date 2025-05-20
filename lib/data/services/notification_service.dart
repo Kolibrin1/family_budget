@@ -1,36 +1,44 @@
-import 'package:family_budget/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:family_budget/data/models/default_reminder_model.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
   Future<void> initNotifications() async {
-    // Настройки для iOS
-    const DarwinInitializationSettings initializationSettingsIOS =
-    DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestSoundPermission: true,
-      requestBadgePermission: true,
-    );
-    InitializationSettings initializationSettings = const InitializationSettings(
-      android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
-      iOS: initializationSettingsIOS,
-    );
-    await flutterLocalNotificationsPlugin.initialize(
-        initializationSettings,
-        onDidReceiveNotificationResponse: onDidReceiveNotificationResponse
+    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iosSettings = DarwinInitializationSettings();
+
+    const initializationSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: iosSettings,
     );
 
-    // Запрос разрешений на iOS
-    await flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-        IOSFlutterLocalNotificationsPlugin>()
-        ?.requestPermissions(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<bool> requestPermission() async {
+    final platform = _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    if (platform != null) {
+      final granted = await platform.requestNotificationsPermission();
+      return granted ?? false;
+    }
+
+    final iosPlatform = _flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>();
+    if (iosPlatform != null) {
+      final result = await iosPlatform.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+      return result ?? false;
+    }
+
+    return false;
   }
 
   Future<void> showNotification() async {
@@ -44,7 +52,7 @@ class NotificationService {
 
     const NotificationDetails details = NotificationDetails(android: androidDetails);
 
-    await flutterLocalNotificationsPlugin.show(
+    await _flutterLocalNotificationsPlugin.show(
       0,
       'Пример уведомления',
       'Это текст уведомления',
@@ -79,7 +87,7 @@ class NotificationService {
   Future<void> scheduleDefaultReminder(DefaultReminderModel reminder) async {
     final tz.TZDateTime scheduledDate = tz.TZDateTime.from(reminder.date, tz.local);
 
-    await flutterLocalNotificationsPlugin.zonedSchedule(
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
       reminder.id,
       reminder.title,
       reminder.description,
@@ -104,7 +112,7 @@ class NotificationService {
   }
 
   Future<void> setupRecurringReminders() async {
-    await flutterLocalNotificationsPlugin.zonedSchedule(
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
       3,
       'Проверь баланс!',
       'Не забудь проверить свои доходы и расходы.',
@@ -146,36 +154,33 @@ class NotificationService {
 
   /// Отправляет уведомление с напоминанием подсчитать расходы через 10 секунд
   Future<void> sendDelayedReminderNotification() async {
-    final tz.TZDateTime scheduledDate = 
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10));
-    
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      99,
-      'Budget Control',
-      'Не забудьте подсчитать свои расходы за день',
-      scheduledDate,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'reminder_channel',
-          'Напоминания о расходах',
-          channelDescription: 'Напоминания о необходимости подсчёта расходов',
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-        iOS: DarwinNotificationDetails(
-          sound: 'default',
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
-        ),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+    const androidDetails = AndroidNotificationDetails(
+      'reminder_channel',
+      'Напоминания',
+      channelDescription: 'Канал для напоминаний о расходах',
+      importance: Importance.max,
+      priority: Priority.high,
+    );
+
+    const iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    );
+
+    const notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    await _flutterLocalNotificationsPlugin.show(
+      0,
+      'Напоминание',
+      'Не забудьте внести расходы за сегодня!',
+      notificationDetails,
     );
   }
 }
-
 
 void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
   final String? payload = notificationResponse.payload;

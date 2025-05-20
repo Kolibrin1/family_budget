@@ -43,6 +43,7 @@ import 'package:family_budget/ui/screens/calculator/screen.dart';
 import 'package:family_budget/ui/screens/diagram/screen.dart';
 import 'package:family_budget/ui/screens/profile/screen.dart';
 import 'package:family_budget/ui/screens/root_screen.dart';
+import 'package:family_budget/ui/screens/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
@@ -79,6 +80,7 @@ class AppRouter extends RootStackRouter {
             AutoRoute(page: ProfileRoute.page, guards: [_authGuard]),
           ],
         ),
+    AutoRoute(page: SettingsRoute.page),
       ];
 }
 

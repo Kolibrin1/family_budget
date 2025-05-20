@@ -1,4 +1,5 @@
 import 'package:family_budget/helpers/enums.dart';
+import 'package:family_budget/helpers/extensions.dart';
 import 'package:family_budget/styles/app_colors.dart';
 import 'package:family_budget/ui/screens/calculator/bloc/calc_bloc.dart';
 import 'package:family_budget/widgets/app_button.dart';
@@ -8,6 +9,7 @@ import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:family_budget/gen/strings.g.dart';
 
 import 'text_field_calculator_widget.dart';
 
@@ -62,7 +64,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
     _filteredCurrencies = _currencies
         .where((currency) =>
     currency.value.contains(query) ||
-        currency.name.toUpperCase().contains(query))
+        currency.displayName.toUpperCase().contains(query))
         .toList();
   }
 
@@ -126,7 +128,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
         child: SvgPicture.asset('assets/icons/search.svg',
             color: AppColors.button),
       ),
-      hintText: 'Поиск',
+      hintText: t.calculator.search,
       hintStyle: theme.textTheme.titleSmall?.copyWith(
         color: AppColors.colorScheme.primary.withOpacity(0.9),
       ),
@@ -203,7 +205,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
           AppColors.primary,
           AppColors.complementaryBlue,
         ],
-        title: widget.isLoading ? '' : 'Посчитать',
+        title: widget.isLoading ? '' : t.calculator.calculateBtn,
         isDisabled: widget.isLoading,
         onPressed: _calculate,
         child: widget.isLoading ? LoadingGif() : null,
@@ -259,7 +261,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
                       .size
                       .width - 120,
                   child: Text(
-                    currency.name,
+                    currency.displayName,
                     style: const TextStyle(color: AppColors.background),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
