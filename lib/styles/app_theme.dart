@@ -45,7 +45,7 @@ abstract class AppTheme {
       );
     }
 
-    // По умолчанию используем Inter
+    // По умолчанию Inter
     return GoogleFonts.inter(
       fontSize: fontSize,
       fontWeight: fontWeight,
@@ -126,6 +126,78 @@ abstract class AppTheme {
     ),
   );
 
+  static final TextTheme _textLightTheme = TextTheme(
+    displayLarge: _createTextStyle(
+      fontSize: 24,
+      fontWeight: FontWeight.w700,
+      color: AppColors.black,
+    ),
+    displayMedium: _createTextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
+      color: AppColors.black,
+    ),
+    displaySmall: _createTextStyle(
+      fontSize: 18,
+      fontWeight: FontWeight.w600,
+      color: AppColors.black,
+    ),
+
+    headlineLarge: TextStyle(
+      fontSize: 20,
+      color: AppColors.black,
+    ),
+
+    titleLarge: _createTextStyle(
+      fontSize: 19,
+      fontWeight: FontWeight.normal,
+      color: AppColors.background,
+    ),
+    titleMedium: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: AppColors.black,
+    ),
+    titleSmall: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      color: AppColors.black,
+    ),
+
+    bodyLarge: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: AppColors.black,
+      fontFamily: 'Montserrat',
+    ),
+    bodyMedium: _createTextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: AppColors.black,
+    ),
+    bodySmall: _createTextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w400,
+      color: AppColors.black,
+    ),
+
+    labelLarge: _createTextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.w800,
+      color: AppColors.black,
+    ),
+    labelMedium: _createTextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: AppColors.black.withOpacity(0.7),
+    ),
+    labelSmall: _createTextStyle(
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+      color: AppColors.divider,
+    ),
+  );
+
   static final primaryTextTheme = _textTheme.copyWith(
     displayLarge: _textTheme.displayLarge?.copyWith(color: AppColors.primary),
     displayMedium: _textTheme.displayMedium?.copyWith(color: AppColors.primary),
@@ -146,10 +218,11 @@ abstract class AppTheme {
     brightness: Brightness.light,
     colorScheme: AppColors.colorScheme,
     scaffoldBackgroundColor: AppColors.colorScheme.background,
+    // scaffoldBackgroundColor: AppColors.colorScheme.outlineVariant,
     useMaterial3: false,
 
-    // Используем наши текстовые темы
     textTheme: _textTheme,
+    // textTheme: _textLightTheme,
     primaryTextTheme: primaryTextTheme,
 
     dividerColor: AppColors.colorScheme.primary,
@@ -190,11 +263,8 @@ abstract class AppTheme {
 
     datePickerTheme: DatePickerThemeData(
       backgroundColor: AppColors.background,
-      // Фон DatePicker
       headerBackgroundColor: AppColors.colorScheme.primary,
-      // Цвет заголовка
       headerForegroundColor: AppColors.white,
-      // Цвет текста и иконок в заголовке
       dayStyle: _textTheme.bodySmall?.copyWith(color: AppColors.text),
       todayBackgroundColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.selected)) {
@@ -220,7 +290,6 @@ abstract class AppTheme {
         textStyle: _textTheme.headlineSmall?.copyWith(color: AppColors.colorScheme.primary),
       ),
       surfaceTintColor: Colors.transparent,
-      // Убираем наложение оттенка
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
     ),
   );

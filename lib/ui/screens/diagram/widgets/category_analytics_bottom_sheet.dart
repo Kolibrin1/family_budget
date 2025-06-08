@@ -34,10 +34,10 @@ class CategoryAnalyticsBottomSheet extends StatefulWidget {
 class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSheet> {
   final _categoryRepository = getIt<CategoryRepository>();
   String _selectedTimeSegment = 'days';
-  List<double> _statistics = [];
-  List<ExpenseModel> _recentExpenses = [];
+  List<double> _statistics = List.empty(growable: true);
+  List<ExpenseModel> _recentExpenses = List.empty(growable: true);
   bool _isLoading = true;
-  List<DateTime> _dates = [];
+  List<DateTime> _dates = List.empty(growable: true);
 
   @override
   void initState() {
@@ -88,7 +88,7 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
           return DateTime(year, adjustedMonth, 1);
         });
       default:
-        return [];
+        return List.empty(growable: true);
     }
   }
 

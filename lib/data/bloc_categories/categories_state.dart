@@ -4,7 +4,7 @@ abstract class CategoriesState extends Equatable {
   const CategoriesState();
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => List.empty(growable: true);
 }
 
 class CategoriesInitial extends CategoriesState {}

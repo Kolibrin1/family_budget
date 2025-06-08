@@ -184,7 +184,7 @@ class _Body extends StatelessWidget {
   }
 
   List<double> _calculatePercents() {
-    final percents = <double>[];
+    final percents = List<double>.empty(growable: true);
     double allPercents = 0;
 
     for (var i = 0; i < analyticsData.totalCounts.length; i++) {

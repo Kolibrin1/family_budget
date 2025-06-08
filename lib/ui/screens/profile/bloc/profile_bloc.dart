@@ -42,7 +42,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> with ErrorHandlerMixi
   final Preferences prefs;
 
   UserModel? _currentUser;
-  List<IncomeModel> _incomesList = [];
+  List<IncomeModel> _incomesList = List.empty(growable: true);
 
   Future<void> _emitInitialState(Emitter<ProfileState> emit) async {
     emit(ProfileInitialState(user: _currentUser!, incomesList: _incomesList));

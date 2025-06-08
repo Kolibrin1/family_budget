@@ -142,7 +142,7 @@ class _AuthLoginScreenState extends State<AuthDetailScreen> {
                                       width: MediaQuery.of(context).size.width -
                                           110,
                                       child: Text(
-                                        currencies[index].name,
+                                        currencies[index].displayName,
                                         style: const TextStyle(color: AppColors.background),
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 1,

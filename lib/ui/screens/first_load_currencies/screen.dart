@@ -36,7 +36,7 @@ class _FirstLoadCurrenciesScreenState extends State<FirstLoadCurrenciesScreen> {
             onPressed: () async {
               await getCurrencies();
             },
-            gradientColors: [],
+            gradientColors: List.empty(growable: true),
           ),
         ],
       ),

@@ -89,9 +89,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           trailing: PopupMenuButton<String>(
                             initialValue: _selectedLanguage,
                             onSelected: (String value) {
-                              // Сохраняем выбранный язык в Preferences
                               getIt<Preferences>().setLocale(value);
-                              // Применяем новую локаль
                               LocaleSettings.setLocaleRaw(value);
                               setState(() => _selectedLanguage = value);
                             },

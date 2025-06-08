@@ -11,6 +11,7 @@ import 'package:family_budget/widgets/app_text_field.dart';
 import 'package:family_budget/widgets/confirm_dialog.dart';
 import 'package:family_budget/widgets/gif_loader.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:family_budget/gen/strings.g.dart';
@@ -103,6 +104,8 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
               textController: _totalCountController,
               colorBorder: AppColors.colorScheme.primary,
               hintText: t.profile.enterAmount,
+              textInputType: TextInputType.number,
+              textInputFormatter: FilteringTextInputFormatter.allow(RegExp(r'^-?\d*[.,]?\d*$')),
               hintStyle: theme.textTheme.titleSmall?.copyWith(color: AppColors.secondary),
             ),
             const SizedBox(height: 20),

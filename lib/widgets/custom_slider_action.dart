@@ -39,7 +39,7 @@ class SlidableAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final children = <Widget>[];
+    final children = List<Widget>.empty(growable: true);
 
     if (icon != null) {
       children.add(

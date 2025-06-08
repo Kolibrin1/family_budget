@@ -19,7 +19,7 @@ class ExpenseModel with _$ExpenseModel {
     final categoriesCubit = getIt<CategoriesCubit>();
     final categories = categoriesCubit.state is CategoriesLoaded
         ? (categoriesCubit.state as CategoriesLoaded).categories
-        : [];
+        : List.empty(growable: true);
 
     final categoryId = json['category_id'] as int?;
     final category = categories.firstWhere(

@@ -74,21 +74,22 @@ class AppRouter extends RootStackRouter {
           initial: true,
           children: [
             AutoRoute(page: AuthRoute.page),
-            AutoRoute(page: CalculatorRoute.page,),
             AutoRoute(
-                page: DiagramRoute.page, guards: [_authGuard], initial: true),
+              page: CalculatorRoute.page,
+            ),
+            AutoRoute(page: DiagramRoute.page, guards: [_authGuard], initial: true),
             AutoRoute(page: ProfileRoute.page, guards: [_authGuard]),
           ],
         ),
-    AutoRoute(page: SettingsRoute.page),
+        AutoRoute(page: SettingsRoute.page),
       ];
 }
 
 Route<T> _tabRouteBuilder<T>(
-    BuildContext context,
-    Widget child,
-    AutoRoutePage<T> page,
-    ) {
+  BuildContext context,
+  Widget child,
+  AutoRoutePage<T> page,
+) {
   final navigationCubit = context.read<NavigationCubit>();
   final currentTabIndex = navigationCubit.previousIndex;
 

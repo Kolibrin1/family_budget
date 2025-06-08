@@ -106,7 +106,7 @@ class DiagramBloc extends Bloc<DiagramEvent, DiagramState> with ErrorHandlerMixi
   Future<void> _onSetCustomPeriodEvent(DiagramSetCustomPeriodEvent event, Emitter<DiagramState> emit) async {
     emit(DiagramLoadingState());
     try {
-      type = 3; // Устанавливаем тип "Период"
+      type = 3;
       customPeriod = (dateFrom: event.dateFrom, dateTo: event.dateTo);
       await _getExpensesAndEmit(emit);
     } catch (ex) {
@@ -129,12 +129,12 @@ class DiagramBloc extends Bloc<DiagramEvent, DiagramState> with ErrorHandlerMixi
   }
 
   Future<AnalyticsData> _processExpenses(List<ExpenseModel> expenses) async {
-    final colors = <Color>[];
-    final titles = <String>[];
-    final icons = <String>[];
-    final totalCounts = <double>[];
-    final transactionCounts = <int>[];
-    final categoryIds = <int>[];
+    final colors = List<Color>.empty(growable: true);
+    final titles = List<String>.empty(growable: true);
+    final icons = List<String>.empty(growable: true);
+    final totalCounts = List<double>.empty(growable: true);
+    final transactionCounts = List<int>.empty(growable: true);
+    final categoryIds = List<int>.empty(growable: true);
     double allCount = 0;
 
     for (final expense in expenses) {
@@ -149,11 +149,10 @@ class DiagramBloc extends Bloc<DiagramEvent, DiagramState> with ErrorHandlerMixi
         transactionCounts.add(1);
         categoryIds.add(expense.category?.id ?? 0);
         icons.add(expense.category?.icon ?? '');
-        // Первая транзакция в этой категории
       } else {
         final index = titles.indexOf(categoryName);
         totalCounts[index] += count;
-        transactionCounts[index] += 1; // Увеличиваем счетчик транзакций
+        transactionCounts[index] += 1;
       }
       allCount += count;
     }
