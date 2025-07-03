@@ -44,21 +44,6 @@ class ProfileBody extends StatelessWidget {
             },
             icon: HugeIcon(icon: HugeIcons.strokeRoundedSettings01, color: AppColors.onSecondary),
           ),
-          // ElevatedButton(
-          //   onPressed: () async {
-          //     final notificationService = NotificationService();
-          //     await notificationService.initNotifications();
-          //     await notificationService.sendDelayedReminderNotification();
-          //
-          //     ScaffoldMessenger.of(context).showSnackBar(
-          //       const SnackBar(
-          //         content: Text('Уведомление будет отправлено через 10 секунд'),
-          //         duration: Duration(seconds: 2),
-          //       ),
-          //     );
-          //   },
-          //   child: SvgPicture.asset('assets/icons/info.svg'),
-          // ),
         ],
         centerTitle: true,
         backgroundColor: AppColors.background,
