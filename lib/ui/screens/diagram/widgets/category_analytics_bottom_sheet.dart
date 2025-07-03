@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import 'package:family_budget/gen/strings.g.dart';
+import 'dart:math' as math;
 
 class CategoryAnalyticsBottomSheet extends StatefulWidget {
   final String categoryName;
@@ -55,9 +56,9 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
       final recentExpenses = await _categoryRepository.getRecentCategoryExpenses(
         widget.categoryId,
       );
-      
+
       _dates = _generateDates();
-      
+
       setState(() {
         _statistics = statistics;
         _recentExpenses = recentExpenses;
@@ -73,12 +74,12 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
     final now = DateTime.now();
     switch (_selectedTimeSegment) {
       case 'days':
-        return List.generate(7, (index) => 
+        return List.generate(7, (index) =>
           now.subtract(Duration(days: 6 - index)));
       case 'weeks':
         // Находим понедельник текущей недели
         final monday = now.subtract(Duration(days: now.weekday - 1));
-        return List.generate(7, (index) => 
+        return List.generate(7, (index) =>
           monday.subtract(Duration(days: (6 - index) * 7)));
       case 'months':
         return List.generate(12, (index) {
@@ -260,114 +261,128 @@ class _CategoryAnalyticsBottomSheetState extends State<CategoryAnalyticsBottomSh
   }
 
   Widget _buildStatisticsChart() {
-    return LineChart(
-      LineChartData(
-        lineTouchData: LineTouchData(enabled: true),
-        gridData: FlGridData(
-          show: true,
-          horizontalInterval: 100,
-          drawVerticalLine: false,
-          getDrawingHorizontalLine: (value) {
-            return FlLine(
-              color: AppColors.onSecondary.withOpacity(0.1),
-              strokeWidth: 1,
-            );
-          },
-        ),
-        titlesData: FlTitlesData(
-          show: true,
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              getTitlesWidget: (value, meta) {
-                if (value < 0 || value >= _dates.length) {
-                  return const Text('');
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    _formatDate(_dates[value.toInt()]),
-                    style: const TextStyle(
-                      color: AppColors.onSecondary,
-                      fontSize: 11,
-                    ),
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        // child: Padding(
+          // padding: const EdgeInsets.only(right: 16.0),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width < 350 ? 400 : MediaQuery.of(context).size.width - 48,
+            child: LineChart(
+            LineChartData(
+              lineTouchData: LineTouchData(enabled: false),
+              gridData: FlGridData(
+                show: true,
+                horizontalInterval: 100,
+                drawVerticalLine: false,
+                getDrawingHorizontalLine: (value) {
+                  return FlLine(
+                    color: AppColors.onSecondary.withOpacity(0.1),
+                    strokeWidth: 1,
+                  );
+                },
+              ),
+              titlesData: FlTitlesData(
+                show: true,
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    interval: 1,
+                    getTitlesWidget: (value, meta) {
+                      if (value < 0 || value >= _dates.length) {
+                        return const Text('');
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Transform.rotate(
+                          angle: _dates.length == 12 ? -math.pi / 2 : 0,
+                          child: Center(
+                            child: Text(
+                              _formatDate(_dates[value.toInt()]),
+                              style: const TextStyle(
+                                color: AppColors.onSecondary,
+                                fontSize: 11,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    reservedSize: _dates.length == 7 ? 40 : 30,
                   ),
-                );
-              },
-              reservedSize: 40,
-            ),
-          ),
-          leftTitles: AxisTitles(
-            axisNameWidget: Text(widget.currency),
-          ),
-          topTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              interval: 1,
-              getTitlesWidget: (value, meta) {
-                if (value < 0 || value >= _statistics.length) {
-                  return const Text('');
-                }
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Text(
-                    _statistics[value.toInt()].toStringAsFixed(0),
-                    style: TextStyle(
-                      color: widget.categoryColor,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                leftTitles: AxisTitles(
+                  axisNameWidget: Text(widget.currency),
+                ),
+                topTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    interval: 1,
+                    getTitlesWidget: (value, meta) {
+                      if (value < 0 || value >= _statistics.length) {
+                        return const Text('');
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Text(
+                          _statistics[value.toInt()].toStringAsFixed(0),
+                          style: TextStyle(
+                            color: widget.categoryColor,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
+                    reservedSize: 20,
                   ),
-                );
-              },
-              reservedSize: 20,
-            ),
-          ),
-          rightTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false),
-          ),
-        ),
-        borderData: FlBorderData(
-          show: true,
-          border: Border(
-            left: BorderSide(color: AppColors.onSecondary.withOpacity(0.2)),
-            bottom: BorderSide(color: AppColors.onSecondary.withOpacity(0.2)),
-          ),
-        ),
-        minX: 0,
-        maxX: _statistics.length - 1.0,
-        minY: 0,
-        maxY: _statistics.isEmpty ? 0 : _statistics.reduce((a, b) => a > b ? a : b) * 1.4,
-        lineBarsData: [
-          LineChartBarData(
-            preventCurveOverShooting: true,
-            spots: List.generate(
-              _statistics.length,
-              (index) => FlSpot(index.toDouble(), _statistics[index]),
-            ),
-            isCurved: true,
-            color: widget.categoryColor,
-            barWidth: 3,
-            isStrokeCapRound: false,
-            dotData: FlDotData(
-              show: true,
-              getDotPainter: (spot, percent, barData, index) {
-                return FlDotCirclePainter(
-                  radius: 4,
+                ),
+                rightTitles: AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+              ),
+              borderData: FlBorderData(
+                show: true,
+                border: Border(
+                  left: BorderSide(color: AppColors.onSecondary.withOpacity(0.2)),
+                  bottom: BorderSide(color: AppColors.onSecondary.withOpacity(0.2)),
+                ),
+              ),
+              minX: 0,
+              maxX: _statistics.length - 1.0,
+              minY: 0,
+              maxY: _statistics.isEmpty ? 0 : _statistics.reduce((a, b) => a > b ? a : b) * 1.4,
+              lineBarsData: [
+                LineChartBarData(
+                  preventCurveOverShooting: true,
+                  spots: List.generate(
+                    _statistics.length,
+                    (index) => FlSpot(index.toDouble(), _statistics[index]),
+                  ),
+                  isCurved: true,
                   color: widget.categoryColor,
-                  strokeWidth: 1.5,
-                  strokeColor: Colors.white,
-                );
-              },
-            ),
-            belowBarData: BarAreaData(
-              show: true,
-              color: widget.categoryColor.withOpacity(0.1),
+                  barWidth: 3,
+                  isStrokeCapRound: false,
+                  dotData: FlDotData(
+                    show: true,
+                    getDotPainter: (spot, percent, barData, index) {
+                      return FlDotCirclePainter(
+                        radius: 4,
+                        color: widget.categoryColor,
+                        strokeWidth: 1.5,
+                        strokeColor: Colors.white,
+                      );
+                    },
+                  ),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    color: widget.categoryColor.withOpacity(0.1),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+                ),
+        // ),
     );
   }
 

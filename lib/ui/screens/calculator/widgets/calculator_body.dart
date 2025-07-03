@@ -45,7 +45,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
     _firstCountController =
         TextEditingController(text: widget.oldState?.count?.toString());
     _secondCountController =
-        TextEditingController(text: widget.oldState?.answer?.toString());
+        TextEditingController(text: widget.oldState?.answer?.toString().replaceAll('.', ','));
     _first = widget.oldState?.first;
     _second = widget.oldState?.second;
     _filterCurrencies(widget.oldState?.searchText ?? '');
@@ -55,7 +55,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
   void didUpdateWidget(covariant CalculatorBody oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.oldState?.answer != widget.oldState?.answer) {
-      _secondCountController.text = widget.oldState?.answer?.toString() ?? '';
+      _secondCountController.text = widget.oldState?.answer?.toString().replaceAll('.', ',') ?? '';
     }
   }
 
@@ -85,7 +85,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
   }
 
   void _calculate() {
-    final count = double.tryParse(_firstCountController.text);
+    final count = double.tryParse(_firstCountController.text.replaceAll(',', '.'));
     if (_first != null && _second != null && count != null) {
       context.read<CalculatorBloc>().add(CalculateEvent(
         first: _first!,
@@ -99,7 +99,11 @@ class _CalculatorBodyState extends State<CalculatorBody> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return AppScaffold(
+    return GestureDetector(
+        onTap: () {
+      FocusScope.of(context).unfocus();
+    },
+    child: AppScaffold(
       willPop: false,
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -116,7 +120,7 @@ class _CalculatorBodyState extends State<CalculatorBody> {
             ],
           ],
         ),
-      ),
+      ),),
     );
   }
 

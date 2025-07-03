@@ -12,49 +12,53 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'auth_detail_screen.dart';
 
 class AuthBodyScreen extends StatelessWidget {
-  const AuthBodyScreen(
-      {super.key, required this.authType, required this.onAuthCompleted});
+  const AuthBodyScreen({super.key, required this.authType, required this.onAuthCompleted});
 
   final AuthType authType;
   final Function() onAuthCompleted;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthBloc>(
-      create: (context) => getIt<AuthBloc>()
-        ..add(
-          AuthInitEvent(authType: authType),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: BlocProvider<AuthBloc>(
+        create: (context) => getIt<AuthBloc>()
+          ..add(
+            AuthInitEvent(authType: authType),
+          ),
+        child: BlocConsumer<AuthBloc, AuthState>(
+          buildWhen: (previous, current) => current is! AuthInfoState,
+          listener: (context, state) {
+            if (state is AuthInfoState) {
+              showMessage(
+                message: state.message,
+                type: state.pageState,
+              );
+            }
+          },
+          builder: (context, state) {
+            return switch (state) {
+              AuthLoadingState _ => AppScaffold(
+                  child: LoadingGif(),
+                ),
+              AuthInitState s => AuthLoginScreen(
+                  title: authType == AuthType.login ? t.auth.signInTitle : t.auth.registerTitle,
+                  login: s.login,
+                  pass: s.pass,
+                  isError: s.isError,
+                  onAuthCompleted: onAuthCompleted,
+                ),
+              AuthDetailState s => AuthDetailScreen(
+                  login: s.login,
+                  pass: s.pass,
+                  onAuthCompleted: onAuthCompleted,
+                ),
+              _ => const SizedBox.shrink(),
+            };
+          },
         ),
-      child: BlocConsumer<AuthBloc, AuthState>(
-        buildWhen: (previous, current) => current is! AuthInfoState,
-        listener: (context, state) {
-          if(state is AuthInfoState) {
-            showMessage(
-              message: state.message,
-              type: state.pageState,
-            );
-          }
-        },
-        builder: (context, state) {
-          return switch (state) {
-            AuthLoadingState _ => AppScaffold(
-              child: LoadingGif(),
-            ),
-            AuthInitState s => AuthLoginScreen(
-              title: authType == AuthType.login ? t.auth.signInTitle : t.auth.registerTitle,
-              login: s.login,
-              pass: s.pass,
-              isError: s.isError,
-              onAuthCompleted: onAuthCompleted,
-            ),
-            AuthDetailState s => AuthDetailScreen(
-              login: s.login,
-              pass: s.pass,
-              onAuthCompleted: onAuthCompleted,
-            ),
-            _ => const SizedBox.shrink(),
-          };
-        },
       ),
     );
   }

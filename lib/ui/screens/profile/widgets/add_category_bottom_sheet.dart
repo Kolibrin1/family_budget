@@ -95,7 +95,12 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
     final theme = Theme.of(context);
     return SizedBox(
       height: MediaQuery.sizeOf(context).height * 0.75,
-      child: Padding(
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
         child: Column(
           children: [
@@ -119,7 +124,7 @@ class _AddCategoryBottomSheetState extends State<AddCategoryBottomSheet> {
             SizedBox(width: 200, child: _buildAddButton()),
           ],
         ),
-      ),
+      ),),
     );
   }
 

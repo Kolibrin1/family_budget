@@ -22,8 +22,8 @@ void main() async {
   final notifyService = NotificationService();
   await notifyService.initNotifications();
   await initDependencies(Environment.dev);
-  await notifyService.setupDefaultReminders();
-  await notifyService.setupRecurringReminders();
+  // await notifyService.setupDefaultReminders();
+  // await notifyService.setupRecurringReminders();
   runApp(const App());
 }
 

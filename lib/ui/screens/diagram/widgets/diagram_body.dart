@@ -54,7 +54,8 @@ class DiagramBody extends StatelessWidget {
                         return PieChartSectionData(
                           color: analyticsData.colors[i],
                           value: analyticsData.totalCounts[i],
-                          title: '${analyticsData.totalCounts[i].toStringAsFixed(0)} $currency',
+                          title: analyticsData.totalCounts[i].toStringAsFixed(0),
+                          titlePositionPercentageOffset: 0.6,
                           radius: radius,
                           titleStyle: TextStyle(
                             fontSize: fontSize,

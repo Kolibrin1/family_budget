@@ -27,6 +27,7 @@ class AppScaffold extends StatelessWidget {
         return willPop;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: appBar,
         body: Container(
           color: AppColors.background,
@@ -72,6 +73,7 @@ class RootScaffold extends StatelessWidget {
         return willPop;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: null,
         bottomNavigationBar: const AppBottomNavigationBar(),
         body: Container(

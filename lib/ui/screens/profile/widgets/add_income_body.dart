@@ -81,7 +81,12 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
+    return GestureDetector(
+        onTap: () {
+      FocusScope.of(context).unfocus();
+    },
+    child: Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(
@@ -118,7 +123,7 @@ class _AddIncomeBodyState extends State<AddIncomeBody> {
             _buildActionButton(context),
           ],
         ),
-      ),
+      ),),
     );
   }
 

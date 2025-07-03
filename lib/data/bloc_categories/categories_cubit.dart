@@ -14,7 +14,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   final CategoryRepository _categoryRepository;
 
   CategoriesCubit(this._categoryRepository) : super(CategoriesInitial()) {
-   loadCategories();
+   // loadCategories();
   }
 
   Future<void> loadCategories() async {
